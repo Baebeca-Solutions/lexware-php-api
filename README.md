@@ -29,7 +29,7 @@ require_once (__DIR__.'/lexoffice-php-api.php');
 $lexoffice = new lexoffice_client(array('api_key' => 'xyz'));
 ```
     
-## Possible Parameter
+## Start Parameter
 > api_key [string]
 
 API Schlüssel
