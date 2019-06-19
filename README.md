@@ -2,8 +2,15 @@
 PHP Client für Lexoffice REST API
 
 Wir lieben Automatisierung! Daher stellen wir Ihnen gerne einen PHP Client zur Verfügung, um Ihre Systeme / Anwendungen an Ihren [lexoffice.de](https://www.lexoffice.de) Account zu binden.
-
+Wenn Sie Hilfe bei der Anbindung Ihrer Systeme benötigen zögern Sie nicht uns anzusprechen.
+<br>
+<br>
+[![Baebeca Solutions](https://www.baebeca.de/logo/logo_400.jpg)](https://www.baebeca.de/)
+<br>
+<br>
 Die offizielle Lexoffice Dokumentation finden Sie [hier](https://www.lexoffice.de).
+
+[![Lexoffice](https://www.baebeca.de/wp-content/uploads/2019/06/lexoffice-Logo-RGB-e1560867468409.png)](https://www.lexoffice.de)
 
 Bitte beachten Sie, dass die Software unter der "GNU Affero General Public License v3.0" Lizenz veröffentlicht wurde. Dies bedeutet, dass Sie unsere Software gerne in Ihren Projekten und Produkten nutzen dürfen, solange Sie Ihr Projekt dann ebenso Quelloffen unter den in der Lizenz genannten Rahmenbedingungen zur Verfügung stellen.
 
