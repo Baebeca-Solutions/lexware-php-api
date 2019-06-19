@@ -1,9 +1,9 @@
 <?php
-require_once (__DIR__.'/lexoffice-php-api.php');
+require_once (__DIR__.'/../lexoffice-php-api.php');
 
 // if local developer test include secret api keys
-if (is_file(__DIR__.'/_local_test_settings.php')) {
-	require_once (__DIR__.'/_local_test_settings.php');
+if (is_file(__DIR__.'/../_local_test_settings.php')) {
+	require_once (__DIR__.'/../_local_test_settings.php');
 } else {
 	$api_key = '';
 }
