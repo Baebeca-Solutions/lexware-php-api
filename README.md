@@ -9,10 +9,10 @@ Bitte beachten Sie, dass die Software unter der "GNU Affero General Public Licen
 
 __Wenn Sie Ihre Lösung nicht veröffentlichen möchten und Support & individuelle Änderungen/Erweiterungen erhalten möchten, können Sie auch eine kommerzielle Version erhalten. Setzten Sie sich diesbezüglich einfach mit uns in [Verbindung](https://www.baebeca.de/kontakt/).__
 
-#1) API Account erstellen
+# 1) API Account erstellen
 Erstellen Sie in Ihrem [Lexoffice Account](https://app.lexoffice.de/settings/#/public-api) einen API Key.
 
-#2) Einbinden
+# 2) Einbinden
 ```php
 <?php
 // include the class file, check the correct folder
@@ -30,9 +30,9 @@ API Schlüssel
 
 Ihre Standard Callback URL für Webhooks von Lexoffice    
     
-#3) Methoden
+# 3) Methoden
 
-##3.1) Rechnungen
+## 3.1) Rechnungen
 
 ### Rechnung abfragen
 ```php
@@ -106,7 +106,7 @@ $lexoffice->create_invoice( array $data [, bool $finalized = false ] ) : array
 * finalized
   * Entscheidet ob die Rechnung fertiggestellt werden soll.
 
-##3.2) Kontakte
+## 3.2) Kontakte
 
 ### Kontakt abfragen
 ```php
@@ -130,7 +130,7 @@ $lexoffice->update_contact( string $uuid, array $data) : array
   * Ein Array der Rechnungsdaten nach der nötigen [Lexoffice Formatierung](https://developers.lexoffice.io/docs/#contact-properties)  
 
     
-##3.3) Events / Webhooks
+## 3.3) Events / Webhooks
      
 ### Event anlegen
 ```php
@@ -153,6 +153,6 @@ $lexoffice->get_event( string $uuid ) : array
 $lexoffice->get_events_all() : array
 ```
 
-#4) Bekannte Fehler/Limitierungen
+# 4) Bekannte Fehler/Limitierungen
 Die offizielle Lexoffice REST-API befindet sich noch im Aufbau und Testphase
 
