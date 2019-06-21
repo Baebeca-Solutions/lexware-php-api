@@ -17,7 +17,7 @@ Bitte beachten Sie, dass die Software unter der "GNU Affero General Public Licen
 __Wenn Sie Ihre Lösung nicht veröffentlichen möchten und Support & individuelle Änderungen/Erweiterungen erhalten möchten, können Sie auch eine kommerzielle Version erhalten. Setzten Sie sich diesbezüglich einfach mit uns in [Verbindung](https://www.baebeca.de/kontakt/).__
 
 # 1) API Account erstellen
-Erstellen Sie in Ihrem [Lexoffice Account](https://app.lexoffice.de/settings/#/public-api) einen API Key.
+Erstellen Sie in Ihrem [Lexoffice Account](https://app.lexoffice.de/settings/) einen API Key.
 
 # 2) Einbinden
 ```php
