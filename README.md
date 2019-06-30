@@ -8,7 +8,7 @@ Wenn Sie Hilfe bei der Anbindung Ihrer Systeme benötigen zögern Sie nicht uns 
 [![Baebeca Solutions](https://www.baebeca.de/logo/logo_400.jpg)](https://www.baebeca.de/)
 <br>
 <br>
-Die offizielle Lexoffice Dokumentation finden Sie [hier](https://www.lexoffice.de).
+Die offizielle Lexoffice Dokumentation finden Sie [hier](https://developers.lexoffice.io/docs/).
 
 [![Lexoffice](https://www.baebeca.de/wp-content/uploads/2019/06/lexoffice-Logo-RGB-e1560867468409.png)](https://www.lexoffice.de)
 
