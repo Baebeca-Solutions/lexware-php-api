@@ -159,6 +159,21 @@ class lexoffice_client {
 		return $this->api_call('GET', 'invoices', $uuid);
 	}
 
+	public function get_invoices_all() {
+		$result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&direction=ASC&sort=voucherNumber&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
+		$vouchers = $result->content;
+		unset($result->content);
+
+		for ($i = 1; $i < $result->totalPages; $i++) {
+			$result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=100&direction=ASC&sort=voucherNumber&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
+			foreach ($result_page->content as $voucher) {
+				$vouchers[] = $voucher;
+			}
+			unset($result_page->content);
+		}
+		return($vouchers);
+	}
+
 	public function get_invoice_pdf($uuid, $filename) {
 		$request = $this->api_call('GET', 'invoices', $uuid, '', '/document');
 		if ($request && isset($request->documentFileId)) {

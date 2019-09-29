@@ -50,6 +50,11 @@ $lexoffice->get_invoice( string $uuid ) : array
 * uuid
   * Die eindeutige uuid des Eintrages der abgefragt werden soll
 
+### Alle Rechnungen abfragen
+```php
+$lexoffice->get_invoices_all() : array
+```
+
 ### Rechnung PDF herunterladen
 ```php
 $lexoffice->get_invoice_pdf( string $uuid, string $filename) : bool
