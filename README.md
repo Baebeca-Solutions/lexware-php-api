@@ -1,7 +1,7 @@
 # lexoffice-php-api
 PHP Client für Lexoffice REST API
 
-Wir lieben Automatisierung! Daher stellen wir Ihnen gerne einen PHP Client zur Verfügung, um Ihre Systeme / Anwendungen an Ihren [lexoffice.de](https://www.lexoffice.de) Account zu binden.
+Wir lieben Automatisierung! Daher stellen wir Ihnen gerne einen PHP Client zur Verfügung, um Ihre Systeme / Anwendungen an Ihren [lexoffice.de](https://www.awin1.com/awclick.php?gid=368497&mid=13787&awinaffid=635216&linkid=2440770&clickref=) Account zu binden.
 Wenn Sie Hilfe bei der Anbindung Ihrer Systeme benötigen zögern Sie nicht uns anzusprechen.
 <br>
 <br>
@@ -10,14 +10,14 @@ Wenn Sie Hilfe bei der Anbindung Ihrer Systeme benötigen zögern Sie nicht uns 
 <br>
 Die offizielle Lexoffice Dokumentation finden Sie [hier](https://developers.lexoffice.io/docs/).
 
-[![Lexoffice](https://www.baebeca.de/wp-content/uploads/2019/06/lexoffice-Logo-RGB-e1560867468409.png)](https://www.lexoffice.de)
+[![Lexoffice](https://www.baebeca.de/wp-content/uploads/2019/06/lexoffice-Logo-RGB-e1560867468409.png)](https://www.awin1.com/cread.php?s=2440752&v=13787&q=368492&r=635216)
 
 Bitte beachten Sie, dass die Software unter der "GNU Affero General Public License v3.0" Lizenz veröffentlicht wurde. Dies bedeutet, dass Sie unsere Software gerne in Ihren Projekten und Produkten nutzen dürfen, solange Sie Ihr Projekt dann ebenso Quelloffen unter den in der Lizenz genannten Rahmenbedingungen zur Verfügung stellen.
 
 __Wenn Sie Ihre Lösung nicht veröffentlichen möchten und Support & individuelle Änderungen/Erweiterungen erhalten möchten, können Sie auch eine kommerzielle Version erhalten. Setzten Sie sich diesbezüglich einfach mit uns in [Verbindung](https://www.baebeca.de/kontakt/).__
 
 # 1) API Account erstellen
-Erstellen Sie in Ihrem [Lexoffice Account](https://app.lexoffice.de/settings/) einen API Key.
+Erstellen Sie in Ihrem [Lexoffice Account](https://www.awin1.com/awclick.php?gid=368497&mid=13787&awinaffid=635216&linkid=2440770&clickref=) einen API Key.
 
 Einstellungen :: Erweiterungen :: lexoffice Public API :: "Schlüssel neu erstellen"
 
