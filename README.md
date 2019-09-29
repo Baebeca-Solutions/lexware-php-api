@@ -151,7 +151,7 @@ $lexoffice->update_contact( string $uuid, array $data) : array
 $lexoffice->create_event( string $event [, bool $callback = false ] ) : array|bool
 ```
 * event
-  * Mögliche Events sind "invoice.status.changed", "contact.created", "contact.changed", "contact.deleted", "token.revoked"
+  * Mögliche sind alle von Lexoffice [angebeotenen Events](https://developers.lexoffice.io/docs/#event-subscriptions-endpoint-event-types).
 * callback
   * Die Callback URL für diesen Aufruf. Wenn keine angegeben wird, wird die Standard URL aus der initialisierung genutzt.  
   
@@ -168,5 +168,5 @@ $lexoffice->get_events_all() : array
 ```
 
 # 4) Bekannte Fehler/Limitierungen
-Die offizielle Lexoffice REST-API befindet sich noch im Aufbau und Testphase
+- keine
 

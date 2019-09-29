@@ -14,6 +14,34 @@ if (!$company_id || $data->organizationId == $company_id) {
 			// do some stuff
 			break;
 
+		case 'invoice.created':
+			// do some stuff
+			break;
+
+		case 'invoice.changed':
+			// do some stuff
+			break;
+
+		case 'invoice.deleted':
+			// do some stuff
+			break;
+
+		case 'credit-note.created':
+			// do some stuff
+			break;
+
+		case 'credit-note.changed':
+			// do some stuff
+			break;
+
+		case 'credit-note.deleted':
+			// do some stuff
+			break;
+
+		case 'credit-note.status.changed':
+			// do some stuff
+			break;
+
 		case 'contact.created':
 			// do some stuff
 			break;
