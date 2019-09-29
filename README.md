@@ -19,6 +19,8 @@ __Wenn Sie Ihre Lösung nicht veröffentlichen möchten und Support & individuel
 # 1) API Account erstellen
 Erstellen Sie in Ihrem [Lexoffice Account](https://app.lexoffice.de/settings/) einen API Key.
 
+Einstellungen :: Erweiterungen :: lexoffice Public API :: "Schlüssel neu erstellen"
+
 # 2) Einbinden
 ```php
 <?php
