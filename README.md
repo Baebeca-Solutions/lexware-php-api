@@ -53,7 +53,7 @@ Erweiterungen benötigen oder dieses Projekt einfach Unterstützen möchten, kö
 eine Lizenz zur Nutzung erhalten. Setzten Sie sich diesbezüglich einfach mit uns in [Verbindung]([Projektseite](https://www.baebeca.de/softwareentwicklung/projekte/lexoffice-php-client/)).
 
 ## Support
-An wen kann ich mich wenden wenn ich Probleme oder Fragen habe?
+An wen kann ich mich wenden, wenn ich Probleme oder Fragen habe?
 * Nutzungslizenz vorhanden
   * Sie können sich jederzeit per Mail an [support@baebeca.de](mailto:support@baebeca.de) wenden und erhalten vorrangigen Support. 
 * Kostenlose Version
