@@ -32,13 +32,13 @@ Wir lieben Automatisierung und die nahtlose Verzahnung von Systemen!
 bestehende Systeme integriert oder Prozesse automatisiert werden können. Für diesen Ansatz haben 
 wir einen PHP-Client entwickelt und stellen diesen kostenfrei zur Verfügung. 
 
-Alle Informationen weiteren findest du auf unserer [Projektseite](https://www.baebeca.de/softwareentwicklung/projekte/lexoffice-php-client/).
+Alle weiteren Informationen finden Sie auf unserer [Projektseite](https://www.baebeca.de/softwareentwicklung/projekte/lexoffice-php-client/).
  
 ## Baebeca Solutions bei lexoffice.de
 * [Public API Partner](https://www.lexoffice.de/partner/public-api/)
 * [Integrationspartner](https://www.lexoffice.de/partner/public-api/integrationspartner/)
 
-Die offizielle Lexoffice API-Dokumentation findest du [hier](https://developers.lexoffice.io/docs/).
+Die offizielle Lexoffice API-Dokumentation finden Sie [hier](https://developers.lexoffice.io/docs/).
 
 [![Lexoffice](https://www.baebeca.de/wp-content/uploads/2019/06/lexoffice-Logo-RGB-e1560867468409.png)](https://www.awin1.com/cread.php?s=2440752&v=13787&q=368492&r=635216)
 
@@ -51,6 +51,13 @@ zur Verfügung stellen.
 Wenn Sie Ihre Lösung nicht veröffentlichen möchten, Support benötigen, individuelle 
 Erweiterungen benötigen oder dieses Projekt einfach Unterstützen möchten, können Sie für einmalig 99,- netto
 eine Lizenz zur Nutzung erhalten. Setzten Sie sich diesbezüglich einfach mit uns in [Verbindung]([Projektseite](https://www.baebeca.de/softwareentwicklung/projekte/lexoffice-php-client/)).
+
+## Support
+An wen kann ich mich wenden wenn ich Probleme oder Fragen habe?
+* Nutzungslizenz vorhanden
+  * Sie können sich jederzeit per Mail an [support@baebeca.de](mailto:support@baebeca.de) wenden und erhalten vorrangigen Support. 
+* Kostenlose Version
+  * Auf Github einen [issue](https://github.com/Baebeca-Solutions/lexoffice-php-api/issues) erstellen.
 
 ## API Account
 Erstellen Sie in Ihrem [Lexoffice Account](https://www.awin1.com/awclick.php?gid=368497&mid=13787&awinaffid=635216&linkid=2440770&clickref=) einen API Key.
