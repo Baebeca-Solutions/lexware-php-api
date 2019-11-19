@@ -1,4 +1,4 @@
-#Übersicht
+# Übersicht
 - [Übersicht - lexoffice-php-api](#-bersicht---lexoffice-php-api)
   * [Baebeca Solutions bei lexoffice.de](#baebeca-solutions-bei-lexofficede)
 - [Dokumentation](#dokumentation)
@@ -42,7 +42,7 @@ Die offizielle Lexoffice API-Dokumentation findest du [hier](https://developers.
 
 [![Lexoffice](https://www.baebeca.de/wp-content/uploads/2019/06/lexoffice-Logo-RGB-e1560867468409.png)](https://www.awin1.com/cread.php?s=2440752&v=13787&q=368492&r=635216)
 
-##Lizenz
+## Lizenz
 Unsere Software wurde unter der "GNU Affero General Public License v3.0" Lizenz veröffentlicht. 
 Dies bedeutet, dass Sie unsere Software gerne in Ihren Projekten und Produkten nutzen dürfen, 
 solange Sie Ihr Projekt dann ebenso Quelloffen unter den in der Lizenz genannten Rahmenbedingungen 
@@ -52,7 +52,7 @@ Wenn Sie Ihre Lösung nicht veröffentlichen möchten, Support benötigen, indiv
 Erweiterungen benötigen oder dieses Projekt einfach Unterstützen möchten, können Sie für einmalig 99,- netto
 eine Lizenz zur Nutzung erhalten. Setzten Sie sich diesbezüglich einfach mit uns in [Verbindung]([Projektseite](https://www.baebeca.de/softwareentwicklung/projekte/lexoffice-php-client/)).
 
-##API Account
+## API Account
 Erstellen Sie in Ihrem [Lexoffice Account](https://www.awin1.com/awclick.php?gid=368497&mid=13787&awinaffid=635216&linkid=2440770&clickref=) einen API Key.
 
 Einstellungen :: Erweiterungen :: lexoffice Public API :: "Schlüssel neu erstellen"
