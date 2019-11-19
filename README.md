@@ -1,27 +1,40 @@
-# lexoffice-php-api
-PHP Client für Lexoffice REST API
+# Übersicht - lexoffice-php-api
+PHP Client für [Lexoffice](https://www.awin1.com/awclick.php?gid=368497&mid=13787&awinaffid=635216&linkid=2440770&clickref=) REST API
 
-Wir lieben Automatisierung! Daher stellen wir Ihnen gerne einen PHP Client zur Verfügung, um Ihre Systeme / Anwendungen an Ihren [lexoffice.de](https://www.awin1.com/awclick.php?gid=368497&mid=13787&awinaffid=635216&linkid=2440770&clickref=) Account zu binden.
-Wenn Sie Hilfe bei der Anbindung Ihrer Systeme benötigen zögern Sie nicht uns anzusprechen.
-<br>
-<br>
-[![Baebeca Solutions](https://www.baebeca.de/logo/logo_400.jpg)](https://www.baebeca.de/)
-<br>
-<br>
-Die offizielle Lexoffice Dokumentation finden Sie [hier](https://developers.lexoffice.io/docs/).
+Wir lieben Automatisierung und die nahtlose Verzahnung von Systemen!
+
+[Lexoffice](https://www.awin1.com/awclick.php?gid=368497&mid=13787&awinaffid=635216&linkid=2440770&clickref=) stellt seinen Kunden eine öffentliche API-Schnittstelle zur Verfügung über die 
+bestehende Systeme integriert oder Prozesse automatisiert werden können. Für diesen Ansatz haben 
+wir einen PHP-Client entwickelt und stellen diesen kostenfrei zur Verfügung. 
+
+Alle Informationen weiteren findest du auf unserer [Projektseite](https://www.baebeca.de/softwareentwicklung/projekte/lexoffice-php-client/).
+ 
+## Baebeca Solutions bei lexoffice.de
+* [Public API Partner](https://www.lexoffice.de/partner/public-api/)
+* [Integrationspartner](https://www.lexoffice.de/partner/public-api/integrationspartner/)
+
+Die offizielle Lexoffice API-Dokumentation findest du [hier](https://developers.lexoffice.io/docs/).
 
 [![Lexoffice](https://www.baebeca.de/wp-content/uploads/2019/06/lexoffice-Logo-RGB-e1560867468409.png)](https://www.awin1.com/cread.php?s=2440752&v=13787&q=368492&r=635216)
 
-Unsere Software wurde unter der "GNU Affero General Public License v3.0" Lizenz veröffentlicht. Dies bedeutet, dass Sie unsere Software gerne in Ihren Projekten und Produkten nutzen dürfen, solange Sie Ihr Projekt dann ebenso Quelloffen unter den in der Lizenz genannten Rahmenbedingungen zur Verfügung stellen.
+##Lizenz
+Unsere Software wurde unter der "GNU Affero General Public License v3.0" Lizenz veröffentlicht. 
+Dies bedeutet, dass Sie unsere Software gerne in Ihren Projekten und Produkten nutzen dürfen, 
+solange Sie Ihr Projekt dann ebenso Quelloffen unter den in der Lizenz genannten Rahmenbedingungen 
+zur Verfügung stellen.
 
-__Wenn Sie Ihre Lösung nicht veröffentlichen möchten und Support & individuelle Änderungen/Erweiterungen erhalten möchten, können Sie auch eine kommerzielle Version erhalten. Setzten Sie sich diesbezüglich einfach mit uns in [Verbindung](https://www.baebeca.de/kontakt/).__
+Wenn Sie Ihre Lösung nicht veröffentlichen möchten, Support benötigen, individuelle 
+Erweiterungen benötigen oder dieses Projekt einfach Unterstützen möchten, können Sie für einmalig 99,- netto
+eine Lizenz zur Nutzung erhalten. Setzten Sie sich diesbezüglich einfach mit uns in [Verbindung]([Projektseite](https://www.baebeca.de/softwareentwicklung/projekte/lexoffice-php-client/)).
 
-# 1) API Account erstellen
+##API Account
 Erstellen Sie in Ihrem [Lexoffice Account](https://www.awin1.com/awclick.php?gid=368497&mid=13787&awinaffid=635216&linkid=2440770&clickref=) einen API Key.
 
 Einstellungen :: Erweiterungen :: lexoffice Public API :: "Schlüssel neu erstellen"
 
-# 2) Einbinden
+# Dokumentation
+
+## Klasse einbinden
 ```php
 <?php
 // include the class file, check the correct folder
@@ -31,7 +44,7 @@ require_once (__DIR__.'/lexoffice-php-api.php');
 $lexoffice = new lexoffice_client(array('api_key' => 'xyz'));
 ```
     
-## Start Parameter
+### Start Parameter
 > api_key [string]
 
 API Schlüssel
@@ -39,23 +52,23 @@ API Schlüssel
 
 Ihre Standard Callback URL für Webhooks von Lexoffice    
     
-# 3) Methoden
+## Methoden
 
-## 3.1) Rechnungen
+### Rechnungen
 
-### Rechnung abfragen
+#### Rechnung abfragen
 ```php
 $lexoffice->get_invoice( string $uuid ) : array
 ```
 * uuid
   * Die eindeutige uuid des Eintrages der abgefragt werden soll
 
-### Alle Rechnungen abfragen
+#### Alle Rechnungen abfragen
 ```php
 $lexoffice->get_invoices_all() : array
 ```
 
-### Rechnung PDF herunterladen
+#### Rechnung PDF herunterladen
 ```php
 $lexoffice->get_invoice_pdf( string $uuid, string $filename) : bool
 ```
@@ -64,7 +77,7 @@ $lexoffice->get_invoice_pdf( string $uuid, string $filename) : bool
 * filename
   * Der lokale Dateiname an dem das PDF abgelegt werden soll  
 
-### Rechnung anlegen
+#### Rechnung anlegen
 ```php
 $lexoffice->create_invoice( array $data [, bool $finalized = false ] ) : array
 ```
@@ -120,21 +133,21 @@ $lexoffice->create_invoice( array $data [, bool $finalized = false ] ) : array
 * finalized
   * Entscheidet ob die Rechnung fertiggestellt werden soll.
 
-## 3.2) Kontakte
+### Kontakte
 
-### Kontakt abfragen
+#### Kontakt abfragen
 ```php
 $lexoffice->get_contact( string $uuid ) : array
 ```
 * uuid
   * Die eindeutige uuid des Eintrages der abgefragt werden soll
   
-### Alle Kontakte abfragen
+#### Alle Kontakte abfragen
 ```php
 $lexoffice->get_contacts_all() : array
 ```
     
-### Kontakt aktualisieren
+#### Kontakt aktualisieren
 ```php
 $lexoffice->update_contact( string $uuid, array $data) : array
 ```
@@ -144,9 +157,9 @@ $lexoffice->update_contact( string $uuid, array $data) : array
   * Ein Array der Rechnungsdaten nach der nötigen [Lexoffice Formatierung](https://developers.lexoffice.io/docs/#contact-properties)  
 
     
-## 3.3) Events / Webhooks
+### Events / Webhooks
      
-### Event anlegen
+#### Event anlegen
 ```php
 $lexoffice->create_event( string $event [, bool $callback = false ] ) : array|bool
 ```
@@ -155,18 +168,15 @@ $lexoffice->create_event( string $event [, bool $callback = false ] ) : array|bo
 * callback
   * Die Callback URL für diesen Aufruf. Wenn keine angegeben wird, wird die Standard URL aus der initialisierung genutzt.  
   
-### Aktives Event abfragen
+#### Aktives Event abfragen
 ```php
 $lexoffice->get_event( string $uuid ) : array
 ```
 * uuid
   * Die eindeutige uuid des Eintrages der abgefragt werden soll
 
-### Alle aktiven Events abfragen
+#### Alle aktiven Events abfragen
 ```php
 $lexoffice->get_events_all() : array
 ```
-
-# 4) Bekannte Fehler/Limitierungen
-- keine
 
