@@ -146,7 +146,7 @@ $lexoffice->create_invoice( array $data [, bool $finalized = false ] ) : array
       	'taxType' => 'net',
       ),
       'shippingConditions' => array(
-      	'shippingDate' => $date,
+      	'shippingDate' => date('Y-m-d').'T00:00:01.000+02:00',
       	'shippingType' => 'delivery',
       ),
       'paymentConditions' => array(
