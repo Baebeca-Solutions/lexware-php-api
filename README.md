@@ -1,4 +1,29 @@
-# Übersicht - lexoffice-php-api
+#Übersicht
+- [Übersicht - lexoffice-php-api](#-bersicht---lexoffice-php-api)
+  * [Baebeca Solutions bei lexoffice.de](#baebeca-solutions-bei-lexofficede)
+- [Dokumentation](#dokumentation)
+  * [Klasse einbinden](#klasse-einbinden)
+    + [Start Parameter](#start-parameter)
+  * [Methoden](#methoden)
+    + [Rechnungen](#rechnungen)
+      - [Rechnung abfragen](#rechnung-abfragen)
+      - [Alle Rechnungen abfragen](#alle-rechnungen-abfragen)
+      - [Rechnung PDF herunterladen](#rechnung-pdf-herunterladen)
+      - [Rechnung anlegen](#rechnung-anlegen)
+    + [Kontakte](#kontakte)
+      - [Kontakt abfragen](#kontakt-abfragen)
+      - [Alle Kontakte abfragen](#alle-kontakte-abfragen)
+      - [Kontakt aktualisieren](#kontakt-aktualisieren)
+    + [Events / Webhooks](#events---webhooks)
+      - [Event anlegen](#event-anlegen)
+      - [Aktives Event abfragen](#aktives-event-abfragen)
+      - [Alle aktiven Events abfragen](#alle-aktiven-events-abfragen)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+---
+
+# lexoffice-php-api
 PHP Client für [Lexoffice](https://www.awin1.com/awclick.php?gid=368497&mid=13787&awinaffid=635216&linkid=2440770&clickref=) REST API
 
 Wir lieben Automatisierung und die nahtlose Verzahnung von Systemen!
