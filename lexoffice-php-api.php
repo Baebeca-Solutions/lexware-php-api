@@ -182,6 +182,10 @@ class lexoffice_client {
 	}
 
 	public function get_invoice_pdf($uuid, $filename) {
+		// check if invoice is a draft
+		$invoice = $this->get_invoice($uuid);
+		if ($invoice->voucherStatus == 'draft') throw new lexoffice_exception('lexoffice-php-api: requested invoice is a draft. Cannot create/download pdf file. Check details via $e->get_error()', array('invoice_id' => $uuid));
+
 		$request = $this->api_call('GET', 'invoices', $uuid, '', '/document');
 		if ($request && isset($request->documentFileId)) {
 			$request_file = $this->api_call('GET', 'files', $request->documentFileId);
@@ -221,7 +225,7 @@ class lexoffice_client {
 
 class lexoffice_exception extends Exception {
 	private $custom_error = '';
-	public function __construct($message, $data) {
+	public function __construct($message, $data = array()) {
 		$this->custom_error = $data;
 		parent::__construct($message);
 	}

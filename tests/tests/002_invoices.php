@@ -49,9 +49,15 @@ try {
 
 	if ($request->id) {
 		test('draft invoice created - id: '.$request->id);
-		// todo check if status is draft
 
-		test_finished(true);
+		// get invoice data
+		$request = $lexoffice->get_invoice($request->id);
+		if ($request->voucherStatus == 'draft') {
+			test_finished(true);
+		} else {
+			test('wrong voucherStatus: '.$request->voucherStatus);
+			test_finished(false);
+		}
 	} else {
 		test_finished(false);
 	}
