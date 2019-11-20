@@ -32,7 +32,7 @@ Erweiterungen benötigen oder dieses Projekt einfach Unterstützen möchten, kö
 An wen kann ich mich wenden, wenn ich Probleme oder Fragen habe?<br>
 Für diese Frage ist entscheidend, ob Sie eine Nutzungslizenz für unsere lexoffice-php-api erworben haben oder die kostenlose Variante nutzen.
 
-* Sofern eine Nutzungslizenz vorhanden ist können sich jederzeit per Mail an support@baebeca.de wenden und erhalten vorrangigen Support. 
+* Sofern eine Nutzungslizenz vorhanden ist, können sich jederzeit per Mail an support@baebeca.de wenden und erhalten vorrangigen Support. 
 * Wenn Sie die kostenlose Version nutzen bitten wir Sie auf Github einen [issue](https://github.com/Baebeca-Solutions/lexoffice-php-api/issues) zu erstellen.
 
 # Technische Dokumentation
