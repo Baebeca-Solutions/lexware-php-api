@@ -18,6 +18,7 @@
       - [Event anlegen](#event-anlegen)
       - [Aktives Event abfragen](#aktives-event-abfragen)
       - [Alle aktiven Events abfragen](#alle-aktiven-events-abfragen)
+  * [Error Handling](#error-handling)      
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -212,3 +213,34 @@ $lexoffice->get_event( string $uuid ) : array
 $lexoffice->get_events_all() : array
 ```
 
+## Error Handling
+Alle Methoden sollten stets in einem try/catch Block verwendet werden.<br>
+Unser Client bietet eine erweiterte Execption Klasse, die via "$e->get_error()" sofern vorhanden weitere Details zur Anfrage und dem API Response zurück gibt.
+
+Beispiel: Versuch eines PDF Downloads von einer nicht fertig gestellten Rechnung
+```php
+try {
+    $lexoffice->get_invoice_pdf('7f0f0f7f-dd61-4bf7-a9f7-a67b0530c7e9', 'test.pdf');
+} catch (lexoffice_exception $e) {
+    echo $e->getMessage();
+    // lexoffice-php-api: error in api request - check details via $e->get_error()
+
+    print_r($e->get_error());
+    /*
+    Array (
+        [HTTP Status] => 500
+        [Requested URI] => https://api.lexoffice.io/v1/invoices/7f0f0f7f-dd61-4bf7-a9f7-a67b0530c7e9/document
+        [Requested Payload] => 
+        [Response] => stdClass Object
+           (
+                [timestamp] => 2019-11-20T17:34:53.360+01:00
+                [status] => 500
+                [error] => Internal Server Error
+                [path] => /v1/invoices/7f0f0f7f-dd61-4bf7-a9f7-a67b0530c7e9/document
+                [traceId] => f9f241666675
+                [message] => A technical error has occurred that is not specified in more detail.
+            )
+    )
+    */
+}
+```
