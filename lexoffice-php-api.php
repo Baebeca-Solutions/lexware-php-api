@@ -26,6 +26,7 @@ class lexoffice_client {
 
 		$this->api_key = $settings['api_key'];
 		array_key_exists('callback', $settings) ? $this->callback = $settings['callback'] : $this->callback = false;
+		array_key_exists('ssl_verify', $settings) ? $this->ssl_verify = $settings['ssl_verify'] : $this->ssl_verify = true;
 
 		return true;
 	}
@@ -83,8 +84,17 @@ class lexoffice_client {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_USERAGENT, 'Baebeca Solutions GmbH - lexoffice-php-api | https://github.com/Baebeca-Solutions/lexoffice-php-api');
-		$result = curl_exec($ch);
 
+		// skip ssl verify only if manual deactivated (eg. in local tests)
+		if (!$this->ssl_verify) {
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		} else {
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, true);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+		}
+
+		$result = curl_exec($ch);
 		$http_status = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
 		if ($http_status == 200 || $http_status == 201) {
 			if (!empty($result) && $result && !($type == 'GET' && $resource == 'files')) {
