@@ -21,8 +21,8 @@ class lexoffice_client {
 	private $api_version = 'v1';
 
 	public function __construct($settings) {
-		if (!is_array($settings)) exit('lexoffice_client: client settings is not an array');
-		if (!array_key_exists('api_key', $settings)) exit('lexoffice_client: no api_key is given');
+		if (!is_array($settings)) throw new lexoffice_exception('lexoffice-php-api: settings should be an array');
+		if (!array_key_exists('api_key', $settings)) throw new lexoffice_exception('lexoffice-php-api: no api_key is given');
 
 		$this->api_key = $settings['api_key'];
 		array_key_exists('callback', $settings) ? $this->callback = $settings['callback'] : $this->callback = false;
@@ -75,7 +75,7 @@ class lexoffice_client {
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
 		} else {
-			exit('lexoffice_client: unknown request type for api_call');
+			throw new lexoffice_exception('lexoffice-php-api: unknown request type "'.$type.'" for api_call');
 		}
 
 		curl_setopt($ch, CURLOPT_URL, $curl_url);
@@ -96,15 +96,12 @@ class lexoffice_client {
 				return true;
 			}
 		} else {
-			echo 'Error: HTTP '.$http_status.'<br />';
-			echo 'Request URI:<br />';
-			echo $curl_url.'<br />';
-			echo 'Request Payload:<br />';
-			echo 'original: '.$data.'<br />';
-			echo '<pre>'.print_r(json_decode($data), true).'</pre>';
-			echo 'Response:<br />';
-			echo '<pre>'.print_r(json_decode($result), true).'</pre>';
-			exit('lexoffice_client: error in api request - check details above');
+			throw new lexoffice_exception('lexoffice-php-api: error in api request - check details via $e->get_error()', array(
+				'HTTP Status' => $http_status,
+				'Requested URI' => $curl_url,
+				'Requested Payload' => json_decode($data),
+				'Response' => json_decode($result),
+			));
 		}
 
 	}
@@ -210,4 +207,16 @@ class lexoffice_client {
 	#
 	#}
 
+}
+
+class lexoffice_exception extends Exception {
+	private $custom_error = '';
+	public function __construct($message, $data) {
+		$this->custom_error = $data;
+		parent::__construct($message);
+	}
+
+	public function get_error() {
+		return $this->custom_error;
+	}
 }
