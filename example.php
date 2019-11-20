@@ -1,30 +1,33 @@
 <?php
-require_once (__DIR__.'/../lexoffice-php-api.php');
+require_once(__DIR__.'/lexoffice-php-api.php');
 
-// if local developer test include secret api keys
-if (is_file(__DIR__.'/../_local_test_settings.php')) {
-	require_once (__DIR__.'/../_local_test_settings.php');
-} else {
-	$api_key = '';
-}
+// please add your API Key
+$api_key = '';
 
 $lexoffice = new lexoffice_client(array(
 	'api_key' => $api_key
 ));
 
+// show active Webhooks
 #print_r($lexoffice->get_events_all());
 
-#print_r($lexoffice->add_event('contact.created'));
+// create webhook
+#print_r($lexoffice->add_event('contact.created', 'https://domain.tld/lexoffice-php-client/callback.php'));
 
+// delete webhook
 #print_r($lexoffice->delete_event('a8a0a5a6-0dc1-4c9b-bfaa-7de4d4a3d6a5'));
 
+// get specific invoice
 #echo '<pre>'.print_r($lexoffice->get_invoice('7f0f0f7f-dd61-4bf7-a9f7-a67b0530c7e9'), true).'</pre>';
 
+// echo specific invoice number
 #$invoice = $lexoffice->get_invoice('350d7ea4-63f9-44fb-a404-b4de167b4a8e');
 #echo $invoice->voucherNumber;
 
+// download invoice pdf
 #$lexoffice->get_invoice_pdf('7f0f0f7f-dd61-4bf7-a9f7-a67b0530c7e9', 'test.pdf'), true);
 
+// create draft invoice
 /*
 print_r($lexoffice->create_invoice(array(
 	'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
@@ -62,7 +65,7 @@ print_r($lexoffice->create_invoice(array(
 		'taxType' => 'net',
 	),
 	'shippingConditions' => array(
-		'shippingDate' => $date,
+		'shippingDate' => date('Y-m-d').'T00:00:01.000+02:00',
 		'shippingType' => 'delivery',
 	),
 	'paymentConditions' => array(
