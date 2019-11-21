@@ -1,29 +1,3 @@
-# Übersicht
-- [Übersicht - lexoffice-php-api](#-bersicht---lexoffice-php-api)
-  * [Baebeca Solutions bei lexoffice.de](#baebeca-solutions-bei-lexofficede)
-- [Dokumentation](#dokumentation)
-  * [Klasse einbinden](#klasse-einbinden)
-    + [Start Parameter](#start-parameter)
-  * [Methoden](#methoden)
-    + [Rechnungen](#rechnungen)
-      - [Rechnung abfragen](#rechnung-abfragen)
-      - [Alle Rechnungen abfragen](#alle-rechnungen-abfragen)
-      - [Rechnung PDF herunterladen](#rechnung-pdf-herunterladen)
-      - [Rechnung anlegen](#rechnung-anlegen)
-    + [Kontakte](#kontakte)
-      - [Kontakt abfragen](#kontakt-abfragen)
-      - [Alle Kontakte abfragen](#alle-kontakte-abfragen)
-      - [Kontakt aktualisieren](#kontakt-aktualisieren)
-    + [Events / Webhooks](#events---webhooks)
-      - [Event anlegen](#event-anlegen)
-      - [Aktives Event abfragen](#aktives-event-abfragen)
-      - [Alle aktiven Events abfragen](#alle-aktiven-events-abfragen)
-  * [Error Handling](#error-handling)      
-
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
----
-
 # lexoffice-php-api
 PHP Client für [Lexoffice](https://www.awin1.com/awclick.php?gid=368497&mid=13787&awinaffid=635216&linkid=2440770&clickref=) REST API
 
@@ -33,7 +7,9 @@ Wir lieben Automatisierung und die nahtlose Verzahnung von Systemen!
 bestehende Systeme integriert oder Prozesse automatisiert werden können. Für diesen Ansatz haben 
 wir einen PHP-Client entwickelt und stellen diesen kostenfrei zur Verfügung. 
 
-Alle weiteren Informationen finden Sie auf unserer [Projektseite](https://www.baebeca.de/softwareentwicklung/projekte/lexoffice-php-client/).
+Alle weiteren Informationen finden Sie hier:
+* Allgemeine Themen auf unserer [Projektseite](https://www.baebeca.de/softwareentwicklung/projekte/lexoffice-php-client/)
+* Eine technische Dokumentation in unserem [Wiki](https://wiki.baebeca.de/index.php?title=Lexoffice-php-api)
  
 ## Baebeca Solutions bei lexoffice.de
 * [Public API Partner](https://www.lexoffice.de/partner/public-api/)
@@ -50,197 +26,14 @@ solange Sie Ihr Projekt dann ebenso Quelloffen unter den in der Lizenz genannten
 zur Verfügung stellen.
 
 Wenn Sie Ihre Lösung nicht veröffentlichen möchten, Support benötigen, individuelle 
-Erweiterungen benötigen oder dieses Projekt einfach Unterstützen möchten, können Sie für einmalig 99,- netto
-eine Lizenz zur Nutzung erhalten. Setzten Sie sich diesbezüglich einfach mit uns in [Verbindung]([Projektseite](https://www.baebeca.de/softwareentwicklung/projekte/lexoffice-php-client/)).
+Erweiterungen benötigen oder dieses Projekt einfach Unterstützen möchten, können Sie für 99,- EUR/Netto eine lifetime Nutzungslizenz erhalten. Setzten Sie sich diesbezüglich bitte kurz mit uns in [Verbindung]([Projektseite](https://www.baebeca.de/softwareentwicklung/projekte/lexoffice-php-client/)).
 
 ## Support
-An wen kann ich mich wenden, wenn ich Probleme oder Fragen habe?
-* Nutzungslizenz vorhanden
-  * Sie können sich jederzeit per Mail an [support@baebeca.de](mailto:support@baebeca.de) wenden und erhalten vorrangigen Support. 
-* Kostenlose Version
-  * Auf Github einen [issue](https://github.com/Baebeca-Solutions/lexoffice-php-api/issues) erstellen.
+An wen kann ich mich wenden, wenn ich Probleme oder Fragen habe?<br>
+Für diese Frage ist entscheidend, ob Sie eine Nutzungslizenz für unsere lexoffice-php-api erworben haben oder die kostenlose Variante nutzen.
 
-## API Account
-Erstellen Sie in Ihrem [Lexoffice Account](https://www.awin1.com/awclick.php?gid=368497&mid=13787&awinaffid=635216&linkid=2440770&clickref=) einen API Key.
+* Sofern eine Nutzungslizenz vorhanden ist, können sich jederzeit per Mail an support@baebeca.de wenden und erhalten vorrangigen Support. 
+* Wenn Sie die kostenlose Version nutzen bitten wir Sie auf Github einen [issue](https://github.com/Baebeca-Solutions/lexoffice-php-api/issues) zu erstellen.
 
-Einstellungen :: Erweiterungen :: lexoffice Public API :: "Schlüssel neu erstellen"
-
-# Dokumentation
-
-## Klasse einbinden
-```php
-<?php
-// include the class file, check the correct folder
-require_once (__DIR__.'/lexoffice-php-api.php');
-   
-// initiate client with your settings
-$lexoffice = new lexoffice_client(array('api_key' => 'xyz'));
-```
-    
-### Start Parameter
-> api_key [string]
-
-API Schlüssel
-> callback [string]
-
-Ihre Standard Callback URL für Webhooks von Lexoffice    
-    
-## Methoden
-
-### Rechnungen
-
-#### Rechnung abfragen
-```php
-$lexoffice->get_invoice( string $uuid ) : array
-```
-* uuid
-  * Die eindeutige uuid des Eintrages der abgefragt werden soll
-
-#### Alle Rechnungen abfragen
-```php
-$lexoffice->get_invoices_all() : array
-```
-
-#### Rechnung PDF herunterladen
-```php
-$lexoffice->get_invoice_pdf( string $uuid, string $filename) : bool
-```
-* uuid
-  * Die eindeutige uuid des Eintrages der abgefragt werden soll
-* filename
-  * Der lokale Dateiname an dem das PDF abgelegt werden soll  
-
-#### Rechnung anlegen
-```php
-$lexoffice->create_invoice( array $data [, bool $finalized = false ] ) : array
-```
-* data
-  * Ein Array der Rechnungsdaten nach der nötigen [Lexoffice Formatierung](https://developers.lexoffice.io/docs/#invoices-properties)
-  * Beispiel
-    ```php
-    array(
-     'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
-     'introduction' => 'Einleitungstext',
-     'remark' => "Fußzeile\r\nMehrzeilig",
-     'address' => array(
-     	#'contactId' => '<id>',
-     	'name' => 'Frau Jane Doe',
-     	'street' => 'Str. 1',
-     	'zip' => '12345',
-     	'city' => 'Stadt',
-     	'countryCode' => 'DE',
-      ),
-      'lineItems' => array(
-      	array(
-       		'type' => 'custom',
-       		'name' => 'Produktname',
-       		'description' => 'Beschreibung',
-       		'quantity' => 1,
-       		'unitName' => 'Stück',
-       		'unitPrice' => array(
-       			'currency' => 'EUR',
-       			'netAmount' => 10.99,
-           		'taxRatePercentage' => 19,
-       		),
-       		#'discountPercentage' => 0,
-       	),
-      ),
-      'totalPrice' => array(
-       	'currency' => 'EUR',
-       	#'totalDiscountAbsolute' => 0,
-       	#'totalDiscountPercentage' => 0,
-      ),
-      'taxConditions' => array(
-      	'taxType' => 'net',
-      ),
-      'shippingConditions' => array(
-      	'shippingDate' => date('Y-m-d').'T00:00:01.000+02:00',
-      	'shippingType' => 'delivery',
-      ),
-      'paymentConditions' => array(
-      	'paymentTermLabel' => 'Vorkasse',
-      	'paymentTermDuration' => 1,
-      ),
-    )
-    ```
-* finalized
-  * Entscheidet ob die Rechnung fertiggestellt werden soll.
-
-### Kontakte
-
-#### Kontakt abfragen
-```php
-$lexoffice->get_contact( string $uuid ) : array
-```
-* uuid
-  * Die eindeutige uuid des Eintrages der abgefragt werden soll
-  
-#### Alle Kontakte abfragen
-```php
-$lexoffice->get_contacts_all() : array
-```
-    
-#### Kontakt aktualisieren
-```php
-$lexoffice->update_contact( string $uuid, array $data) : array
-```
-* uuid
-  * Die eindeutige uuid des Eintrages der abgefragt werden soll
-* data
-  * Ein Array der Rechnungsdaten nach der nötigen [Lexoffice Formatierung](https://developers.lexoffice.io/docs/#contact-properties)  
-
-    
-### Events / Webhooks
-     
-#### Event anlegen
-```php
-$lexoffice->create_event( string $event [, bool $callback = false ] ) : array|bool
-```
-* event
-  * Mögliche sind alle von Lexoffice [angebeotenen Events](https://developers.lexoffice.io/docs/#event-subscriptions-endpoint-event-types).
-* callback
-  * Die Callback URL für diesen Aufruf. Wenn keine angegeben wird, wird die Standard URL aus der initialisierung genutzt.  
-  
-#### Aktives Event abfragen
-```php
-$lexoffice->get_event( string $uuid ) : array
-```
-* uuid
-  * Die eindeutige uuid des Eintrages der abgefragt werden soll
-
-#### Alle aktiven Events abfragen
-```php
-$lexoffice->get_events_all() : array
-```
-
-## Error Handling
-Alle Methoden sollten stets in einem try/catch Block verwendet werden.<br>
-Unser Client bietet eine erweiterte Execption Klasse, die via "$e->get_error()" sofern vorhanden weitere Details zur Anfrage und dem API Response zurück gibt.
-
-Beispiel: Versuch eines PDF Downloads von einer nicht fertig gestellten Rechnung
-```php
-try {
-    $lexoffice->get_invoice_pdf('7f0f0f7f-dd61-4bf7-a9f7-a67b0530c7e9', 'test.pdf');
-} catch (lexoffice_exception $e) {
-    echo $e->getMessage();
-    // lexoffice-php-api: error in api request - check details via $e->get_error()
-
-    print_r($e->get_error());
-    /*
-    Array (
-        [HTTP Status] => 500
-        [Requested URI] => https://api.lexoffice.io/v1/invoices/7f0f0f7f-dd61-4bf7-a9f7-a67b0530c7e9/document
-        [Requested Payload] => 
-        [Response] => stdClass Object
-           (
-                [timestamp] => 2019-11-20T17:34:53.360+01:00
-                [status] => 500
-                [error] => Internal Server Error
-                [path] => /v1/invoices/7f0f0f7f-dd61-4bf7-a9f7-a67b0530c7e9/document
-                [traceId] => f9f241666675
-                [message] => A technical error has occurred that is not specified in more detail.
-            )
-    )
-    */
-}
-```
+# Technische Dokumentation
+Die Dokumentation mit allen Informationen finden Sie in unserem [Wiki](https://wiki.baebeca.de/index.php?title=Lexoffice-php-api) unter https://wiki.baebeca.de/index.php?title=Lexoffice-php-api
