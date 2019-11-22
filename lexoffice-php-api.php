@@ -96,16 +96,21 @@ class lexoffice_client {
 
 		$result = curl_exec($ch);
 		$http_status = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-		if ($http_status == 200 || $http_status == 201) {
+		if ($http_status == 200 || $http_status == 201 || $http_status == 202 || $http_status == 204) {
 			if (!empty($result) && $result && !($type == 'GET' && $resource == 'files')) {
 				return json_decode($result);
-			// binary
-			} elseif (!empty($result) && $result) {
+				// binary
+			} else if (!empty($result) && $result) {
 				return $result;
 			} else {
 				return true;
 			}
+		} elseif ($http_status == 401) {
+			throw new lexoffice_exception('lexoffice-php-api: invalid API Key');
+		} elseif ($http_status == 402) {
+			throw new lexoffice_exception('lexoffice-php-api: action not possible due a lexoffice contract issue');
 		} else {
+			// all other codes https://developers.lexoffice.io/docs/#http-status-codes
 			throw new lexoffice_exception('lexoffice-php-api: error in api request - check details via $e->get_error()', array(
 				'HTTP Status' => $http_status,
 				'Requested URI' => $curl_url,
@@ -202,6 +207,10 @@ class lexoffice_client {
 
 	public function update_contact($uuid, $data) {
 		return $this->api_call('PUT', 'contacts', $uuid, $data);
+	}
+
+	public function get_profile() {
+		return $this->api_call('GET', 'profile');
 	}
 
 	// todo check lifetime api key
