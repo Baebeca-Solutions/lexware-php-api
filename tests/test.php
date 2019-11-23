@@ -48,7 +48,7 @@ function test_finished($result) {
 
 
 $run_specific_test = 0;
-#$run_specific_test = 3;
+#$run_specific_test = 4;
 $debug = true;
 
 $tests = array_slice(scandir('./tests'), 2);

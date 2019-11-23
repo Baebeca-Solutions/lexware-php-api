@@ -130,10 +130,13 @@ class lexoffice_client {
 		}
 	}
 
-	// todo
-	#public function create_contact() {
-	#
-	#}
+	public function create_contact(array $data) {
+		// todo maybe a good idea to check if already exist?
+		// todo some validation checks
+		// set version to 0 to create a new contact
+		$data['version'] = 0;
+		return $this->api_call('POST', 'contacts', '', $data);
+	}
 
 	public function create_invoice($data, $finalized = false) {
 		//todo some validation checks
@@ -205,15 +208,13 @@ class lexoffice_client {
 		}
 	}
 
-	public function update_contact($uuid, $data) {
-		return $this->api_call('PUT', 'contacts', $uuid, $data);
-	}
-
 	public function get_profile() {
 		return $this->api_call('GET', 'profile');
 	}
 
-	// todo check lifetime api key
+	public function update_contact(string $uuid, $data) {
+		return $this->api_call('PUT', 'contacts', $uuid, $data);
+	}
 
 	// todo
 	#public function update_invoice() {
@@ -225,11 +226,33 @@ class lexoffice_client {
 	#
 	#}
 
-	// todo
-	#public function search_contact() {
-	#
-	#}
+	public function search_contact(array $filters) {
+		// todo integrate pagination
 
+		$filter_string = '';
+		$i = 1;
+		foreach ($filters as $index => $filter) {
+			if (($index == 'customer' || $index == 'vendor') && $filter !== '') {
+				// bool to text
+				if ($filter === true) $filter = 'true';
+				if ($filter === false) $filter = 'false';
+				$filter_string.= 'filter_'.$i.'='.urlencode($filter).'&';
+				$i++;
+			} elseif (($index == 'email' || $index == 'name') && $filter !== '') {
+				if (strlen($filter) < 3) throw new lexoffice_exception('lexoffice-php-api: search pattern must have least 3 characters');
+				$filter_string.= 'filter_'.$i.'='.urlencode($filter).'&';
+				$i++;
+			} elseif ($filter !== '') {
+				$filter_string.= 'filter_'.$i.'='.urlencode($filter).'&';
+				$i++;
+			}
+		}
+
+		if (!$filter_string) throw new lexoffice_exception('lexoffice-php-api: no valid filter for searching contacts');
+		return $this->api_call('GET', 'contacts', '', '', '?'.substr($filter_string, 0, -1));
+	}
+
+	// todo check lifetime api key
 }
 
 class lexoffice_exception extends Exception {
