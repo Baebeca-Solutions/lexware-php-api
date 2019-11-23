@@ -15,6 +15,9 @@
 
 // Official Lexoffice Documentation: https://developers.lexoffice.io/docs/
 
+use Lexoffice\Models\Contact;
+
+
 class lexoffice_client {
 	private $api_key;
 	private $api_endpoint = 'https://api.lexoffice.io';
@@ -130,10 +133,9 @@ class lexoffice_client {
 		}
 	}
 
-	// todo
-	#public function create_contact() {
-	#
-	#}
+	public function create_contact(Contact $contact) {
+	    return $this->api_call('POST', 'contacts', '', $contact->getData());
+	}
 
 	public function create_invoice($data, $finalized = false) {
 		//todo some validation checks
