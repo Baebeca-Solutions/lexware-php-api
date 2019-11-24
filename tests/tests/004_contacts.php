@@ -11,7 +11,7 @@ try {
 		),
 		'person' => array(
 			'salutation' => 'Herr',
-			'firstName' => 'Jon',
+			'firstName' => 'John',
 			'lastName' => 'Doe',
 		),
 		'addresses' => array(
@@ -58,7 +58,7 @@ try {
 	test_finished(false);
 }
 
-
+$random_contact_name = 'contact_'.rand(11111111, 999999999999);
 test_start('create contact - company');
 try {
 	$request = $lexoffice->create_contact(array(
@@ -69,7 +69,8 @@ try {
 			),
 		),
 		'company' => array(
-			'name' => 'Baebeca Solutions GmbH',
+			// use random name, use it in later search check
+			'name' => $random_contact_name,
 			'street' => 'Genklerhardt 6',
 			'zip' => '51647',
 			'city' => 'Gummersbach',
@@ -77,7 +78,7 @@ try {
 			'contactPersons' => array(
 				array(
 					'salutation' => 'Herr',
-					'firstName' => 'Jon',
+					'firstName' => 'John',
 					'lastName' => 'Doe',
 					'emailAddress' =>'support@baebeca.de',
         			'phoneNumber' => '022619202930',
@@ -132,13 +133,13 @@ test_start('search a contact');
 try {
 	$request = $lexoffice->search_contact(array(
 		'email' => '',
-		'name' => 'Jon Doe',
+		'name' => $random_contact_name,
 		'number' => '',
 		'customer' => '', // bool
 		'venodr' => '', // bool
 	));
 
-	if (count($request->content)) {
+	if (count($request->content) == 1) {
 		test('found '.count($request->content).' contacts');
 		test_finished(true);
 	} else {

@@ -230,21 +230,17 @@ class lexoffice_client {
 		// todo integrate pagination
 
 		$filter_string = '';
-		$i = 1;
 		foreach ($filters as $index => $filter) {
 			if (($index == 'customer' || $index == 'vendor') && $filter !== '') {
 				// bool to text
 				if ($filter === true) $filter = 'true';
 				if ($filter === false) $filter = 'false';
-				$filter_string.= 'filter_'.$i.'='.urlencode($filter).'&';
-				$i++;
+				$filter_string.= $index.'='.urlencode($filter).'&';
 			} elseif (($index == 'email' || $index == 'name') && $filter !== '') {
 				if (strlen($filter) < 3) throw new lexoffice_exception('lexoffice-php-api: search pattern must have least 3 characters');
-				$filter_string.= 'filter_'.$i.'='.urlencode($filter).'&';
-				$i++;
+				$filter_string.= $index.'='.urlencode($filter).'&';
 			} elseif ($filter !== '') {
-				$filter_string.= 'filter_'.$i.'='.urlencode($filter).'&';
-				$i++;
+				$filter_string.= $index.'='.urlencode($filter).'&';
 			}
 		}
 
