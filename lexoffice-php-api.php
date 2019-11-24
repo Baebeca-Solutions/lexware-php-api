@@ -133,6 +133,12 @@ class lexoffice_client {
 		}
 	}
 
+    /**
+     * @param  Contact  $contact
+     * @return bool|mixed|string
+     * @throws lexoffice_exception
+     */
+
 	public function create_contact(Contact $contact) {
 	    return $this->api_call('POST', 'contacts', '', $contact->getData());
 	}
