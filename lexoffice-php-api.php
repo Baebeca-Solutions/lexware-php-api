@@ -89,9 +89,6 @@ class lexoffice_client {
 		if (!$this->ssl_verify) {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		} else {
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, true);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 		}
 
 		$result = curl_exec($ch);
