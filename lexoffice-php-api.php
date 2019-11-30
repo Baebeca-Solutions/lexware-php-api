@@ -172,12 +172,12 @@ class lexoffice_client {
 	}
 
 	public function get_invoices_all() {
-		$result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&direction=ASC&sort=voucherNumber&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
+		$result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
 		$vouchers = $result->content;
 		unset($result->content);
 
 		for ($i = 1; $i < $result->totalPages; $i++) {
-			$result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=100&direction=ASC&sort=voucherNumber&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
+			$result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=100&sort=voucherNumber,DESC&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
 			foreach ($result_page->content as $voucher) {
 				$vouchers[] = $voucher;
 			}
@@ -185,6 +185,38 @@ class lexoffice_client {
 		}
 		return($vouchers);
 	}
+
+	public function get_last_invoices($count) {
+		if ($count <= 0) throw new lexoffice_exception('lexoffice-php-api: positive invoice count needed');
+
+		if ($count <= 100) {
+			$result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size='.$count.'&sort=voucherNumber,DESC&voucherType=invoice&voucherStatus=open,paid,paidoff,voided,transferred');
+			return $result->content;
+		} else {
+			$result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType=invoice&voucherStatus=open,paid,paidoff,voided,transferred');
+			$vouchers = $result->content;
+			$count = $count-100;
+			unset($result->content);
+
+			for ($i = 1; $i < $result->totalPages; $i++) {
+				if (!$count) break;
+				if ($count <= 100) {
+					$count_tmp = $count;
+				} else {
+					$count_tmp = 100;
+				}
+
+				$result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size='.$count_tmp.'&sort=voucherNumber,DESC&voucherType=invoice&voucherStatus=open,paid,paidoff,voided,transferred');
+				foreach ($result_page->content as $voucher) {
+					$vouchers[] = $voucher;
+				}
+				$count = $count-$count_tmp;
+				unset($result_page->content);
+			}
+			return $vouchers;
+		}
+	}
+
 
 	public function get_invoice_pdf($uuid, $filename) {
 		// check if invoice is a draft
