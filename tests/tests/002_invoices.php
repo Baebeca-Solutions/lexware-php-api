@@ -419,7 +419,6 @@ try {
 	test_finished(false);
 }
 
-/* not implemented yet
 test_start('invoice - text position');
 try {
 	$request = $lexoffice->create_invoice([
@@ -439,11 +438,16 @@ try {
 				'type' => 'text',
 				'name' => 'blub blub bub',
 				'description' => 'Beschreibung',
-				'quantity' =>01,
+			],
+			[
+				'type' => 'custom',
+				'name' => 'Produktname',
+				'description' => 'Beschreibung',
+				'quantity' => 1,
 				'unitName' => 'Stück',
 				'unitPrice' => [
 					'currency' => 'EUR',
-					'netAmount' => 0,
+					'netAmount' => 11.99,
 					'taxRatePercentage' => 19,
 				],
 				#'discountPercentage' => 0,
@@ -456,20 +460,7 @@ try {
 				'unitName' => 'Stück',
 				'unitPrice' => [
 					'currency' => 'EUR',
-					'netAmount' => -11.99,
-					'taxRatePercentage' => 19,
-				],
-				#'discountPercentage' => 0,
-			],
-			[
-				'type' => 'custom',
-				'name' => 'Produktname',
-				'description' => 'Beschreibung',
-				'quantity' => 1,
-				'unitName' => 'Stück',
-				'unitPrice' => [
-					'currency' => 'EUR',
-					'netAmount' => 3.99,
+					'netAmount' => -3.99,
 					'taxRatePercentage' => 19,
 				],
 				#'discountPercentage' => 0,
@@ -504,7 +495,7 @@ try {
 	test(print_r($e->get_error(), true));
 	test_finished(false);
 }
-*/
+
 
 test_start('invoice - get all invoices');
 $max_invoices_in_test_account = 0;

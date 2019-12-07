@@ -65,14 +65,24 @@ class lexoffice_client {
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
 		} elseif ($type == 'POST') {
-			$data = json_encode($data);
-			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-				'Authorization: Bearer '.$this->api_key,
-				'Content-Type: application/json',
-				'Content-Length: '.strlen($data),
-				'Accept: application/json',
-			));
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+
+			if ($resource == 'files') {
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+					'Authorization: Bearer '.$this->api_key,
+					'Content-Type: multipart/form-data',
+					'Accept: application/json',
+				));
+				curl_setopt($ch, CURLOPT_POST, true);
+			} else {
+				$data = json_encode($data);
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+					'Authorization: Bearer '.$this->api_key,
+					'Content-Type: application/json',
+					'Content-Length: '.strlen($data),
+					'Accept: application/json',
+				));
+			}
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
 		} else {
@@ -241,7 +251,7 @@ class lexoffice_client {
 		return $this->api_call('GET', 'profile');
 	}
 
-	public function update_contact(string $uuid, $data) {
+	public function update_contact($uuid, $data) {
 		return $this->api_call('PUT', 'contacts', $uuid, $data);
 	}
 
@@ -278,6 +288,14 @@ class lexoffice_client {
 	}
 
 	// todo check lifetime api key
+
+	public function upload_file($file) {
+		if (!file_exists($file)) throw new lexoffice_exception('lexoffice-php-api: file does not exist', array('file' => $file));
+		if (filesize($file) > 5*1024*1024) throw new lexoffice_exception('lexoffice-php-api: filesize to big', array('file' => $file, 'filesize' => filesize($file).' byte'));
+		if (!in_array(substr($file, -4), array('.pdf', '.jpg', '.png'))) throw new lexoffice_exception('lexoffice-php-api: invalid file extension', array('file' => $file));
+
+		return $this->api_call('POST', 'files', '', array('file' => new CURLFile($file), 'type' => 'voucher'), '');
+	}
 }
 
 class lexoffice_exception extends Exception {
