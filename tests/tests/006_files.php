@@ -16,8 +16,6 @@ try {
 	test(print_r($e->get_error(), true));
 	test_finished(false);
 }
-print_r($request);
-exit();
 
 test_start('upload big voucher');
 try {

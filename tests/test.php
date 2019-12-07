@@ -48,13 +48,14 @@ function test_finished($result) {
 
 
 $run_specific_test = 0;
-$run_specific_test = 6;
+#$run_specific_test = 6;
 $debug = true;
 
 $tests = array_slice(scandir('./tests'), 2);
 foreach ($tests as $test) {
 	$test_tmp = explode('_', $test);
 	if (!$run_specific_test || $run_specific_test == (int)$test_tmp[0]) {
+		if (substr($test, -4) != '.php') continue;
 		test('include test: '.'./tests/'.$test, true);
 		require_once ('./tests/'.$test);
 	} else {
