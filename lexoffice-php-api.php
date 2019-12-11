@@ -16,9 +16,9 @@
 // Official Lexoffice Documentation: https://developers.lexoffice.io/docs/
 
 class lexoffice_client {
-	protected $api_key;
+	protected $api_key = '';
 	protected $api_endpoint = 'https://api.lexoffice.io';
-	protected $callback;
+	protected $callback = '';
 	protected $api_version = 'v1';
 
 	public function __construct($settings) {
@@ -139,7 +139,7 @@ class lexoffice_client {
 		if ($callback) {
 			return $this->api_call('POST', 'event-subscriptions', '', array('eventType' => $event, 'callbackUrl' => $callback));
 		} else {
-			return false;
+			throw new lexoffice_exception('lexoffice-php-api: cannot create webhook, no callback given');
 		}
 	}
 
