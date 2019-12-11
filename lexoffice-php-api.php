@@ -16,9 +16,10 @@
 // Official Lexoffice Documentation: https://developers.lexoffice.io/docs/
 
 class lexoffice_client {
-	private $api_key;
-	private $api_endpoint = 'https://api.lexoffice.io';
-	private $api_version = 'v1';
+	protected $api_key;
+	protected $api_endpoint = 'https://api.lexoffice.io';
+	protected $callback;
+	protected $api_version = 'v1';
 
 	public function __construct($settings) {
 		if (!is_array($settings)) throw new lexoffice_exception('lexoffice-php-api: settings should be an array');
@@ -35,7 +36,7 @@ class lexoffice_client {
 		unset($this->api_key);
 	}
 
-	private function api_call($type, $resource, $uuid = '', $data = '', $params = '') {
+	protected function api_call($type, $resource, $uuid = '', $data = '', $params = '') {
 		$ch = curl_init();
 		$curl_url = $this->api_endpoint.'/'.$this->api_version.'/'.$resource.'/'.$uuid.$params;
 
@@ -113,7 +114,12 @@ class lexoffice_client {
 				return true;
 			}
 		} elseif ($http_status == 401) {
-			throw new lexoffice_exception('lexoffice-php-api: invalid API Key');
+			throw new lexoffice_exception('lexoffice-php-api: invalid API Key', array(
+				'HTTP Status' => $http_status,
+				'Requested URI' => $curl_url,
+				'Requested Payload' => json_decode($data),
+				'Response' => json_decode($result),
+			));
 		} elseif ($http_status == 402) {
 			throw new lexoffice_exception('lexoffice-php-api: action not possible due a lexoffice contract issue');
 		} else {
