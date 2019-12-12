@@ -85,7 +85,12 @@ class lexoffice_client {
 				));
 			}
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-
+		} elseif ($type == 'DELETE') {
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'Authorization: Bearer '.$this->api_key,
+				'Accept: application/json',
+			));
 		} else {
 			throw new lexoffice_exception('lexoffice-php-api: unknown request type "'.$type.'" for api_call');
 		}
@@ -266,10 +271,9 @@ class lexoffice_client {
 	#
 	#}
 
-	// todo
-	#public function delete_event($uuid) {
-	#
-	#}
+	public function delete_event($uuid) {
+		return $this->api_call('DELETE', 'event-subscriptions', $uuid);
+	}
 
 	public function search_contact(array $filters) {
 		// todo integrate pagination
