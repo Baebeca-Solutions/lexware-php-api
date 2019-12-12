@@ -238,7 +238,6 @@ class lexoffice_client {
 		}
 	}
 
-
 	public function get_invoice_pdf($uuid, $filename) {
 		// check if invoice is a draft
 		$invoice = $this->get_invoice($uuid);
@@ -256,6 +255,21 @@ class lexoffice_client {
 		} else {
 			return false;
 		}
+	}
+
+	public function get_vouchers($type = 'invoice,creditnote,orderconfirmation', $state = 'draft,open,paid,paidoff,voided,transferred') {
+		$result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state);
+		$vouchers = $result->content;
+		unset($result->content);
+
+		for ($i = 1; $i < $result->totalPages; $i++) {
+			$result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state);
+			foreach ($result_page->content as $voucher) {
+				$vouchers[] = $voucher;
+			}
+			unset($result_page->content);
+		}
+		return($vouchers);
 	}
 
 	public function get_profile() {
