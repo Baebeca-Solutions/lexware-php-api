@@ -1,13 +1,32 @@
 <?php
 
-// to prevent execute unknown callbacks, you should setup your "organizationId" (you see it if you check existing events)
+// to prevent execute callbacks for other keys/companies, you can setup your "organizationId" as whitelist
 $company_id = '';
 
-$data = file_get_contents('php://input');
-$data = json_decode($data);
+$data_webhook = file_get_contents('php://input');
+$data = json_decode($data_webhook);
 
-// todo Verify Authenticity with X-Lxo-Signature
-if (!$company_id || $data->organizationId == $company_id) {
+$headers = getallheaders();
+if (!isset($headers['X-Lxo-Signature'])) exit('no X-Lxo-Signature is given');
+
+$lexoffice_key_public_api = '-----BEGIN PUBLIC KEY-----
+MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAtCkZXZqT2zFRmA83KsBC
+tQSv9t+AaWiZpRWvzE4wiQEh0aHzNYkT/DlP419pngqoLxnqW9SsgWfKOG3utoEV
+z+Lru9odZntW/n/yaRK3f0AcMtuWs/Z1PZ4BbN/RlFYyqlPg0VfuAvZMAa+J9WAl
+Fuy0T4Y0EdO0d+EL8BpzSLqj3XLI+YuK4hUhlTOxHmdDtNUkugnT9b9khb+oPDmB
+3yxRP6Rmo2qo6waSc+pihCdOiZKzwA4fA1HT8DM54OaNQ4qd9NRf5uECijFlpQu6
+vZdW7Z+LZ8HTgGQVSsJdCzUtM1wiWOERrHvd8IpBMvUAvGM/qaJnAmwsEr4J/El4
+yCmur8wwYBtSUH0Xue42YysdmSS0pOMMUAAvr70HQMDHagYkErMtu6FAyAmPz8p/
+tAqJJpwAhxITbnc5WsmZOu0Ke255nXQ/2Go1TKv+45mSb7RLsvpmhVZ4nFByFt24
+vG6IwNReuLhJJL468jrdTpxyZRn0QqkxiQV7jDd9Dp1NVd/W3+n86Aos9LnJa+ut
+kN+jOOWmJdJjnQetJlbDVg3ex+XHVmCjiRYggCGPlpXVJwdEUNGzxhPGKjxmeiQT
+ahwFA9iHtwBw7yK5VfM/hA+JeF2FXYhTdehfClAQt1YCYXkgUEFxm9idRdBoCY6U
+bmFUXQLdi7tZyDor8Rxoq2MCAwEAAQ==
+-----END PUBLIC KEY-----';
+
+if (1 === openssl_verify ($data_webhook, base64_decode($headers['X-Lxo-Signature']), $lexoffice_key_public_api, 'RSA-SHA512')) {
+
+	if ($company_id && $data->organizationId == $company_id) exit('invalid organizationId');
 
 	switch ($data->eventType) {
 		case 'invoice.status.changed':
@@ -58,5 +77,6 @@ if (!$company_id || $data->organizationId == $company_id) {
 			// do some stuff
 			break;
 	}
-
+} else {
+	exit('invalid signature');
 }
