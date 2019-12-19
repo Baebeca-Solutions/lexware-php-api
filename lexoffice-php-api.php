@@ -70,7 +70,7 @@ class lexoffice_client {
 
 			if (
 				$resource == 'files' ||
-				$resource == 'vouchers' // POST requests to endpoint "vouchers" only available in Partner-API
+				($resource == 'vouchers' && $params == '/files') // POST requests to endpoint "vouchers" only available in Partner-API
 			) {
 				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 					'Authorization: Bearer '.$this->api_key,
