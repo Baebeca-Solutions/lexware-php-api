@@ -276,6 +276,10 @@ class lexoffice_client {
 		return $this->api_call('GET', 'profile');
 	}
 
+	public function get_credit_note($uuid) {
+		return $this->api_call('GET', 'credit-notes', $uuid);
+	}
+
 	public function update_contact($uuid, $data) {
 		return $this->api_call('PUT', 'contacts', $uuid, $data);
 	}
