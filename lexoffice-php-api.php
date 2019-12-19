@@ -68,7 +68,10 @@ class lexoffice_client {
 		} elseif ($type == 'POST') {
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 
-			if ($resource == 'files') {
+			if (
+				$resource == 'files' ||
+				$resource == 'vouchers' // POST requests to endpoint "vouchers" only available in Partner-API
+			) {
 				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 					'Authorization: Bearer '.$this->api_key,
 					'Content-Type: multipart/form-data',
