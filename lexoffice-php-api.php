@@ -28,6 +28,7 @@ class lexoffice_client {
 		$this->api_key = $settings['api_key'];
 		array_key_exists('callback', $settings) ? $this->callback = $settings['callback'] : $this->callback = false;
 		array_key_exists('ssl_verify', $settings) ? $this->ssl_verify = $settings['ssl_verify'] : $this->ssl_verify = true;
+		if (array_key_exists('sandbox', $settings)) $this->api_endpoint = 'https://api-sandbox.grld.eu';
 
 		return true;
 	}
