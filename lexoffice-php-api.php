@@ -261,19 +261,30 @@ class lexoffice_client {
 		}
 	}
 
-	public function get_vouchers($type = 'invoice,creditnote,orderconfirmation', $state = 'draft,open,paid,paidoff,voided,transferred', $archived = 'true') {
-		$result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.'&archived='.$archived);
-		$vouchers = $result->content;
-		unset($result->content);
-
-		for ($i = 1; $i < $result->totalPages; $i++) {
-			$result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.'&archived='.$archived);
-			foreach ($result_page->content as $voucher) {
-				$vouchers[] = $voucher;
-			}
-			unset($result_page->content);
+	public function get_vouchers($type = 'invoice,creditnote,orderconfirmation', $state = 'draft,open,paid,paidoff,voided,transferred', $archived = 'both') {
+		if ($archived == 'true') {
+			$archived = '&archived=true';
+		} elseif ($archived == 'false') {
+			$archived = '&archived=false';
+		} else {
+			$archived = '';
 		}
-		return($vouchers);
+
+		$result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.$archived);
+
+		if (isset($result->content)) {
+			$vouchers = $result->content;
+			unset($result->content);
+
+			for ($i = 1; $i < $result->totalPages; $i++) {
+				$result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.$archived);
+				foreach ($result_page->content as $voucher) {
+					$vouchers[] = $voucher;
+				}
+				unset($result_page->content);
+			}
+			return($vouchers);
+		}
 	}
 
 	public function get_profile() {
