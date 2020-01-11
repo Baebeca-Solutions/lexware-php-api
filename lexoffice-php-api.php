@@ -261,13 +261,13 @@ class lexoffice_client {
 		}
 	}
 
-	public function get_vouchers($type = 'invoice,creditnote,orderconfirmation', $state = 'draft,open,paid,paidoff,voided,transferred') {
-		$result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state);
+	public function get_vouchers($type = 'invoice,creditnote,orderconfirmation', $state = 'draft,open,paid,paidoff,voided,transferred', $archived = 'true') {
+		$result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.'&archived='.$archived);
 		$vouchers = $result->content;
 		unset($result->content);
 
 		for ($i = 1; $i < $result->totalPages; $i++) {
-			$result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state);
+			$result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.'&archived='.$archived);
 			foreach ($result_page->content as $voucher) {
 				$vouchers[] = $voucher;
 			}
