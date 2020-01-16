@@ -12,8 +12,8 @@ Alle weiteren Informationen finden Sie hier:
 * Eine technische Dokumentation in unserem [Wiki](https://wiki.baebeca.de/index.php?title=lexoffice-php-api)
  
 ## Baebeca Solutions bei lexoffice.de
-* [Public API Partner](https://www.lexoffice.de/partner/public-api/)
 * [Integrationspartner](https://www.lexoffice.de/partner/public-api/integrationspartner/)
+* [Softwarepartner](https://www.lexoffice.de/partner/)
 
 Die offizielle lexoffice API-Dokumentation finden Sie [hier](https://developers.lexoffice.io/docs/).
 
