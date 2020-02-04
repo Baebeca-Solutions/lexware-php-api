@@ -115,8 +115,8 @@ class lexoffice_client {
 		$http_status = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
 		if ($http_status == 200 || $http_status == 201 || $http_status == 202 || $http_status == 204) {
 			if (!empty($result) && $result && !($type == 'GET' && $resource == 'files')) {
-				return (is_array($result) ? json_decode($result) : $result);
-			// binary
+				return json_decode($result);
+				// binary
 			} else if (!empty($result) && $result) {
 				return $result;
 			} else {
@@ -126,8 +126,8 @@ class lexoffice_client {
 			throw new lexoffice_exception('lexoffice-php-api: invalid API Key', array(
 				'HTTP Status' => $http_status,
 				'Requested URI' => $curl_url,
-				'Requested Payload' => (is_array($data) ? json_decode($data) : $data),
-				'Response' => (is_array($result) ? json_decode($result) : $result),
+				'Requested Payload' => json_decode($data),
+				'Response' => json_decode($result),
 			));
 		} elseif ($http_status == 402) {
 			throw new lexoffice_exception('lexoffice-php-api: action not possible due a lexoffice contract issue');
@@ -136,8 +136,8 @@ class lexoffice_client {
 			throw new lexoffice_exception('lexoffice-php-api: error in api request - check details via $e->get_error()', array(
 				'HTTP Status' => $http_status,
 				'Requested URI' => $curl_url,
-				'Requested Payload' => (is_array($data) ? json_decode($data) : $data),
-				'Response' => (is_array($result) ? json_decode($result) : $result),
+				'Requested Payload' => json_decode($data),
+				'Response' => json_decode($result),
 			));
 		}
 
