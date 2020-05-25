@@ -61,6 +61,22 @@ if (1 === openssl_verify ($data_webhook, base64_decode($headers['X-Lxo-Signature
 			// do some stuff
 			break;
 
+		case 'quotation.created':
+			// do some stuff
+			break;
+
+		case 'quotation.changed':
+			// do some stuff
+			break;
+
+		case 'quotation.deleted':
+			// do some stuff
+			break;
+
+		case 'quotation.status.changed':
+			// do some stuff
+			break;
+
 		case 'contact.created':
 			// do some stuff
 			break;

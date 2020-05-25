@@ -11,6 +11,7 @@ if (is_file(__DIR__.'/../_local_test_settings.php')) {
 $lexoffice = new lexoffice_client(array(
 	'api_key' => $api_key,
 	'ssl_verify' => false,
+	//'sandbox' => true,
 ));
 
 
@@ -48,7 +49,7 @@ function test_finished($result) {
 
 
 $run_specific_test = 0;
-#$run_specific_test = 999;
+$run_specific_test = 7;
 $debug = true;
 
 $tests = array_slice(scandir('./tests'), 2);

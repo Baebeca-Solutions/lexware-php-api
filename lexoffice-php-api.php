@@ -251,6 +251,10 @@ class lexoffice_client {
 		}
 	}
 
+	public function get_quotation($uuid) {
+		return $this->api_call('GET', 'quotations', $uuid);
+	}
+
 	/* legacy function - will be removed in futere releases */
 	/* use get_pdf($type, $uuid, $filename) instead */
 	public function get_invoice_pdf($uuid, $filename) {
