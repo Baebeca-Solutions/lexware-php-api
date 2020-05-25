@@ -314,7 +314,7 @@ class lexoffice_client {
 		return $this->api_call('GET', 'profile');
 	}
 
-	public function get_credit_note($uuid) {
+	public function get_creditnote($uuid) {
 		return $this->api_call('GET', 'credit-notes', $uuid);
 	}
 
@@ -361,6 +361,11 @@ class lexoffice_client {
 		if (!in_array(substr($file, -4), array('.pdf', '.jpg', '.png'))) throw new lexoffice_exception('lexoffice-php-api: invalid file extension', array('file' => $file));
 
 		return $this->api_call('POST', 'files', '', array('file' => new CURLFile($file), 'type' => 'voucher'), '');
+	}
+
+	// legacy wrapper
+	public function get_credit_note($uuid) {
+		return $this->get_creditnote($uuid);
 	}
 }
 
