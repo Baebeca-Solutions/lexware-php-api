@@ -77,6 +77,22 @@ if (1 === openssl_verify ($data_webhook, base64_decode($headers['X-Lxo-Signature
 			// do some stuff
 			break;
 
+		case 'order-confirmation.created':
+			// do some stuff
+			break;
+
+		case 'order-confirmation.changed':
+			// do some stuff
+			break;
+
+		case 'order-confirmation.deleted':
+			// do some stuff
+			break;
+
+		case 'order-confirmation.status.changed':
+			// do some stuff
+			break;
+
 		case 'contact.created':
 			// do some stuff
 			break;
