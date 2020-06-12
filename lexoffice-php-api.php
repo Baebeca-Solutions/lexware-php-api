@@ -37,7 +37,7 @@ class lexoffice_client {
 		unset($this->api_key);
 	}
 
-	protected function api_call($type, $resource, $uuid = '', $data = '', $params = '') {
+	protected function api_call($type, $resource, $uuid = '', $data = '', $params = '', $return_http_header = false) {
 		// check api_key
 		if ($this->api_key === true || $this->api_key === false || $this->api_key === '') throw new lexoffice_exception('lexoffice-php-api: invalid API Key', array('api_key' => $this->api_key));
 		if (strlen($this->api_key) != 36 || substr_count($this->api_key, '-') != 4) throw new lexoffice_exception('lexoffice-php-api: invalid API Key', array('api_key' => $this->api_key));
@@ -106,7 +106,7 @@ class lexoffice_client {
 		curl_setopt($ch, CURLOPT_URL, $curl_url);
 		curl_setopt($ch, CURLOPT_VERBOSE, false);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_HEADER, $return_http_header);
 		curl_setopt($ch, CURLOPT_USERAGENT, 'Baebeca Solutions GmbH - lexoffice-php-api | https://github.com/Baebeca-Solutions/lexoffice-php-api');
 
 		// skip ssl verify only if manual deactivated (eg. in local tests)
@@ -118,9 +118,12 @@ class lexoffice_client {
 		$result = curl_exec($ch);
 		$http_status = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
 		if ($http_status == 200 || $http_status == 201 || $http_status == 202 || $http_status == 204) {
-			if (!empty($result) && $result && !($type == 'GET' && $resource == 'files')) {
+			if (!empty($result) && $result && !($type == 'GET' && $resource == 'files') && !$return_http_header) {
 				return json_decode($result);
-				// binary
+				// full http_header
+			} else if (!empty($result) && $result && $return_http_header) {
+				return ['header' => curl_getinfo($ch), 'body' => $result];
+				// binary or full http_header
 			} else if (!empty($result) && $result) {
 				return $result;
 			} else {
@@ -172,6 +175,10 @@ class lexoffice_client {
 	public function create_invoice($data, $finalized = false) {
 		//todo some validation checks
 		return $this->api_call('POST', 'invoices', '', $data, ($finalized ? '?finalize=true' : ''));
+	}
+
+	public function create_voucher($data) {
+		return $this->api_call('POST', 'vouchers', '', $data);
 	}
 
 	public function get_event($uuid) {
@@ -284,6 +291,10 @@ class lexoffice_client {
 		}
 	}
 
+	public function get_voucher($uuid) {
+		return $this->api_call('GET', 'vouchers', $uuid);
+	}
+
 	public function get_vouchers($type = 'invoice,creditnote,orderconfirmation', $state = 'draft,open,paid,paidoff,voided,transferred', $archived = 'both') {
 		if ($archived == 'true') {
 			$archived = '&archived=true';
@@ -308,6 +319,44 @@ class lexoffice_client {
 			}
 			return($vouchers);
 		}
+	}
+
+	public function get_voucher_files($uuid, $filename_prefix) {
+		// must get voucher files before
+		$voucher = $this->get_voucher($uuid);
+		if (!$voucher || !isset($voucher->files[0])) throw new lexoffice_exception('lexoffice-php-api: voucher has no files. Cannot download file. Check details via $e->get_error()', array('type' => $type, 'voucher_id' => $uuid));
+
+		// iterate files
+		$i = 1;
+		$saved_files = [];
+		foreach ($voucher->files as $uuid_file) {
+			$request = $this->api_call('GET', 'files', $uuid_file, '', '', true);
+
+			$header = substr($request['body'], 0, $request['header']['header_size']);
+			$body = substr($request['body'], $request['header']['header_size']);
+
+			// content type
+			switch ($request['header']['content_type']) {
+				case 'image/png':
+					$extension = 'png';
+					break;
+				case 'image/jpg':
+					$extension = 'jpg';
+					break;
+				case 'application/pdf':
+					$extension = 'pdf';
+					break;
+				default:
+					logfile('notice', 'unknown header', $request['header']['content_type']);
+					$extension = 'unknown';
+			}
+
+			$filename = $filename_prefix.'_'.$i.'.'.$extension;
+			file_put_contents($filename, $body);
+			$saved_files[] = $filename;
+			$i++;
+		}
+		return $saved_files;
 	}
 
 	public function get_profile() {
@@ -361,6 +410,14 @@ class lexoffice_client {
 		if (!in_array(substr($file, -4), array('.pdf', '.jpg', '.png'))) throw new lexoffice_exception('lexoffice-php-api: invalid file extension', array('file' => $file));
 
 		return $this->api_call('POST', 'files', '', array('file' => new CURLFile($file), 'type' => 'voucher'), '');
+	}
+
+	public function upload_voucher($uuid, $file) {
+		if (!file_exists($file)) throw new lexoffice_exception('lexoffice-php-api: file does not exist', array('file' => $file));
+		if (filesize($file) > 5*1024*1024) throw new lexoffice_exception('lexoffice-php-api: filesize to big', array('file' => $file, 'filesize' => filesize($file).' byte'));
+		if (!in_array(substr($file, -4), array('.pdf', '.jpg', '.png'))) throw new lexoffice_exception('lexoffice-php-api: invalid file extension', array('file' => $file));
+
+		return $this->api_call('POST', 'vouchers', $uuid, array('file' => new CURLFile($file)), '/files');
 	}
 
 	// legacy wrapper
