@@ -324,7 +324,7 @@ class lexoffice_client {
 	public function get_voucher_files($uuid, $filename_prefix) {
 		// must get voucher files before
 		$voucher = $this->get_voucher($uuid);
-		if (!$voucher || !isset($voucher->files[0])) throw new lexoffice_exception('lexoffice-php-api: voucher has no files. Cannot download file. Check details via $e->get_error()', array('type' => $type, 'voucher_id' => $uuid));
+		if (!$voucher || !isset($voucher->files[0])) throw new lexoffice_exception('lexoffice-php-api: voucher has no files. Cannot download file. Check details via $e->get_error()', array('voucher_id' => $uuid));
 
 		// iterate files
 		$i = 1;
