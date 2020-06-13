@@ -138,6 +138,11 @@ class lexoffice_client {
 			));
 		} elseif ($http_status == 402) {
 			throw new lexoffice_exception('lexoffice-php-api: action not possible due a lexoffice contract issue');
+		} elseif ($http_status == 500) {
+			throw new lexoffice_exception('lexoffice-php-api: Internal server error.', array(
+				'HTTP Status' => $http_status,
+				'Requested URI' => $curl_url,
+			));
 		} elseif ($http_status == 503) {
 			throw new lexoffice_exception('lexoffice-php-api: API Service currently unavailable', array(
 				'HTTP Status' => $http_status,
