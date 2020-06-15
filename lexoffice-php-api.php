@@ -412,7 +412,7 @@ class lexoffice_client {
 	public function upload_file($file) {
 		if (!file_exists($file)) throw new lexoffice_exception('lexoffice-php-api: file does not exist', array('file' => $file));
 		if (filesize($file) > 5*1024*1024) throw new lexoffice_exception('lexoffice-php-api: filesize to big', array('file' => $file, 'filesize' => filesize($file).' byte'));
-		if (!in_array(substr($file, -4), array('.pdf', '.jpg', '.png'))) throw new lexoffice_exception('lexoffice-php-api: invalid file extension', array('file' => $file));
+		if (!in_array(substr(strtolower($file), -4), array('.pdf', '.jpg', '.png'))) throw new lexoffice_exception('lexoffice-php-api: invalid file extension', array('file' => $file));
 
 		return $this->api_call('POST', 'files', '', array('file' => new CURLFile($file), 'type' => 'voucher'), '');
 	}
@@ -420,7 +420,7 @@ class lexoffice_client {
 	public function upload_voucher($uuid, $file) {
 		if (!file_exists($file)) throw new lexoffice_exception('lexoffice-php-api: file does not exist', array('file' => $file));
 		if (filesize($file) > 5*1024*1024) throw new lexoffice_exception('lexoffice-php-api: filesize to big', array('file' => $file, 'filesize' => filesize($file).' byte'));
-		if (!in_array(substr($file, -4), array('.pdf', '.jpg', '.png'))) throw new lexoffice_exception('lexoffice-php-api: invalid file extension', array('file' => $file));
+		if (!in_array(substr(strtolower($file), -4), array('.pdf', '.jpg', '.png'))) throw new lexoffice_exception('lexoffice-php-api: invalid file extension', array('file' => $file));
 
 		return $this->api_call('POST', 'vouchers', $uuid, array('file' => new CURLFile($file)), '/files');
 	}
