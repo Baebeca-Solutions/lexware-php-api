@@ -218,18 +218,7 @@ class lexoffice_client {
 	}
 
 	public function get_invoices_all() {
-		$result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
-		$vouchers = $result->content;
-		unset($result->content);
-
-		for ($i = 1; $i < $result->totalPages; $i++) {
-			$result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=100&sort=voucherNumber,DESC&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
-			foreach ($result_page->content as $voucher) {
-				$vouchers[] = $voucher;
-			}
-			unset($result_page->content);
-		}
-		return($vouchers);
+	    return $this->get_vouchers('invoice', 'open,paid,paidoff,voided,transferred');
 	}
 
 	public function get_last_invoices($count) {
@@ -371,6 +360,10 @@ class lexoffice_client {
 	public function get_creditnote($uuid) {
 		return $this->api_call('GET', 'credit-notes', $uuid);
 	}
+
+    public function get_creditnotes_all() {
+        return $this->get_vouchers('creditnote', 'open,paid,paidoff,voided,transferred');
+    }
 
 	public function update_contact($uuid, $data) {
 		return $this->api_call('PUT', 'contacts', $uuid, $data);
