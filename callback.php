@@ -2,6 +2,7 @@
 
 // to prevent execute callbacks for other keys/companies, you can setup your "organizationId" as whitelist
 $company_id = '';
+// blub
 
 $data_webhook = file_get_contents('php://input');
 $data = json_decode($data_webhook);
