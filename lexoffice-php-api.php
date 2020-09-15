@@ -346,14 +346,14 @@ class lexoffice_client {
 					$extension = 'png';
 					break;
 				case 'image/jpg':
+				case 'image/jpeg':
 					$extension = 'jpg';
 					break;
 				case 'application/pdf':
 					$extension = 'pdf';
 					break;
 				default:
-					logfile('notice', 'unknown header', $request['header']['content_type']);
-					$extension = 'unknown';
+                    throw new lexoffice_exception('lexoffice-php-api: unknown mime/type "'.$request['header']['content_type'].'". Check details via $e->get_error()', array('voucher_id' => $uuid, 'response' => $request));
 			}
 
 			$filename = $filename_prefix.'_'.$i.'.'.$extension;
