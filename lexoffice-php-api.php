@@ -133,7 +133,7 @@ class lexoffice_client {
 			throw new lexoffice_exception('lexoffice-php-api: invalid API Key', array(
 				'HTTP Status' => $http_status,
 				'Requested URI' => $curl_url,
-				'Requested Payload' => json_decode($data),
+				'Requested Payload' => ($data ? json_decode($data) : ''),
 				'Response' => json_decode($result),
 			));
 		} elseif ($http_status == 402) {
@@ -142,18 +142,22 @@ class lexoffice_client {
 			throw new lexoffice_exception('lexoffice-php-api: Internal server error.', array(
 				'HTTP Status' => $http_status,
 				'Requested URI' => $curl_url,
+				'Requested Payload' => ($data ? json_decode($data) : ''),
+				'Response' => json_decode($result),
 			));
 		} elseif ($http_status == 503) {
 			throw new lexoffice_exception('lexoffice-php-api: API Service currently unavailable', array(
 				'HTTP Status' => $http_status,
 				'Requested URI' => $curl_url,
+				'Requested Payload' => ($data ? json_decode($data) : ''),
+				'Response' => json_decode($result),
 			));
 		} else {
 			// all other codes https://developers.lexoffice.io/docs/#http-status-codes
 			throw new lexoffice_exception('lexoffice-php-api: error in api request - check details via $e->get_error()', array(
 				'HTTP Status' => $http_status,
 				'Requested URI' => $curl_url,
-				'Requested Payload' => json_decode($data),
+				'Requested Payload' => ($data ? json_decode($data) : ''),
 				'Response' => json_decode($result),
 			));
 		}
