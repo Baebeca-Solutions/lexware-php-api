@@ -304,7 +304,7 @@ class lexoffice_client {
 		return $this->api_call('GET', 'vouchers', $uuid);
 	}
 
-	public function get_vouchers($type = 'invoice,creditnote,orderconfirmation', $state = 'draft,open,paid,paidoff,voided,overdue,accepted,rejected', $archived = 'both') {
+	public function get_vouchers($type = 'invoice,creditnote,orderconfirmation', $state = 'draft,open,paid,paidoff,voided,accepted,rejected', $archived = 'both') {
 		if ($archived == 'true') {
 			$archived = '&archived=true';
 		} elseif ($archived == 'false') {
