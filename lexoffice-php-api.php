@@ -186,6 +186,11 @@ class lexoffice_client {
 		return $this->api_call('POST', 'invoices', '', $data, ($finalized ? '?finalize=true' : ''));
 	}
 
+	public function create_orderconfirmation($data) {
+		//todo some validation checks
+		return $this->api_call('POST', 'order-confirmations', '', $data);
+	}
+
 	public function create_voucher($data) {
 		return $this->api_call('POST', 'vouchers', '', $data);
 	}

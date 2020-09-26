@@ -8,12 +8,16 @@ if (is_file(__DIR__.'/../_local_test_settings.php')) {
 	exit('no "_local_test_settings.php" found in root doc');
 }
 
+if (!isset($sandbox)) $sandbox = false;
 $lexoffice = new lexoffice_client(array(
 	'api_key' => $api_key,
 	'ssl_verify' => false,
-	//'sandbox' => true,
+	'sandbox' => $sandbox,
 ));
 
+// special for german taxrate change
+$taxrate_19 = 16;
+$taxrate_7 = 5;
 
 $logfile_current_test = false;
 $logfile_current_test_content = '';
@@ -49,7 +53,6 @@ function test_finished($result) {
 
 
 $run_specific_test = 0;
-$run_specific_test = 7;
 $debug = true;
 
 $tests = array_slice(scandir('./tests'), 2);
