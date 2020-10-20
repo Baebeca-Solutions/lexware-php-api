@@ -381,6 +381,10 @@ class lexoffice_client {
 		return $this->api_call('GET', 'credit-notes', $uuid);
 	}
 
+	public function create_creditnote($data, $finalized = false) {
+		return $this->api_call('POST', 'credit-notes', '', $data, ($finalized ? '?finalize=true' : ''));
+	}
+
 	public function update_contact($uuid, $data) {
 		return $this->api_call('PUT', 'contacts', $uuid, $data);
 	}
@@ -437,6 +441,11 @@ class lexoffice_client {
 	// legacy wrapper
 	public function get_credit_note($uuid) {
 		return $this->get_creditnote($uuid);
+	}
+
+	// legacy wrapper
+	public function create_credit_note($data, $finalized = false) {
+		return $this->create_creditnote($data, $finalized);
 	}
 }
 
