@@ -181,6 +181,10 @@ class lexoffice_client {
 		return $this->api_call('POST', 'contacts', '', $data);
 	}
 
+	public function create_creditnote($data, $finalized = false) {
+		return $this->api_call('POST', 'credit-notes', '', $data, ($finalized ? '?finalize=true' : ''));
+	}
+
 	public function create_invoice($data, $finalized = false) {
 		//todo some validation checks
 		return $this->api_call('POST', 'invoices', '', $data, ($finalized ? '?finalize=true' : ''));
@@ -379,10 +383,6 @@ class lexoffice_client {
 
 	public function get_creditnote($uuid) {
 		return $this->api_call('GET', 'credit-notes', $uuid);
-	}
-
-	public function create_creditnote($data, $finalized = false) {
-		return $this->api_call('POST', 'credit-notes', '', $data, ($finalized ? '?finalize=true' : ''));
 	}
 
 	public function update_contact($uuid, $data) {
