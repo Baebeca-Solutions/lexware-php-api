@@ -77,7 +77,7 @@ try {
 						'unitPrice' => [
 							'currency' => 'EUR',
 							'netAmount' => 11.99,
-							'taxRatePercentage' => 19,
+							'taxRatePercentage' => $taxrate_19,
 						],
 						#'discountPercentage' => 0,
 					],
