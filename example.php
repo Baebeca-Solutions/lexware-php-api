@@ -65,7 +65,7 @@ print_r($lexoffice->create_invoice(array(
 		'taxType' => 'net',
 	),
 	'shippingConditions' => array(
-		'shippingDate' => date('Y-m-d').'T00:00:01.000+02:00',
+		'shippingDate' => date(DATE_RFC3339_EXTENDED),
 		'shippingType' => 'delivery',
 	),
 	'paymentConditions' => array(

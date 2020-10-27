@@ -38,7 +38,7 @@ try {
 			'taxType' => 'net',
 		],
 		'shippingConditions' => [
-			'shippingDate' => date('Y-m-d').'T00:00:01.000+02:00',
+			'shippingDate' => date(DATE_RFC3339_EXTENDED),
 			'shippingType' => 'delivery',
 		],
 		'paymentConditions' => [
@@ -160,7 +160,7 @@ try {
 			'taxType' => 'net',
 		],
 		'shippingConditions' => [
-			'shippingDate' => date('Y-m-d').'T00:00:01.000+02:00',
+			'shippingDate' => date(DATE_RFC3339_EXTENDED),
 			'shippingType' => 'delivery',
 		],
 		'paymentConditions' => [
@@ -219,7 +219,7 @@ try {
 			'taxType' => 'net',
 		],
 		'shippingConditions' => [
-			'shippingDate' => date('Y-m-d').'T00:00:01.000+02:00',
+			'shippingDate' => date(DATE_RFC3339_EXTENDED),
 			'shippingType' => 'delivery',
 		],
 		'paymentConditions' => [
@@ -280,7 +280,7 @@ try {
 			'taxType' => 'net',
 		],
 		'shippingConditions' => [
-			'shippingDate' => date('Y-m-d').'T00:00:01.000+02:00',
+			'shippingDate' => date(DATE_RFC3339_EXTENDED),
 			'shippingType' => 'delivery',
 		],
 		'paymentConditions' => [
@@ -340,7 +340,7 @@ try {
 			'taxType' => 'net',
 		],
 		'shippingConditions' => [
-			'shippingDate' => date('Y-m-d').'T00:00:01.000+02:00',
+			'shippingDate' => date(DATE_RFC3339_EXTENDED),
 			'shippingType' => 'delivery',
 		],
 		'paymentConditions' => [
@@ -427,7 +427,7 @@ try {
 			'taxType' => 'net',
 		],
 		'shippingConditions' => [
-			'shippingDate' => date('Y-m-d').'T00:00:01.000+02:00',
+			'shippingDate' => date(DATE_RFC3339_EXTENDED),
 			'shippingType' => 'delivery',
 		],
 		'paymentConditions' => [
@@ -513,7 +513,7 @@ try {
 			'taxType' => 'net',
 		],
 		'shippingConditions' => [
-			'shippingDate' => date('Y-m-d').'T00:00:01.000+02:00',
+			'shippingDate' => date(DATE_RFC3339_EXTENDED),
 			'shippingType' => 'delivery',
 		],
 		'paymentConditions' => [
@@ -591,7 +591,7 @@ try {
 			'taxType' => 'net',
 		],
 		'shippingConditions' => [
-			'shippingDate' => date('Y-m-d').'T00:00:01.000+02:00',
+			'shippingDate' => date(DATE_RFC3339_EXTENDED),
 			'shippingType' => 'delivery',
 		],
 		'paymentConditions' => [
