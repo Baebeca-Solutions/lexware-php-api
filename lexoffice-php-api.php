@@ -40,7 +40,6 @@ class lexoffice_client {
 	protected function api_call($type, $resource, $uuid = '', $data = '', $params = '', $return_http_header = false) {
 		// check api_key
 		if ($this->api_key === true || $this->api_key === false || $this->api_key === '') throw new lexoffice_exception('lexoffice-php-api: invalid API Key', array('api_key' => $this->api_key));
-		if (strlen($this->api_key) != 36 || substr_count($this->api_key, '-') != 4) throw new lexoffice_exception('lexoffice-php-api: invalid API Key', array('api_key' => $this->api_key));
 
 		$ch = curl_init();
 		$curl_url = $this->api_endpoint.'/'.$this->api_version.'/'.$resource.'/'.$uuid.$params;
