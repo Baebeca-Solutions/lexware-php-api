@@ -376,6 +376,10 @@ class lexoffice_client {
 		return $saved_files;
 	}
 
+	public function get_voucher_payments($uuid) {
+        return $this->api_call('GET', 'payments', $uuid);
+	}
+
 	public function get_profile() {
 		return $this->api_call('GET', 'profile');
 	}
