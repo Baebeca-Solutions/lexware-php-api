@@ -428,12 +428,33 @@ class lexoffice_client {
     public function upload_file($file) {
         if (!file_exists($file)) throw new lexoffice_exception('lexoffice-php-api: file does not exist', ['file' => $file]);
         if (filesize($file) > 5*1024*1024) throw new lexoffice_exception('lexoffice-php-api: filesize to big', ['file' => $file, 'filesize' => filesize($file).' byte']);
+        // use mimetype type from filename
         if (
-            !in_array(substr(strtolower($file), -4), ['.pdf', '.jpg', '.png']) &&
-            !in_array(substr(strtolower($file), -5), ['.jpeg'])
-        ) throw new lexoffice_exception('lexoffice-php-api: invalid file extension', ['file' => $file]);
+            in_array(substr(strtolower($file), -4), ['.pdf', '.jpg', '.png']) ||
+            in_array(substr(strtolower($file), -5), ['.jpeg'])
+        ) {
+            return $this->api_call('POST', 'files', '', ['file' => new CURLFile($file), 'type' => 'voucher'], '');
+        }
 
-        return $this->api_call('POST', 'files', '', ['file' => new CURLFile($file), 'type' => 'voucher'], '');
+        // use file mimetype (lexoffice requires a fileextension in the filename :/)
+        $mime_type = mime_content_type($file);
+        switch ($mime_type) {
+            case 'application/pdf':
+                $dummy_title = 'dummy.pdf';
+                break;
+            case 'image/png':
+                $dummy_title = 'dummy.png';
+                break;
+            case 'image/jpeg':
+                $dummy_title = 'dummy.jpg';
+                break;
+            default:
+                throw new lexoffice_exception('lexoffice-php-api: invalid mime type', ['file' => $file]);
+        }
+        return $this->api_call('POST', 'files', '', ['file' => new CURLFile($file, $mime_type, $dummy_title), 'type' => 'voucher'], '');
+
+        // throw legacy error to prevent behaviour change
+        throw new lexoffice_exception('lexoffice-php-api: invalid file extension', ['file' => $file]);
     }
 
     public function upload_voucher($uuid, $file) {

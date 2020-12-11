@@ -47,18 +47,34 @@ try {
 	}
 }
 
-test_start('upload invalid extension');
+test_start('upload invalid mime type');
 try {
-	$request = $lexoffice->upload_file(__DIR__.'\files\cat.cat');
+	$request = $lexoffice->upload_file(__DIR__.'\files\libssh2.dll');
 	test_finished(false);
 
 } catch(lexoffice_exception $e) {
-	if ($e->getMessage() == 'lexoffice-php-api: invalid file extension') {
+	if ($e->getMessage() == 'lexoffice-php-api: invalid mime type') {
 		test_finished(true);
 	} else {
 		test($e->getMessage());
 		test(print_r($e->get_error(), true));
 		test_finished(false);
 	}
+}
+
+test_start('upload jpg without extension');
+try {
+    $request = $lexoffice->upload_file(__DIR__.'\files\cat_without_extension');
+    if ($request->id) {
+        test('file id: '.$request->id);
+        test_finished(true);
+    } else {
+        test_finished(false);
+    }
+
+} catch(lexoffice_exception $e) {
+    test($e->getMessage());
+    test(print_r($e->get_error(), true));
+    test_finished(false);
 }
 
