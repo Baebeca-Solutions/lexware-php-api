@@ -16,8 +16,8 @@ $lexoffice = new lexoffice_client(array(
 ));
 
 // special for german taxrate change
-$taxrate_19 = 16;
-$taxrate_7 = 5;
+$taxrate_19 = 19;
+$taxrate_7 = 7;
 
 $logfile_current_test = false;
 $logfile_current_test_content = '';
