@@ -116,6 +116,10 @@ class lexoffice_client {
 
 		$result = curl_exec($ch);
 		$http_status = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+
+		// prepare data for error message
+        if ($data !== '' && is_string($data)) $data = json_decode($data);
+
 		if ($http_status == 200 || $http_status == 201 || $http_status == 202 || $http_status == 204) {
 			if (!empty($result) && $result && !($type == 'GET' && $resource == 'files') && !$return_http_header) {
 				return json_decode($result);
@@ -132,7 +136,7 @@ class lexoffice_client {
 			throw new lexoffice_exception('lexoffice-php-api: invalid API Key', array(
 				'HTTP Status' => $http_status,
 				'Requested URI' => $curl_url,
-				'Requested Payload' => ($data ? json_decode($data) : ''),
+				'Requested Payload' => $data,
 				'Response' => json_decode($result),
 			));
 		} elseif ($http_status == 402) {
@@ -141,14 +145,14 @@ class lexoffice_client {
 			throw new lexoffice_exception('lexoffice-php-api: Internal server error.', array(
 				'HTTP Status' => $http_status,
 				'Requested URI' => $curl_url,
-				'Requested Payload' => ($data ? json_decode($data) : ''),
+				'Requested Payload' => $data,
 				'Response' => json_decode($result),
 			));
 		} elseif ($http_status == 503) {
 			throw new lexoffice_exception('lexoffice-php-api: API Service currently unavailable', array(
 				'HTTP Status' => $http_status,
 				'Requested URI' => $curl_url,
-				'Requested Payload' => ($data ? json_decode($data) : ''),
+				'Requested Payload' => $data,
 				'Response' => json_decode($result),
 			));
 		} else {
@@ -156,7 +160,7 @@ class lexoffice_client {
 			throw new lexoffice_exception('lexoffice-php-api: error in api request - check details via $e->get_error()', array(
 				'HTTP Status' => $http_status,
 				'Requested URI' => $curl_url,
-				'Requested Payload' => ($data ? json_decode($data) : ''),
+				'Requested Payload' => $data,
 				'Response' => json_decode($result),
 			));
 		}
@@ -336,6 +340,7 @@ class lexoffice_client {
 			}
 			return($vouchers);
 		}
+		return [];
 	}
 
 	public function get_voucher_files($uuid, $filename_prefix) {
@@ -349,7 +354,8 @@ class lexoffice_client {
 		foreach ($voucher->files as $uuid_file) {
 			$request = $this->api_call('GET', 'files', $uuid_file, '', '', true);
 
-			$header = substr($request['body'], 0, $request['header']['header_size']);
+			// unsused at the moment
+			//$header = substr($request['body'], 0, $request['header']['header_size']);
 			$body = substr($request['body'], $request['header']['header_size']);
 
 			// content type
