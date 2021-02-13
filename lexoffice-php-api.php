@@ -184,7 +184,11 @@ class lexoffice_client {
 		return $this->api_call('POST', 'contacts', '', $data);
 	}
 
-	public function create_creditnote($data, $finalized = false) {
+    public function create_quotation($data, $finalized = false) {
+        return $this->api_call('POST', 'quotations', '', $data, ($finalized ? '?finalize=true' : ''));
+    }
+
+    public function create_creditnote($data, $finalized = false) {
 		return $this->api_call('POST', 'credit-notes', '', $data, ($finalized ? '?finalize=true' : ''));
 	}
 
