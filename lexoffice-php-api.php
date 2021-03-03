@@ -416,16 +416,21 @@ class lexoffice_client {
 
 		$filter_string = '';
 		foreach ($filters as $index => $filter) {
+		    // check if is not already encoded
+            if (strpos($filter, '%') === false || $filter == rawurldecode($filter)) {
+                $filter = rawurlencode($filter);
+            }
+
 			if (($index == 'customer' || $index == 'vendor') && $filter !== '') {
 				// bool to text
 				if ($filter === true) $filter = 'true';
 				if ($filter === false) $filter = 'false';
-				$filter_string.= $index.'='.urlencode($filter).'&';
+				$filter_string.= $index.'='.$filter.'&';
 			} elseif (($index == 'email' || $index == 'name') && $filter !== '') {
 				if (strlen($filter) < 3) throw new lexoffice_exception('lexoffice-php-api: search pattern must have least 3 characters');
-				$filter_string.= $index.'='.urlencode($filter).'&';
+				$filter_string.= $index.'='.$filter.'&';
 			} elseif ($filter !== '') {
-				$filter_string.= $index.'='.urlencode($filter).'&';
+				$filter_string.= $index.'='.$filter.'&';
 			}
 		}
 
