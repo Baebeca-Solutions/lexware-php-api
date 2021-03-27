@@ -12,7 +12,7 @@ test_start('description of the test');
 // log some output in your test
 test('log some messages');
 
-// compare exepcted output with output and decide if your test was successfull
+// compare exepcted output with output and decide if your test was successful
 if ($something_is_true) {
     test_finished(true);
 } else {
