@@ -331,7 +331,15 @@ class lexoffice_client {
 
 		$result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.$archived);
 
-		if (isset($result->content)) {
+        // #69724 - warning - lexoffice::init::vouchers
+        // at the moment it is not possible to request more than 10K items due lexoffice internal restrictions
+        // the lexoffice-API will throw an HTTP 500, so lets abort it until lexoffice has integrated a solution for this limitation
+        // check it here: https://github.com/Baebeca-Solutions/lexoffice-php-api/issues/31
+        if ($result->totalPages >= 100) {
+            throw new lexoffice_exception('lexoffice-php-api: more than 10K voucher items requested. Check details via $e->get_error()', array('response' => $result));
+        }
+
+        if (isset($result->content)) {
 			$vouchers = $result->content;
 			unset($result->content);
 
