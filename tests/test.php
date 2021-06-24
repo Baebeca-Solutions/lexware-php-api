@@ -13,6 +13,7 @@ $lexoffice = new lexoffice_client(array(
 	'api_key' => $api_key,
 	'ssl_verify' => false,
 	'sandbox' => $sandbox,
+	'sandbox_sso' => $sandbox_sso,
 ));
 
 // special for german taxrate change

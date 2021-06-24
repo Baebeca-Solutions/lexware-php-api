@@ -20,15 +20,343 @@ class lexoffice_client {
 	protected $api_endpoint = 'https://api.lexoffice.io';
 	protected $callback = '';
 	protected $api_version = 'v1';
+    protected $countries;
 
-	public function __construct($settings) {
+    public function __construct($settings) {
 		if (!is_array($settings)) throw new lexoffice_exception('lexoffice-php-api: settings should be an array');
 		if (!array_key_exists('api_key', $settings)) throw new lexoffice_exception('lexoffice-php-api: no api_key is given');
 
 		$this->api_key = $settings['api_key'];
 		array_key_exists('callback', $settings) ? $this->callback = $settings['callback'] : $this->callback = false;
 		array_key_exists('ssl_verify', $settings) ? $this->ssl_verify = $settings['ssl_verify'] : $this->ssl_verify = true;
+
+		// sandboxes
 		if (array_key_exists('sandbox', $settings) && $settings['sandbox'] === true) $this->api_endpoint = 'https://api-sandbox.grld.eu';
+		if (array_key_exists('sandbox_sso', $settings) && $settings['sandbox_sso'] === true) $this->api_endpoint = 'https://api-oss-sandbox.grld.eu';
+
+		// define countries
+        $this->countries = (object)[
+            /** nullrate | Nullsatz
+             * https://europa.eu/youreurope/business/taxation/vat/vat-rules-rates/index_de.htm
+             * Einige EU-Länder wenden auf bestimmte Umsätze einen Nullsatz an.
+             * Bei Anwendung eines Nullsatzes muss der Verbraucher keine Mehrwertsteuer abführen,
+             * Sie können jedoch Mehrwertsteuer, die Sie bei unmittelbar mit dem betreffenden Umsatz verbundenen
+             * Einkäufen selbst entrichtet haben, in Abzug bringen.
+             */
+
+            /** europe_member | Europäischen Wirtschaftsraums (EWR) */
+
+            'AT' => (object)[
+                'title' => 'Österreich',
+                'taxtitle' => 'USt',
+                'taxrates' => (object)[
+                    'default' => 20,
+                    'reduced' => [10, 13],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'BE' => (object)[
+                'title' => 'Belgien',
+                'taxtitle' => 'TVA',
+                'taxrates' => (object)[
+                    'default' => 21,
+                    'reduced' => [6, 12],
+                    'nullrate' => true,
+                ],
+                'europe_member' => true,
+            ],
+            'BG' => (object)[
+                'title' => 'Bulgaria',
+                'taxtitle' => 'DDS',
+                'taxrates' => (object)[
+                    'default' => 20,
+                    'reduced' => [9],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'CY' => (object)[
+                'title' => 'Zypern',
+                'taxtitle' => 'FPA',
+                'taxrates' => (object)[
+                    'default' => 19,
+                    'reduced' => [5, 9],
+                    'nullrate' => true,
+                ],
+                'europe_member' => true,
+            ],
+            'CZ' => (object)[
+                'title' => 'Tschechische Republik',
+                'taxtitle' => 'DPH',
+                'taxrates' => (object)[
+                    'default' => 21,
+                    'reduced' => [10, 15],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'DK' => (object)[
+                'title' => 'Dänemark',
+                'taxtitle' => 'MOMS',
+                'taxrates' => (object)[
+                    'default' => 25,
+                    'reduced' => [],
+                    'nullrate' => true,
+                ],
+                'europe_member' => true,
+            ],
+            'DE' => (object)[
+                'title' => 'Deutschland',
+                'taxtitle' => 'USt',
+                'taxrates' => (object)[
+                    'default' => 19,
+                    'reduced' => [7],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'EE' => (object)[
+                'title' => 'Estland',
+                'taxtitle' => 'KMKR',
+                'taxrates' => (object)[
+                    'default' => 20,
+                    'reduced' => [9],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'ES' => (object)[
+                'title' => 'Spanien',
+                'taxtitle' => 'IVA',
+                'taxrates' => (object)[
+                    'default' => 21,
+                    'reduced' => [4, 10],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'FI' => (object)[
+                'title' => 'Finnland',
+                'taxtitle' => 'AVL',
+                'taxrates' => (object)[
+                    'default' => 24,
+                    'reduced' => [10, 14],
+                    'nullrate' => true,
+                ],
+                'europe_member' => true,
+            ],
+            'FR' => (object)[
+                'title' => 'Frankreich',
+                'taxtitle' => 'TVA',
+                'taxrates' => (object)[
+                    'default' => 20,
+                    'reduced' => [2.1, 5.5, 10],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'GR' => (object)[
+                'title' => 'Griechenland',
+                'taxtitle' => 'FPA',
+                'taxrates' => (object)[
+                    'default' => 24,
+                    'reduced' => [6, 13],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'GB' => (object)[
+                'title' => 'Großbritannien',
+                'taxtitle' => 'VAT',
+                'taxrates' => (object)[
+                    'default' => 20,
+                    'reduced' => [5],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            'IE' => (object)[
+                'title' => 'Irland',
+                'taxtitle' => 'VAT',
+                'taxrates' => (object)[
+                    'default' => 23,
+                    'reduced' => [4.8, 9, 13.5],
+                    'nullrate' => true,
+                ],
+                'europe_member' => true,
+            ],
+            'IT' => (object)[
+                'title' => 'Italien',
+                'taxtitle' => 'IVA',
+                'taxrates' => (object)[
+                    'default' => 22,
+                    'reduced' => [4, 5, 10],
+                    'nullrate' => true,
+                ],
+                'europe_member' => true,
+            ],
+            'HR' => (object)[
+                'title' => 'Kroatien',
+                'taxtitle' => 'PDV',
+                'taxrates' => (object)[
+                    'default' => 25,
+                    'reduced' => [5, 13],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'LV' => (object)[
+                'title' => 'Lettland',
+                'taxtitle' => 'PVN',
+                'taxrates' => (object)[
+                    'default' => 21,
+                    'reduced' => [5, 12],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'LT' => (object)[
+                'title' => 'Litauen',
+                'taxtitle' => 'PVM',
+                'taxrates' => (object)[
+                    'default' => 21,
+                    'reduced' => [5, 9],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'LU' => (object)[
+                'title' => 'Luxemburg',
+                'taxtitle' => 'TVA',
+                'taxrates' => (object)[
+                    'default' => 17,
+                    'reduced' => [3, 8],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'MT' => (object)[
+                'title' => 'Malta',
+                'taxtitle' => 'VAT',
+                'taxrates' => (object)[
+                    'default' => 18,
+                    'reduced' => [5, 7],
+                    'nullrate' => true,
+                ],
+                'europe_member' => true,
+            ],
+            'NL' => (object)[
+                'title' => 'Niederlande',
+                'taxtitle' => 'OB',
+                'taxrates' => (object)[
+                    'default' => 21,
+                    'reduced' => [9],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'PL' => (object)[
+                'title' => 'Polen',
+                'taxtitle' => 'VAT',
+                'taxrates' => (object)[
+                    'default' => 23,
+                    'reduced' => [5, 8],
+                    'nullrate' => true,
+                ],
+                'europe_member' => true,
+            ],
+            'PT' => (object)[
+                'title' => 'Portugal',
+                'taxtitle' => 'IVA',
+                'taxrates' => (object)[
+                    'default' => 23,
+                    'reduced' => [6, 13],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'RO' => (object)[
+                'title' => 'Rumänien',
+                'taxtitle' => 'TVA',
+                'taxrates' => (object)[
+                    'default' => 19,
+                    'reduced' => [5, 9],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'SE' => (object)[
+                'title' => 'Schweden',
+                'taxtitle' => 'ML',
+                'taxrates' => (object)[
+                    'default' => 25,
+                    'reduced' => [6, 12],
+                    'nullrate' => true,
+                ],
+                'europe_member' => true,
+            ],
+            'SK' => (object)[
+                'title' => 'Slowakische Republik',
+                'taxtitle' => 'DPH',
+                'taxrates' => (object)[
+                    'default' => 20,
+                    'reduced' => [10],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'SI' => (object)[
+                'title' => 'Slowenien',
+                'taxtitle' => 'DDV',
+                'taxrates' => (object)[
+                    'default' => 22,
+                    'reduced' => [5, 9.5],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'HU' => (object)[
+                'title' => 'Ungarn',
+                'taxtitle' => 'AFA',
+                'taxrates' => (object)[
+                    'default' => 27,
+                    'reduced' => [5, 18],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+            'IS' => (object)[
+                'title' => 'Island',
+                'taxtitle' => 'VSK',
+                'taxrates' => (object)[
+                    'default' => 24,
+                    'reduced' => [11],
+                    'nullrate' => false,
+                ],
+                'europe_member' => false,
+            ],
+            'LI' => (object)[
+                'title' => 'Liechtenstein',
+                'taxtitle' => 'VAT',
+                'taxrates' => (object)[
+                    'default' => 7.7,
+                    'reduced' => [2.5, 3.7],
+                    'nullrate' => false,
+                ],
+                'europe_member' => false,
+            ],
+            'NO' => (object)[
+                'title' => 'Norwegen',
+                'taxtitle' => 'MVA',
+                'taxrates' => (object)[
+                    'default' => 25,
+                    'reduced' => [11.11, 12, 15],
+                    'nullrate' => false,
+                ],
+                'europe_member' => true,
+            ],
+        ];
 
 		return true;
 	}
@@ -398,8 +726,11 @@ class lexoffice_client {
         return $this->api_call('GET', 'payments', $uuid);
 	}
 
+	private $cache_profile = null;
 	public function get_profile() {
-		return $this->api_call('GET', 'profile');
+	    if (!is_null($this->cache_profile)) return $this->cache_profile;
+		$this->cache_profile = $this->api_call('GET', 'profile');
+        return $this->cache_profile;
 	}
 
 	public function get_creditnote($uuid) {
@@ -513,12 +844,171 @@ class lexoffice_client {
         throw new lexoffice_exception('lexoffice-php-api: invalid file extension', ['file' => $file]);
     }
 
-	// legacy wrapper
+    /* Tax methods */
+
+    public function is_tax_free_company(): bool {
+        $profile = $this->get_profile();
+        return !empty($profile->smallBusiness) && $profile->smallBusiness;
+    }
+
+    /**
+     * Check if the given country is member in the european union
+     * @param $country_code 2-letter country code
+     * @return bool
+     */
+    public function is_european_member(string $country_code): bool {
+        return isset($this->countries->{strtoupper($country_code)}) && $this->countries->{strtoupper($country_code)}->europe_member;
+    }
+
+    /**
+     * @param float $taxrate used taxrate for this item
+     * @param string $country_code 2-letter customer country code
+     * @param bool $euopean_vatid customer use a vatid
+     * @param bool $b2b_business customer is a b2b customer
+     * @param bool $physical_good a physical good will be selled
+     * @return string
+     * @throws \lexoffice_exception
+     */
+    public function get_needed_voucher_booking_id(float $taxrate, string $country_code, bool $euopean_vatid, bool $b2b_business, bool $physical_good = true): string {
+        // Weltweit, Kleinunternehmer
+        if ($this->is_tax_free_company()) return '7a1efa0e-6283-4cbf-9583-8e88d3ba5960'; // §19 Kleinunternehmer
+
+        // Deutschland
+        if (strtoupper($country_code) == 'DE') return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
+
+        // Europa
+        if ($this->is_european_member($country_code)) {
+            // B2B
+            // Ware/Dienstleistung
+            if ($taxrate > 0 && $euopean_vatid && $b2b_business) return '9075a4e3-66de-4795-a016-3889feca0d20'; // Innergemeinschaftliche Lieferung
+
+            // Check OSS Stuff
+            $oss = $this->is_oss_needed($country_code);
+
+            // Europa B2C
+            // Ware/Dienstleistung ohne OSS
+            if ($oss === false) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
+
+            // check oss tax rate
+            $oss_taxrates = $this->get_oss_taxrates($country_code);
+
+            if (empty($oss_taxrates)) throw new lexoffice_exception('lexoffice-php-api: unknown OSS booking scenario, cannot decide correct taxrates', [
+                'taxrate' => $taxrate,
+                'country_code' => $country_code,
+                'european_vatid' => $euopean_vatid,
+                'b2b_business' => $b2b_business,
+                'physical_good' => $physical_good,
+            ]);
+
+            if ($taxrate != $oss_taxrates['default'] && !in_array($taxrate, $oss_taxrates['reduced'])) throw new lexoffice_exception('lexoffice-php-api: invalid OSS taxrate for given country', [
+                'taxrate' => $taxrate,
+                'country_code' => $country_code,
+                'european_vatid' => $euopean_vatid,
+                'b2b_business' => $b2b_business,
+                'physical_good' => $physical_good,
+                'oss_valid_taxrates' => $oss_taxrates,
+            ]);
+
+            return $this->get_oss_voucher_category($country_code, ($physical_good ? 1 : 2));
+        }
+
+        // Welt (inkl. Schweiz)
+        // Warenlieferung
+        if ($physical_good) {
+            // Welt (inkl. Schweiz)
+            // B2B
+            if ($taxrate == 0 && $b2b_business) return '93d24c20-ea84-424e-a731-5e1b78d1e6a9'; // Ausfuhrlieferungen an Drittländer
+
+            // Welt (inkl. Schweiz)
+            // B2C
+            if ($taxrate == 0 && !$b2b_business) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
+        // Dienstleistung
+        } else {
+            // Welt (inkl. Schweiz)
+            // B2B
+            if ($taxrate == 0 && $b2b_business) return 'ef5b1a6e-f690-4004-9a19-91276348894f'; // Dienstleistung an Drittländer
+
+            // Welt (inkl. Schweiz)
+            // B2C
+            if ($taxrate > 0 && !$b2b_business) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
+        }
+
+        throw new lexoffice_exception('lexoffice-php-api: unknown booking scenario, cannot decide correct booking category', [
+            'taxrate' => $taxrate,
+            'country_code' => $country_code,
+            'european_vatid' => $euopean_vatid,
+            'b2b_business' => $b2b_business,
+            'physical_good' => $physical_good,
+        ]);
+    }
+
+    /* One Stop Shop (OSS) */
+    /**
+     * Check if for the current lexoffice settings and given country special OSS-Settings should be used
+     * @param $country_code 2-letter country code from the billing address
+     * @return false|string
+     *  bool    false           => no OSS needed, you can proceed without OSS stuff
+     *  string  "origin"        => you have to use german taxrates
+     *  string  "destination"   => you have to use OSS taxrates
+     * @throws \lexoffice_exception
+     */
+    public function is_oss_needed(string $country_code) {
+        $profile = $this->get_profile();
+        if ($profile->smallBusiness) return false; // not used for taxless businesses
+        if ($country_code === strtoupper('DE')) return false; // not for own country
+        if (!$this->is_european_member($country_code)) return false; // not for outside EU
+        if (empty($profile->distanceSalesPrinciple)) throw new lexoffice_exception('lexoffice-php-api: missing SSO configuration in lexoffice account'); // not configured in lexoffice
+        return strtolower($profile->distanceSalesPrinciple);
+    }
+
+    /**
+     * Returns an array with the possible taxrates for the given country
+     * @param string $country_code
+     * @return array
+     *  [
+     *      'default' => 19
+     *      'reduced' => [7, 5]
+     *  ]
+     */
+    public function get_oss_taxrates(string $country_code): array {
+        if (empty($this->countries->{strtoupper($country_code)})) return [];
+        // add zero taxrate to array
+        $this->countries->{strtoupper($country_code)}->taxrates->reduced[] = 0;
+        return (array) $this->countries->{strtoupper($country_code)}->taxrates;
+    }
+
+    /**
+     * Return the needed OSS Voucher Booking Category
+     * @param string $country_code 2-letter country code
+     * @param int $booking_category
+     *  1 => Fernverkauf
+     *  2 => Elektronische Dienstleistung
+     * @return string lexoffice voucher booking category id
+     * @throws \lexoffice_exception
+     */
+    public function get_oss_voucher_category(string $country_code, int $booking_category = 1): string {
+        $oss_type = $this->is_oss_needed($country_code);
+        if ($oss_type === 'origin') {
+            if ($booking_category === 1) return '7c112b66-0565-479c-bc18-5845e080880a';
+            if ($booking_category === 2) return 'd73b880f-c24a-41ea-a862-18d90e1c3d82';
+            throw new lexoffice_exception('lexoffice-php-api: invalid given booking_category', ['booking_category' => $booking_category]);
+        }
+        elseif ($oss_type === 'destination') {
+            if ($booking_category === 1) return '4ebd965a-7126-416c-9d8c-a5c9366ee473';
+            if ($booking_category === 2) return 'efa82f40-fd85-11e1-a21f-0800200c9a66';
+            throw new lexoffice_exception('lexoffice-php-api: invalid given booking_category', ['booking_category' => $booking_category]);
+        }
+        else {
+            throw new lexoffice_exception('lexoffice-php-api: no possible SSO voucher category id');
+        }
+    }
+
+    /* legacy wrapper */
+
 	public function get_credit_note($uuid) {
 		return $this->get_creditnote($uuid);
 	}
 
-	// legacy wrapper
 	public function create_credit_note($data, $finalized = false) {
 		return $this->create_creditnote($data, $finalized);
 	}
