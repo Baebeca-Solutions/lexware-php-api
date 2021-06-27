@@ -1,7 +1,7 @@
 <?php
 test_start('test taxrates unknown country');
 try {
-    $request = $lexoffice->get_oss_taxrates('ZZ');
+    $request = $lexoffice->get_taxrates('ZZ', strtotime('2021-07-05'));
     if (empty($request)) {
         test_finished(true);
     } else {
@@ -16,8 +16,36 @@ catch (lexoffice_exception $e) {
 
 test_start('test taxrates country DE');
 try {
-    $request = $lexoffice->get_oss_taxrates('DE');
+    $request = $lexoffice->get_taxrates('DE', strtotime('2021-07-05'));
     if (!empty($request) && $request['default'] == 19 && in_array(7, $request['reduced'])) {
+        test_finished(true);
+    } else {
+        test_finished(false);
+    }
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}
+
+test_start('test taxrates country nl - before oss');
+try {
+    $request = $lexoffice->get_taxrates('nl', strtotime('2021-06-05'));
+    if (!empty($request) && $request['default'] == 19 && in_array(7, $request['reduced'])) {
+        test_finished(true);
+    } else {
+        test_finished(false);
+    }
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}
+
+test_start('test taxrates country nl - after oss');
+try {
+    $request = $lexoffice->get_taxrates('nl', strtotime('2021-07-05'));
+    if (!empty($request) && $request['default'] == 21 && in_array(9, $request['reduced'])) {
         test_finished(true);
     } else {
         test_finished(false);
@@ -30,7 +58,7 @@ catch (lexoffice_exception $e) {
 
 test_start('test oss settings - DE');
 try {
-    $request = $lexoffice->is_oss_needed('DE');
+    $request = $lexoffice->is_oss_needed('DE', strtotime('2021-07-05'));
     if ($request === false) {
         test_finished(true);
     } else {
@@ -44,8 +72,22 @@ catch (lexoffice_exception $e) {
 
 test_start('test oss settings - NL');
 try {
-    $request = $lexoffice->is_oss_needed('NL');
+    $request = $lexoffice->is_oss_needed('NL', strtotime('2021-07-05'));
     if ($request === 'destination') {
+        test_finished(true);
+    } else {
+        test_finished(false);
+    }
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}
+
+test_start('test oss settings - NL - before oss');
+try {
+    $request = $lexoffice->is_oss_needed('NL', strtotime('2021-06-05'));
+    if ($request === false) {
         test_finished(true);
     } else {
         test_finished(false);
@@ -58,7 +100,7 @@ catch (lexoffice_exception $e) {
 
 test_start('test oss settings - ZZ');
 try {
-    $request = $lexoffice->is_oss_needed('ZZ');
+    $request = $lexoffice->is_oss_needed('ZZ', strtotime('2021-07-05'));
     if ($request === false) {
         test_finished(true);
     } else {
@@ -72,7 +114,7 @@ catch (lexoffice_exception $e) {
 
 test_start('test oss settings - GB');
 try {
-    $request = $lexoffice->is_oss_needed('GB');
+    $request = $lexoffice->is_oss_needed('GB', strtotime('2021-07-05'));
     if ($request === false) {
         test_finished(true);
     } else {
@@ -86,7 +128,7 @@ catch (lexoffice_exception $e) {
 
 test_start('test oss voucher category - GB');
 try {
-    $request = $lexoffice->get_oss_voucher_category('GB');
+    $request = $lexoffice->get_oss_voucher_category('GB', strtotime('2021-07-05'));
     test_finished(false);
 }
 catch (lexoffice_exception $e) {
@@ -99,7 +141,7 @@ catch (lexoffice_exception $e) {
 
 test_start('test oss voucher category - DE');
 try {
-    $request = $lexoffice->get_oss_voucher_category('DE');
+    $request = $lexoffice->get_oss_voucher_category('DE', strtotime('2021-07-05'));
     test_finished(false);
 }
 catch (lexoffice_exception $e) {
@@ -112,7 +154,7 @@ catch (lexoffice_exception $e) {
 
 test_start('test oss voucher category - NL');
 try {
-    $request = $lexoffice->get_oss_voucher_category('NL');
+    $request = $lexoffice->get_oss_voucher_category('NL', strtotime('2021-07-05'));
     if ($request === '4ebd965a-7126-416c-9d8c-a5c9366ee473') {
         test_finished(true);
     } else {
@@ -168,13 +210,13 @@ try {
                 'amount' => 100.00,
                 'taxAmount' => 23.00,
                 'taxRatePercent' => 23,
-                'categoryId' => $lexoffice->get_oss_voucher_category('pt', 1),
+                'categoryId' => $lexoffice->get_oss_voucher_category('pt', strtotime('2021-07-05'), 1),
             ],
             [
                 'amount' => 100.00,
                 'taxAmount' => 13.00,
                 'taxRatePercent' => 13,
-                'categoryId' => $lexoffice->get_oss_voucher_category('pt', 1),
+                'categoryId' => $lexoffice->get_oss_voucher_category('pt', strtotime('2021-07-05'), 1),
             ],
         ],
         'taxType' => "net",
@@ -237,13 +279,13 @@ try {
                 'amount' => 123.00,
                 'taxAmount' => 23.00,
                 'taxRatePercent' => 23,
-                'categoryId' => $lexoffice->get_oss_voucher_category('pt', 1),
+                'categoryId' => $lexoffice->get_oss_voucher_category('pt', strtotime('2021-07-05'), 1),
             ],
             [
                 'amount' => 113.00,
                 'taxAmount' => 13.00,
                 'taxRatePercent' => 13,
-                'categoryId' => $lexoffice->get_oss_voucher_category('pt', 1),
+                'categoryId' => $lexoffice->get_oss_voucher_category('pt', strtotime('2021-07-05'), 1),
             ],
         ],
         'taxType' => "gross",
@@ -306,13 +348,13 @@ try {
                 'amount' => 100.00,
                 'taxAmount' => 23.00,
                 'taxRatePercent' => 23,
-                'categoryId' => $lexoffice->get_needed_voucher_booking_id(23, 'PT', false, false, true),
+                'categoryId' => $lexoffice->get_needed_voucher_booking_id(23, 'PT', strtotime('2021-07-05'), false, false, true),
             ],
             [
                 'amount' => 100.00,
                 'taxAmount' => 13.00,
                 'taxRatePercent' => 13,
-                'categoryId' => $lexoffice->get_needed_voucher_booking_id(13, 'PT', false, false, true),
+                'categoryId' => $lexoffice->get_needed_voucher_booking_id(13, 'PT', strtotime('2021-07-05'), false, false, true),
             ],
         ],
         'taxType' => "net",
@@ -375,13 +417,13 @@ try {
                 'amount' => 123.00,
                 'taxAmount' => 23.00,
                 'taxRatePercent' => 23,
-                'categoryId' => $lexoffice->get_needed_voucher_booking_id(23, 'PT', false, false, true),
+                'categoryId' => $lexoffice->get_needed_voucher_booking_id(23, 'PT', strtotime('2021-07-05'), false, false, true),
             ],
             [
                 'amount' => 113.00,
                 'taxAmount' => 13.00,
                 'taxRatePercent' => 13,
-                'categoryId' => $lexoffice->get_needed_voucher_booking_id(13, 'PT', false, false, true),
+                'categoryId' => $lexoffice->get_needed_voucher_booking_id(13, 'PT', strtotime('2021-07-05'), false, false, true),
             ],
         ],
         'taxType' => "gross",
