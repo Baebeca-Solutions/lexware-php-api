@@ -16,25 +16,31 @@
 // Official Lexoffice Documentation: https://developers.lexoffice.io/docs/
 
 class lexoffice_client {
-	protected $api_key = '';
-	protected $api_endpoint = 'https://api.lexoffice.io';
-	protected $callback = '';
-	protected $api_version = 'v1';
+    protected $api_key = '';
+    protected $api_endpoint = 'https://api.lexoffice.io';
+    protected $callback = '';
+    protected $api_version = 'v1';
     protected $countries;
 
     public function __construct($settings) {
-		if (!is_array($settings)) throw new lexoffice_exception('lexoffice-php-api: settings should be an array');
-		if (!array_key_exists('api_key', $settings)) throw new lexoffice_exception('lexoffice-php-api: no api_key is given');
+        if (!is_array($settings)) throw new lexoffice_exception('lexoffice-php-api: settings should be an array');
+        if (!array_key_exists('api_key', $settings)) throw new lexoffice_exception('lexoffice-php-api: no api_key is given');
 
-		$this->api_key = $settings['api_key'];
-		array_key_exists('callback', $settings) ? $this->callback = $settings['callback'] : $this->callback = false;
-		array_key_exists('ssl_verify', $settings) ? $this->ssl_verify = $settings['ssl_verify'] : $this->ssl_verify = true;
+        $this->api_key = $settings['api_key'];
+        array_key_exists('callback', $settings) ? $this->callback = $settings['callback'] : $this->callback = false;
+        array_key_exists('ssl_verify', $settings) ? $this->ssl_verify = $settings['ssl_verify'] : $this->ssl_verify = true;
 
-		// sandboxes
-		if (array_key_exists('sandbox', $settings) && $settings['sandbox'] === true) $this->api_endpoint = 'https://api-sandbox.grld.eu';
-		if (array_key_exists('sandbox_sso', $settings) && $settings['sandbox_sso'] === true) $this->api_endpoint = 'https://api-oss-sandbox.grld.eu';
+        // sandboxes
+        if (array_key_exists('sandbox', $settings) && $settings['sandbox'] === true) $this->api_endpoint = 'https://api-sandbox.grld.eu';
+        if (array_key_exists('sandbox_sso', $settings) && $settings['sandbox_sso'] === true) $this->api_endpoint = 'https://api-oss-sandbox.grld.eu';
 
-		// country definition | this is the curren definition which is legal today
+        $this->load_country_definition();
+
+        return true;
+    }
+
+    private function load_country_definition() {
+        // country definition | this is the curren definition which is legal today
         // tax adjustments in past or future will be checked later in
         $this->countries = (object)[
             /** nullrate | Nullsatz
@@ -358,304 +364,302 @@ class lexoffice_client {
                 'europe_member' => true,
             ],
         ];
+    }
 
-		return true;
-	}
+    public function __destruct() {
+        unset($this->api_key);
+    }
 
-	public function __destruct() {
-		unset($this->api_key);
-	}
+    protected function api_call($type, $resource, $uuid = '', $data = '', $params = '', $return_http_header = false) {
+        // check api_key
+        if ($this->api_key === true || $this->api_key === false || $this->api_key === '') throw new lexoffice_exception('lexoffice-php-api: invalid API Key', ['api_key' => $this->api_key]);
 
-	protected function api_call($type, $resource, $uuid = '', $data = '', $params = '', $return_http_header = false) {
-		// check api_key
-		if ($this->api_key === true || $this->api_key === false || $this->api_key === '') throw new lexoffice_exception('lexoffice-php-api: invalid API Key', ['api_key' => $this->api_key]);
+        $ch = curl_init();
+        $curl_url = $this->api_endpoint.'/'.$this->api_version.'/'.$resource.'/'.$uuid.$params;
 
-		$ch = curl_init();
-		$curl_url = $this->api_endpoint.'/'.$this->api_version.'/'.$resource.'/'.$uuid.$params;
+        if ($type == 'GET') {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 
-		if ($type == 'GET') {
-			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+            if ($resource == 'files') {
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'Authorization: Bearer '.$this->api_key,
+                ]);
+            } else {
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'Authorization: Bearer '.$this->api_key,
+                    'Accept: application/json',
+                ]);
+            }
 
-			if ($resource == 'files') {
-				curl_setopt($ch, CURLOPT_HTTPHEADER, [
-					'Authorization: Bearer '.$this->api_key,
-				]);
-			} else {
-				curl_setopt($ch, CURLOPT_HTTPHEADER, [
-					'Authorization: Bearer '.$this->api_key,
-					'Accept: application/json',
-				]);
-			}
+        } elseif ($type == 'PUT') {
+            $data = json_encode($data);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer '.$this->api_key,
+                'Content-Type: application/json',
+                'Content-Length: '.strlen($data),
+                'Accept: application/json',
+            ]);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
-		} elseif ($type == 'PUT') {
-			$data = json_encode($data);
-			curl_setopt($ch, CURLOPT_HTTPHEADER, [
-				'Authorization: Bearer '.$this->api_key,
-				'Content-Type: application/json',
-				'Content-Length: '.strlen($data),
-				'Accept: application/json',
-        ]);
-			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        } elseif ($type == 'POST') {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 
-		} elseif ($type == 'POST') {
-			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            if (
+                $resource == 'files' ||
+                ($resource == 'vouchers' && $params == '/files') // POST requests to endpoint "vouchers" only available in Partner-API
+            ) {
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'Authorization: Bearer '.$this->api_key,
+                    'Content-Type: multipart/form-data',
+                    'Accept: application/json',
+                ]);
+                curl_setopt($ch, CURLOPT_POST, true);
+            } else {
+                $data = json_encode($data);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'Authorization: Bearer '.$this->api_key,
+                    'Content-Type: application/json',
+                    'Content-Length: '.strlen($data),
+                    'Accept: application/json',
+                ]);
+            }
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        } elseif ($type == 'DELETE') {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer '.$this->api_key,
+                'Accept: application/json',
+            ]);
+        } else {
+            throw new lexoffice_exception('lexoffice-php-api: unknown request type "'.$type.'" for api_call');
+        }
 
-			if (
-				$resource == 'files' ||
-				($resource == 'vouchers' && $params == '/files') // POST requests to endpoint "vouchers" only available in Partner-API
-			) {
-				curl_setopt($ch, CURLOPT_HTTPHEADER, [
-					'Authorization: Bearer '.$this->api_key,
-					'Content-Type: multipart/form-data',
-					'Accept: application/json',
-				]);
-				curl_setopt($ch, CURLOPT_POST, true);
-			} else {
-				$data = json_encode($data);
-				curl_setopt($ch, CURLOPT_HTTPHEADER, [
-					'Authorization: Bearer '.$this->api_key,
-					'Content-Type: application/json',
-					'Content-Length: '.strlen($data),
-					'Accept: application/json',
-				]);
-			}
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-		} elseif ($type == 'DELETE') {
-			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-			curl_setopt($ch, CURLOPT_HTTPHEADER, [
-				'Authorization: Bearer '.$this->api_key,
-				'Accept: application/json',
-			]);
-		} else {
-			throw new lexoffice_exception('lexoffice-php-api: unknown request type "'.$type.'" for api_call');
-		}
+        curl_setopt($ch, CURLOPT_URL, $curl_url);
+        curl_setopt($ch, CURLOPT_VERBOSE, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, $return_http_header);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Baebeca Solutions GmbH - lexoffice-php-api | https://github.com/Baebeca-Solutions/lexoffice-php-api');
 
-		curl_setopt($ch, CURLOPT_URL, $curl_url);
-		curl_setopt($ch, CURLOPT_VERBOSE, false);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_HEADER, $return_http_header);
-		curl_setopt($ch, CURLOPT_USERAGENT, 'Baebeca Solutions GmbH - lexoffice-php-api | https://github.com/Baebeca-Solutions/lexoffice-php-api');
+        // skip ssl verify only if manual deactivated (eg. in local tests)
+        if (!$this->ssl_verify) {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        }
 
-		// skip ssl verify only if manual deactivated (eg. in local tests)
-		if (!$this->ssl_verify) {
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		}
+        $result = curl_exec($ch);
+        $http_status = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
 
-		$result = curl_exec($ch);
-		$http_status = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-
-		// prepare data for error message
+        // prepare data for error message
         if ($data !== '' && is_string($data)) $data = json_decode($data);
 
-		if ($http_status == 200 || $http_status == 201 || $http_status == 202 || $http_status == 204) {
-			if (!empty($result) && $result && !($type == 'GET' && $resource == 'files') && !$return_http_header) {
-				return json_decode($result);
-				// full http_header
-			} else if (!empty($result) && $result && $return_http_header) {
-				return ['header' => curl_getinfo($ch), 'body' => $result];
-				// binary or full http_header
-			} else if (!empty($result) && $result) {
-				return $result;
-			} else {
-				return true;
-			}
-		} elseif ($http_status == 401) {
-			throw new lexoffice_exception('lexoffice-php-api: invalid API Key', [
-				'HTTP Status' => $http_status,
-				'Requested URI' => $curl_url,
-				'Requested Payload' => $data,
-				'Response' => json_decode($result),
-			]);
-		} elseif ($http_status == 402) {
-			throw new lexoffice_exception('lexoffice-php-api: action not possible due a lexoffice contract issue');
-		} elseif ($http_status == 500) {
-			throw new lexoffice_exception('lexoffice-php-api: Internal server error.', [
-				'HTTP Status' => $http_status,
-				'Requested URI' => $curl_url,
-				'Requested Payload' => $data,
-				'Response' => json_decode($result),
-			]);
-		} elseif ($http_status == 503) {
-			throw new lexoffice_exception('lexoffice-php-api: API Service currently unavailable', [
-				'HTTP Status' => $http_status,
-				'Requested URI' => $curl_url,
-				'Requested Payload' => $data,
-				'Response' => json_decode($result),
-			]);
-		} else {
-			// all other codes https://developers.lexoffice.io/docs/#http-status-codes
-			throw new lexoffice_exception('lexoffice-php-api: error in api request - check details via $e->get_error()', [				'HTTP Status' => $http_status,
-				'Requested URI' => $curl_url,
-				'Requested Payload' => $data,
-				'Response' => json_decode($result),
-			]);
-		}
+        if ($http_status == 200 || $http_status == 201 || $http_status == 202 || $http_status == 204) {
+            if (!empty($result) && $result && !($type == 'GET' && $resource == 'files') && !$return_http_header) {
+                return json_decode($result);
+                // full http_header
+            } else if (!empty($result) && $result && $return_http_header) {
+                return ['header' => curl_getinfo($ch), 'body' => $result];
+                // binary or full http_header
+            } else if (!empty($result) && $result) {
+                return $result;
+            } else {
+                return true;
+            }
+        } elseif ($http_status == 401) {
+            throw new lexoffice_exception('lexoffice-php-api: invalid API Key', [
+                'HTTP Status' => $http_status,
+                'Requested URI' => $curl_url,
+                'Requested Payload' => $data,
+                'Response' => json_decode($result),
+            ]);
+        } elseif ($http_status == 402) {
+            throw new lexoffice_exception('lexoffice-php-api: action not possible due a lexoffice contract issue');
+        } elseif ($http_status == 500) {
+            throw new lexoffice_exception('lexoffice-php-api: Internal server error.', [
+                'HTTP Status' => $http_status,
+                'Requested URI' => $curl_url,
+                'Requested Payload' => $data,
+                'Response' => json_decode($result),
+            ]);
+        } elseif ($http_status == 503) {
+            throw new lexoffice_exception('lexoffice-php-api: API Service currently unavailable', [
+                'HTTP Status' => $http_status,
+                'Requested URI' => $curl_url,
+                'Requested Payload' => $data,
+                'Response' => json_decode($result),
+            ]);
+        } else {
+            // all other codes https://developers.lexoffice.io/docs/#http-status-codes
+            throw new lexoffice_exception('lexoffice-php-api: error in api request - check details via $e->get_error()', [				'HTTP Status' => $http_status,
+                'Requested URI' => $curl_url,
+                'Requested Payload' => $data,
+                'Response' => json_decode($result),
+            ]);
+        }
 
-	}
+    }
 
-	public function create_event($event, $callback = false) {
-		if (!$callback) $callback = $this->callback;
-		if ($callback) {
-			return $this->api_call('POST', 'event-subscriptions', '', ['eventType' => $event, 'callbackUrl' => $callback]);
-		} else {
-			throw new lexoffice_exception('lexoffice-php-api: cannot create webhook, no callback given');
-		}
-	}
+    public function create_event($event, $callback = false) {
+        if (!$callback) $callback = $this->callback;
+        if ($callback) {
+            return $this->api_call('POST', 'event-subscriptions', '', ['eventType' => $event, 'callbackUrl' => $callback]);
+        } else {
+            throw new lexoffice_exception('lexoffice-php-api: cannot create webhook, no callback given');
+        }
+    }
 
-	public function create_contact(array $data) {
-		// todo maybe a good idea to check if already exist?
-		// todo some validation checks
-		// set version to 0 to create a new contact
-		$data['version'] = 0;
-		return $this->api_call('POST', 'contacts', '', $data);
-	}
+    public function create_contact(array $data) {
+        // todo maybe a good idea to check if already exist?
+        // todo some validation checks
+        // set version to 0 to create a new contact
+        $data['version'] = 0;
+        return $this->api_call('POST', 'contacts', '', $data);
+    }
 
     public function create_quotation($data, $finalized = false) {
         return $this->api_call('POST', 'quotations', '', $data, ($finalized ? '?finalize=true' : ''));
     }
 
     public function create_creditnote($data, $finalized = false) {
-		return $this->api_call('POST', 'credit-notes', '', $data, ($finalized ? '?finalize=true' : ''));
-	}
+        return $this->api_call('POST', 'credit-notes', '', $data, ($finalized ? '?finalize=true' : ''));
+    }
 
-	public function create_invoice($data, $finalized = false) {
-		//todo some validation checks
-		return $this->api_call('POST', 'invoices', '', $data, ($finalized ? '?finalize=true' : ''));
-	}
+    public function create_invoice($data, $finalized = false) {
+        //todo some validation checks
+        return $this->api_call('POST', 'invoices', '', $data, ($finalized ? '?finalize=true' : ''));
+    }
 
-	public function create_orderconfirmation($data) {
-		//todo some validation checks
-		return $this->api_call('POST', 'order-confirmations', '', $data);
-	}
+    public function create_orderconfirmation($data) {
+        //todo some validation checks
+        return $this->api_call('POST', 'order-confirmations', '', $data);
+    }
 
-	public function create_voucher($data) {
-		return $this->api_call('POST', 'vouchers', '', $data);
-	}
+    public function create_voucher($data) {
+        return $this->api_call('POST', 'vouchers', '', $data);
+    }
 
-	public function get_event($uuid) {
-		return $this->api_call('GET', 'event-subscriptions', $uuid);
-	}
+    public function get_event($uuid) {
+        return $this->api_call('GET', 'event-subscriptions', $uuid);
+    }
 
-	public function get_events_all() {
-		return $this->api_call('GET', 'event-subscriptions');
-	}
+    public function get_events_all() {
+        return $this->api_call('GET', 'event-subscriptions');
+    }
 
-	public function get_contact($uuid) {
-		return $this->api_call('GET', 'contacts', $uuid);
-	}
+    public function get_contact($uuid) {
+        return $this->api_call('GET', 'contacts', $uuid);
+    }
 
-	public function get_contacts_all() {
-		$result = $this->api_call('GET', 'contacts', '', '', '?page=0&size=100&direction=ASC&property=name');
-		$contacts = $result->content;
-		unset($result->content);
+    public function get_contacts_all() {
+        $result = $this->api_call('GET', 'contacts', '', '', '?page=0&size=100&direction=ASC&property=name');
+        $contacts = $result->content;
+        unset($result->content);
 
-		for ($i = 1; $i < $result->totalPages; $i++) {
-			$result_page = $this->api_call('GET', 'contacts', '', '', '?page='.$i.'&size=100&direction=ASC&property=name');
-			foreach ($result_page->content as $contact) {
-				$contacts[] = $contact;
-			}
-			unset($result_page->content);
-		}
-		return($contacts);
-	}
+        for ($i = 1; $i < $result->totalPages; $i++) {
+            $result_page = $this->api_call('GET', 'contacts', '', '', '?page='.$i.'&size=100&direction=ASC&property=name');
+            foreach ($result_page->content as $contact) {
+                $contacts[] = $contact;
+            }
+            unset($result_page->content);
+        }
+        return($contacts);
+    }
 
-	public function get_invoice($uuid) {
-		return $this->api_call('GET', 'invoices', $uuid);
-	}
+    public function get_invoice($uuid) {
+        return $this->api_call('GET', 'invoices', $uuid);
+    }
 
-	public function get_invoices_all() {
-		$result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
-		$vouchers = $result->content;
-		unset($result->content);
+    public function get_invoices_all() {
+        $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
+        $vouchers = $result->content;
+        unset($result->content);
 
-		for ($i = 1; $i < $result->totalPages; $i++) {
-			$result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=100&sort=voucherNumber,DESC&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
-			foreach ($result_page->content as $voucher) {
-				$vouchers[] = $voucher;
-			}
-			unset($result_page->content);
-		}
-		return($vouchers);
-	}
+        for ($i = 1; $i < $result->totalPages; $i++) {
+            $result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=100&sort=voucherNumber,DESC&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
+            foreach ($result_page->content as $voucher) {
+                $vouchers[] = $voucher;
+            }
+            unset($result_page->content);
+        }
+        return($vouchers);
+    }
 
-	public function get_last_invoices($count) {
-		if ($count <= 0) throw new lexoffice_exception('lexoffice-php-api: positive invoice count needed');
+    public function get_last_invoices($count) {
+        if ($count <= 0) throw new lexoffice_exception('lexoffice-php-api: positive invoice count needed');
 
-		if ($count <= 100) {
-			$result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size='.$count.'&sort=voucherNumber,DESC&voucherType=invoice&voucherStatus=open,paid,paidoff,voided,transferred');
-			return $result->content;
-		} else {
-			$result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType=invoice&voucherStatus=open,paid,paidoff,voided,transferred');
-			$vouchers = $result->content;
-			$count = $count-100;
-			unset($result->content);
+        if ($count <= 100) {
+            $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size='.$count.'&sort=voucherNumber,DESC&voucherType=invoice&voucherStatus=open,paid,paidoff,voided,transferred');
+            return $result->content;
+        } else {
+            $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType=invoice&voucherStatus=open,paid,paidoff,voided,transferred');
+            $vouchers = $result->content;
+            $count = $count-100;
+            unset($result->content);
 
-			for ($i = 1; $i < $result->totalPages; $i++) {
-				if (!$count) break;
-				if ($count <= 100) {
-					$count_tmp = $count;
-				} else {
-					$count_tmp = 100;
-				}
+            for ($i = 1; $i < $result->totalPages; $i++) {
+                if (!$count) break;
+                if ($count <= 100) {
+                    $count_tmp = $count;
+                } else {
+                    $count_tmp = 100;
+                }
 
-				$result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size='.$count_tmp.'&sort=voucherNumber,DESC&voucherType=invoice&voucherStatus=open,paid,paidoff,voided,transferred');
-				foreach ($result_page->content as $voucher) {
-					$vouchers[] = $voucher;
-				}
-				$count = $count-$count_tmp;
-				unset($result_page->content);
-			}
-			return $vouchers;
-		}
-	}
+                $result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size='.$count_tmp.'&sort=voucherNumber,DESC&voucherType=invoice&voucherStatus=open,paid,paidoff,voided,transferred');
+                foreach ($result_page->content as $voucher) {
+                    $vouchers[] = $voucher;
+                }
+                $count = $count-$count_tmp;
+                unset($result_page->content);
+            }
+            return $vouchers;
+        }
+    }
 
-	public function get_quotation($uuid) {
-		return $this->api_call('GET', 'quotations', $uuid);
-	}
+    public function get_quotation($uuid) {
+        return $this->api_call('GET', 'quotations', $uuid);
+    }
 
-	public function get_orderconfirmation($uuid) {
-		return $this->api_call('GET', 'order-confirmations', $uuid);
-	}
+    public function get_orderconfirmation($uuid) {
+        return $this->api_call('GET', 'order-confirmations', $uuid);
+    }
 
-	/* legacy function - will be removed in futere releases */
-	/* use get_pdf($type, $uuid, $filename) instead */
-	public function get_invoice_pdf($uuid, $filename) {
-		// check if invoice is a draft
-		$invoice = $this->get_invoice($uuid);
-		if ($invoice->voucherStatus == 'draft') throw new lexoffice_exception('lexoffice-php-api: requested invoice is a draft. Cannot create/download pdf file. Check details via $e->get_error()', ['invoice_id' => $uuid]);
+    /* legacy function - will be removed in futere releases */
+    /* use get_pdf($type, $uuid, $filename) instead */
+    public function get_invoice_pdf($uuid, $filename) {
+        // check if invoice is a draft
+        $invoice = $this->get_invoice($uuid);
+        if ($invoice->voucherStatus == 'draft') throw new lexoffice_exception('lexoffice-php-api: requested invoice is a draft. Cannot create/download pdf file. Check details via $e->get_error()', ['invoice_id' => $uuid]);
 
-		return $this->get_pdf('invoices', $uuid, $filename);
-	}
+        return $this->get_pdf('invoices', $uuid, $filename);
+    }
 
-	public function get_pdf($type, $uuid, $filename): bool {
-		$request = $this->api_call('GET', $type, $uuid, '', '/document');
-		if ($request && isset($request->documentFileId)) {
-			$request_file = $this->api_call('GET', 'files', $request->documentFileId);
-			if ($request_file) {
-				file_put_contents($filename, $request_file);
-				return true;
-			}
-			return false;
-		}
-		return false;
-	}
+    public function get_pdf($type, $uuid, $filename): bool {
+        $request = $this->api_call('GET', $type, $uuid, '', '/document');
+        if ($request && isset($request->documentFileId)) {
+            $request_file = $this->api_call('GET', 'files', $request->documentFileId);
+            if ($request_file) {
+                file_put_contents($filename, $request_file);
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
 
-	public function get_voucher($uuid) {
-		return $this->api_call('GET', 'vouchers', $uuid);
-	}
+    public function get_voucher($uuid) {
+        return $this->api_call('GET', 'vouchers', $uuid);
+    }
 
-	public function get_vouchers($type = 'invoice,creditnote,orderconfirmation', $state = 'draft,open,paid,paidoff,voided,accepted,rejected', $archived = 'both') {
-		if ($archived == 'true') {
-			$archived = '&archived=true';
-		} elseif ($archived == 'false') {
-			$archived = '&archived=false';
-		} else {
-			$archived = '';
-		}
+    public function get_vouchers($type = 'invoice,creditnote,orderconfirmation', $state = 'draft,open,paid,paidoff,voided,accepted,rejected', $archived = 'both') {
+        if ($archived == 'true') {
+            $archived = '&archived=true';
+        } elseif ($archived == 'false') {
+            $archived = '&archived=false';
+        } else {
+            $archived = '';
+        }
 
-		$result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.$archived);
+        $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.$archived);
 
         // #69724 - warning - lexoffice::init::vouchers
         // at the moment it is not possible to request more than 10K items due lexoffice internal restrictions
@@ -666,116 +670,116 @@ class lexoffice_client {
         }
 
         if (isset($result->content)) {
-			$vouchers = $result->content;
-			unset($result->content);
+            $vouchers = $result->content;
+            unset($result->content);
 
-			for ($i = 1; $i < $result->totalPages; $i++) {
-				$result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.$archived);
-				foreach ($result_page->content as $voucher) {
-					$vouchers[] = $voucher;
-				}
-				unset($result_page->content);
-			}
-			return($vouchers);
-		}
-		return [];
-	}
+            for ($i = 1; $i < $result->totalPages; $i++) {
+                $result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.$archived);
+                foreach ($result_page->content as $voucher) {
+                    $vouchers[] = $voucher;
+                }
+                unset($result_page->content);
+            }
+            return($vouchers);
+        }
+        return [];
+    }
 
-	public function get_voucher_files($uuid, $filename_prefix): array {
-		// must get voucher files before
-		$voucher = $this->get_voucher($uuid);
-		if (!$voucher || !isset($voucher->files[0])) throw new lexoffice_exception('lexoffice-php-api: voucher has no files. Cannot download file. Check details via $e->get_error()', ['voucher_id' => $uuid]);
+    public function get_voucher_files($uuid, $filename_prefix): array {
+        // must get voucher files before
+        $voucher = $this->get_voucher($uuid);
+        if (!$voucher || !isset($voucher->files[0])) throw new lexoffice_exception('lexoffice-php-api: voucher has no files. Cannot download file. Check details via $e->get_error()', ['voucher_id' => $uuid]);
 
-		// iterate files
-		$i = 1;
-		$saved_files = [];
-		foreach ($voucher->files as $uuid_file) {
-			$request = $this->api_call('GET', 'files', $uuid_file, '', '', true);
+        // iterate files
+        $i = 1;
+        $saved_files = [];
+        foreach ($voucher->files as $uuid_file) {
+            $request = $this->api_call('GET', 'files', $uuid_file, '', '', true);
 
-			// unsused at the moment
-			//$header = substr($request['body'], 0, $request['header']['header_size']);
-			$body = substr($request['body'], $request['header']['header_size']);
+            // unsused at the moment
+            //$header = substr($request['body'], 0, $request['header']['header_size']);
+            $body = substr($request['body'], $request['header']['header_size']);
 
-			// content type
-			switch ($request['header']['content_type']) {
-				case 'image/png':
-					$extension = 'png';
-					break;
-				case 'image/jpg':
-				case 'image/jpeg':
-					$extension = 'jpg';
-					break;
-				case 'application/pdf':
-					$extension = 'pdf';
-					break;
-				default:
+            // content type
+            switch ($request['header']['content_type']) {
+                case 'image/png':
+                    $extension = 'png';
+                    break;
+                case 'image/jpg':
+                case 'image/jpeg':
+                    $extension = 'jpg';
+                    break;
+                case 'application/pdf':
+                    $extension = 'pdf';
+                    break;
+                default:
                     throw new lexoffice_exception('lexoffice-php-api: unknown mime/type "'.$request['header']['content_type'].'". Check details via $e->get_error()', ['voucher_id' => $uuid, 'response' => $request]);
-			}
+            }
 
-			$filename = $filename_prefix.'_'.$i.'.'.$extension;
-			file_put_contents($filename, $body);
-			$saved_files[] = $filename;
-			$i++;
-		}
-		return $saved_files;
-	}
+            $filename = $filename_prefix.'_'.$i.'.'.$extension;
+            file_put_contents($filename, $body);
+            $saved_files[] = $filename;
+            $i++;
+        }
+        return $saved_files;
+    }
 
-	public function get_voucher_payments($uuid) {
+    public function get_voucher_payments($uuid) {
         return $this->api_call('GET', 'payments', $uuid);
-	}
+    }
 
-	private $cache_profile = null;
-	public function get_profile() {
-	    if (!is_null($this->cache_profile)) return $this->cache_profile;
-		$this->cache_profile = $this->api_call('GET', 'profile');
+    private $cache_profile = null;
+    public function get_profile() {
+        if (!is_null($this->cache_profile)) return $this->cache_profile;
+        $this->cache_profile = $this->api_call('GET', 'profile');
         return $this->cache_profile;
-	}
+    }
 
-	public function get_creditnote($uuid) {
-		return $this->api_call('GET', 'credit-notes', $uuid);
-	}
+    public function get_creditnote($uuid) {
+        return $this->api_call('GET', 'credit-notes', $uuid);
+    }
 
-	public function update_contact($uuid, $data) {
-		return $this->api_call('PUT', 'contacts', $uuid, $data);
-	}
+    public function update_contact($uuid, $data) {
+        return $this->api_call('PUT', 'contacts', $uuid, $data);
+    }
 
-	// todo
-	#public function update_invoice() {
-	#
-	#}
+    // todo
+    #public function update_invoice() {
+    #
+    #}
 
-	public function delete_event($uuid) {
-		return $this->api_call('DELETE', 'event-subscriptions', $uuid);
-	}
+    public function delete_event($uuid) {
+        return $this->api_call('DELETE', 'event-subscriptions', $uuid);
+    }
 
-	public function search_contact(array $filters) {
-		// todo integrate pagination
+    public function search_contact(array $filters) {
+        // todo integrate pagination
 
-		$filter_string = '';
-		foreach ($filters as $index => $filter) {
-		    // check if is not already encoded
+        $filter_string = '';
+        foreach ($filters as $index => $filter) {
+            // check if is not already encoded
             if (strpos($filter, '%') === false || $filter == rawurldecode($filter)) {
                 $filter = rawurlencode($filter);
             }
 
-			if (($index == 'customer' || $index == 'vendor') && $filter !== '') {
-				// bool to text
-				if ($filter === true) $filter = 'true';
-				if ($filter === false) $filter = 'false';
-				$filter_string.= $index.'='.$filter.'&';
-			} elseif (($index == 'email' || $index == 'name') && $filter !== '') {
-				if (strlen($filter) < 3) throw new lexoffice_exception('lexoffice-php-api: search pattern must have least 3 characters');
-				$filter_string.= $index.'='.$filter.'&';
-			} elseif ($filter !== '') {
-				$filter_string.= $index.'='.$filter.'&';
-			}
-		}
+            if (($index == 'customer' || $index == 'vendor') && $filter !== '') {
+                // bool to text
+                if ($filter === true) $filter = 'true';
+                if ($filter === false) $filter = 'false';
+                $filter_string.= $index.'='.$filter.'&';
+            } elseif (($index == 'email' || $index == 'name') && $filter !== '') {
+                if (strlen($filter) < 3) throw new lexoffice_exception('lexoffice-php-api: search pattern must have least 3 characters');
+                $filter_string.= $index.'='.$filter.'&';
+            } elseif ($filter !== '') {
+                $filter_string.= $index.'='.$filter.'&';
+            }
+        }
 
-		if (!$filter_string) throw new lexoffice_exception('lexoffice-php-api: no valid filter for searching contacts');
-		return $this->api_call('GET', 'contacts', '', '', '?'.substr($filter_string, 0, -1));
-	}
+        if (!$filter_string) throw new lexoffice_exception('lexoffice-php-api: no valid filter for searching contacts');
+        return $this->api_call('GET', 'contacts', '', '', '?'.substr($filter_string, 0, -1));
+    }
 
-	// todo check lifetime api key
+    // todo check lifetime api key
 
     public function upload_file($file) {
         if (!file_exists($file)) throw new lexoffice_exception('lexoffice-php-api: file does not exist', ['file' => $file]);
@@ -849,6 +853,9 @@ class lexoffice_client {
      * @return bool
      */
     public function is_european_member(string $country_code, int $date): bool {
+        // load country definition, needed in extending classes with own constructor
+        if (is_null($this->countries)) $this->load_country_definition();
+
         // use $date for future EU changes if needed
         return isset($this->countries->{strtoupper($country_code)}) && $this->countries->{strtoupper($country_code)}->europe_member;
     }
@@ -917,7 +924,7 @@ class lexoffice_client {
             // Welt (inkl. Schweiz)
             // B2C
             if ($taxrate == 0 && !$b2b_business) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
-        // Dienstleistung
+            // Dienstleistung
         } else {
             // Welt (inkl. Schweiz)
             // B2B
@@ -949,12 +956,14 @@ class lexoffice_client {
      *  ]
      */
     public function get_taxrates(string $country_code, int $date): array {
+        // load country definition, needed in extending classes with own constructor
+        if (is_null($this->countries)) $this->load_country_definition();
         if (empty($this->countries->{strtoupper($country_code)})) return [];
         // add zero taxrate to array
         $this->countries->{strtoupper($country_code)}->taxrates->reduced[] = 0;
 
         // overwrite until 01.07.2021
-        if ($date <= 1624783982 && strtoupper($country_code) != 'DE') return $this->get_taxrates('DE', $date);
+        if ($date <= 1625090400 && strtoupper($country_code) != 'DE') return $this->get_taxrates('DE', $date);
 
         return $this->check_adjusted_taxrate($country_code, (array) $this->countries->{strtoupper($country_code)}->taxrates, $date);
     }
@@ -978,7 +987,14 @@ class lexoffice_client {
      */
     public function check_taxrate(float $taxrate, string $country_code, int $date): bool {
         $taxrates = $this->get_taxrates($country_code, $date);
-        return $taxrate == $taxrates['default'] || in_array($taxrate, $taxrates['reduced']);
+        if (!empty($taxrates['default']) && $taxrate == $taxrates['default']) return true;
+
+        // iterate because in_array() not like floats for equal check :/
+        if (empty($taxrates['reduced'])) return false;
+        foreach ($taxrates['reduced'] as $taxrate_reduced) {
+            if (abs(floatval($taxrate_reduced)-$taxrate) < 0.00001) return true;
+        }
+        return false;
     }
 
     /* One Stop Shop (OSS) */
@@ -993,7 +1009,7 @@ class lexoffice_client {
      * @throws \lexoffice_exception
      */
     public function is_oss_needed(string $country_code, int $date) {
-        if ($date <= 1624783982) return false; // 01.07.2021
+        if ($date <= 1625090400) return false; // 01.07.2021
 
         $profile = $this->get_profile();
         if ($profile->smallBusiness) return false; // not used for taxless businesses
@@ -1032,23 +1048,23 @@ class lexoffice_client {
 
     /* legacy wrapper */
 
-	public function get_credit_note($uuid) {
-		return $this->get_creditnote($uuid);
-	}
+    public function get_credit_note($uuid) {
+        return $this->get_creditnote($uuid);
+    }
 
-	public function create_credit_note($data, $finalized = false) {
-		return $this->create_creditnote($data, $finalized);
-	}
+    public function create_credit_note($data, $finalized = false) {
+        return $this->create_creditnote($data, $finalized);
+    }
 }
 
 class lexoffice_exception extends Exception {
-	private $custom_error;
-	public function __construct($message, $data = []) {
-		$this->custom_error = $data;
-		parent::__construct($message);
-	}
+    private $custom_error;
+    public function __construct($message, $data = []) {
+        $this->custom_error = $data;
+        parent::__construct($message);
+    }
 
-	public function get_error() {
-		return $this->custom_error;
-	}
+    public function get_error() {
+        return $this->custom_error;
+    }
 }
