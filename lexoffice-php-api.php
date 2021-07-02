@@ -74,7 +74,7 @@ class lexoffice_client {
                 'europe_member' => true,
             ],
             'BG' => (object)[
-                'title' => 'Bulgaria',
+                'title' => 'Bulgarien',
                 'taxtitle' => 'DDS',
                 'taxrates' => (object)[
                     'default' => 20,
@@ -82,6 +82,16 @@ class lexoffice_client {
                     'nullrate' => false,
                 ],
                 'europe_member' => true,
+            ],
+            'CH' => (object)[
+                'title' => 'Bulgaria',
+                'taxtitle' => 'VAT',
+                'taxrates' => (object)[
+                    'default' => 7.7,
+                    'reduced' => [2.5, 3.7],
+                    'nullrate' => false,
+                ],
+                'europe_member' => false,
             ],
             'CY' => (object)[
                 'title' => 'Zypern',
@@ -958,7 +968,13 @@ class lexoffice_client {
     public function get_taxrates(string $country_code, int $date): array {
         // load country definition, needed in extending classes with own constructor
         if (is_null($this->countries)) $this->load_country_definition();
-        if (empty($this->countries->{strtoupper($country_code)})) return [];
+
+        // unknown country
+        if (empty($this->countries->{strtoupper($country_code)})) return [
+            'default' => null,
+            'reduced' => [0]
+        ];
+
         // add zero taxrate to array
         $this->countries->{strtoupper($country_code)}->taxrates->reduced[] = 0;
 
