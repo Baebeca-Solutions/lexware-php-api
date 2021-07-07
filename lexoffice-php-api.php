@@ -84,7 +84,7 @@ class lexoffice_client {
                 'europe_member' => true,
             ],
             'CH' => (object)[
-                'title' => 'Bulgaria',
+                'title' => 'Schweiz',
                 'taxtitle' => 'VAT',
                 'taxrates' => (object)[
                     'default' => 7.7,
