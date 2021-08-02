@@ -146,3 +146,13 @@ catch (lexoffice_exception $e) {
     test($e->getMessage());
     test_finished(false);
 }
+
+test_start('check taxrate Österreich');
+try {
+    $request = $lexoffice->check_taxrate(floatval(20), 'at', strtotime('2021-07-05'));
+    test_finished($request);
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}
