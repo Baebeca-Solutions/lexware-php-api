@@ -21,6 +21,7 @@ class lexoffice_client {
     protected $callback = '';
     protected $api_version = 'v1';
     protected $countries;
+    protected $page_size = 500;
 
     public function __construct($settings) {
         if (!is_array($settings)) throw new lexoffice_exception('lexoffice-php-api: settings should be an array');
@@ -600,12 +601,12 @@ class lexoffice_client {
     }
 
     public function get_contacts_all() {
-        $result = $this->api_call('GET', 'contacts', '', '', '?page=0&size=100&direction=ASC&property=name');
+        $result = $this->api_call('GET', 'contacts', '', '', '?page=0&=size'. $this->page_size. '&direction=ASC&property=name');
         $contacts = $result->content;
         unset($result->content);
 
         for ($i = 1; $i < $result->totalPages; $i++) {
-            $result_page = $this->api_call('GET', 'contacts', '', '', '?page='.$i.'&size=100&direction=ASC&property=name');
+            $result_page = $this->api_call('GET', 'contacts', '', '', '?page='.$i.'&size='. $this->page_size.'&direction=ASC&property=name');
             foreach ($result_page->content as $contact) {
                 $contacts[] = $contact;
             }
@@ -619,12 +620,12 @@ class lexoffice_client {
     }
 
     public function get_invoices_all() {
-        $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
+        $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size='. $this->page_size.'&sort=voucherNumber,DESC&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
         $vouchers = $result->content;
         unset($result->content);
 
         for ($i = 1; $i < $result->totalPages; $i++) {
-            $result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=100&sort=voucherNumber,DESC&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
+            $result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size='. $this->page_size.'&sort=voucherNumber,DESC&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
             foreach ($result_page->content as $voucher) {
                 $vouchers[] = $voucher;
             }
@@ -636,21 +637,21 @@ class lexoffice_client {
     public function get_last_invoices($count) {
         if ($count <= 0) throw new lexoffice_exception('lexoffice-php-api: positive invoice count needed');
 
-        if ($count <= 100) {
+        if ($count <= $this->page_size) {
             $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size='.$count.'&sort=voucherNumber,DESC&voucherType=invoice&voucherStatus=open,paid,paidoff,voided,transferred');
             return $result->content;
         } else {
-            $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType=invoice&voucherStatus=open,paid,paidoff,voided,transferred');
+            $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size='. $this->page_size.'&sort=voucherNumber,DESC&voucherType=invoice&voucherStatus=open,paid,paidoff,voided,transferred');
             $vouchers = $result->content;
-            $count = $count-100;
+            $count = $count- $this->page_size;
             unset($result->content);
 
             for ($i = 1; $i < $result->totalPages; $i++) {
                 if (!$count) break;
-                if ($count <= 100) {
+                if ($count <= $this->page_size) {
                     $count_tmp = $count;
                 } else {
-                    $count_tmp = 100;
+                    $count_tmp = $this->page_size;
                 }
 
                 $result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size='.$count_tmp.'&sort=voucherNumber,DESC&voucherType=invoice&voucherStatus=open,paid,paidoff,voided,transferred');
@@ -708,13 +709,13 @@ class lexoffice_client {
             $archived = '';
         }
 
-        $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.$archived);
+        $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size='. $this->page_size.'&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.$archived);
 
         // #69724 - warning - lexoffice::init::vouchers
         // at the moment it is not possible to request more than 10K items due lexoffice internal restrictions
         // the lexoffice-API will throw an HTTP 500, so lets abort it until lexoffice has integrated a solution for this limitation
         // check it here: https://github.com/Baebeca-Solutions/lexoffice-php-api/issues/31
-        if ($result->totalPages >= 100) {
+        if ($result->totalPages >= 20) {
             throw new lexoffice_exception('lexoffice-php-api: more than 10K voucher items requested. Check details via $e->get_error()', ['response' => $result]);
         }
 
@@ -723,7 +724,7 @@ class lexoffice_client {
             unset($result->content);
 
             for ($i = 1; $i < $result->totalPages; $i++) {
-                $result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.$archived);
+                $result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size='. $this->page_size.'&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.$archived);
                 foreach ($result_page->content as $voucher) {
                     $vouchers[] = $voucher;
                 }
@@ -1109,6 +1110,19 @@ class lexoffice_client {
 
     public function create_credit_note($data, $finalized = false) {
         return $this->create_creditnote($data, $finalized);
+    }
+
+    public function set_page_size($pageSize) {
+        $val = (int) $pageSize;
+        if (!$val) {
+            return;
+        }
+        $this->page_size = $val;
+    }
+
+    public function get_page_size()
+    {
+        return $this->page_size;
     }
 }
 
