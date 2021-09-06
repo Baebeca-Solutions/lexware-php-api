@@ -1114,7 +1114,7 @@ class lexoffice_client {
 
     public function set_page_size($pageSize) {
         $val = (int) $pageSize;
-        if (!$val) {
+        if (!$val || $val < 0) {
             return;
         }
         $this->page_size = $val;
