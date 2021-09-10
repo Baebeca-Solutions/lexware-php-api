@@ -558,11 +558,17 @@ class lexoffice_client {
     }
 
     public function create_contact(array $data) {
-        // todo maybe a good idea to check if already exist?
         // todo some validation checks
         // set version to 0 to create a new contact
         $data['version'] = 0;
-        return $this->api_call('POST', 'contacts', '', $data);
+        $new_contact = $this->api_call('POST', 'contacts', '', $data);
+
+        // #73917
+        // support a technical race condition in lexoffice database system
+        // we have to wait 500ms before we can do anything with the delivered contact id
+        usleep(500000); // 500 ms / 0.5 sec
+
+        return $new_contact;
     }
 
     public function create_quotation($data, $finalized = false) {
