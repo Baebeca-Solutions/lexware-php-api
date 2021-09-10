@@ -289,7 +289,6 @@ try {
 	}
 }
 
-
 test_start('try invalid search for a contact - no filters');
 try {
 	$request = $lexoffice->search_contact(array(
@@ -300,6 +299,20 @@ try {
 		'venodr' => '',
 	));
 	test_finished(false);
+
+} catch(lexoffice_exception $e) {
+	if ($e->getMessage() == 'lexoffice-php-api: no valid filter for searching contacts') {
+		test_finished(true);
+	} else {
+		test_finished(false);
+	}
+}
+
+test_start('get all contacts');
+try {
+	$request = $lexoffice->get_contacts_all();
+    if (count($request) > 250) test_finished(true);
+    test_finished(false);
 
 } catch(lexoffice_exception $e) {
 	if ($e->getMessage() == 'lexoffice-php-api: no valid filter for searching contacts') {

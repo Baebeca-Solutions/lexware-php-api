@@ -600,12 +600,12 @@ class lexoffice_client {
     }
 
     public function get_contacts_all() {
-        $result = $this->api_call('GET', 'contacts', '', '', '?page=0&size=100&direction=ASC&property=name');
+        $result = $this->api_call('GET', 'contacts', '', '', '?page=0&size=250&direction=ASC&property=name');
         $contacts = $result->content;
         unset($result->content);
 
         for ($i = 1; $i < $result->totalPages; $i++) {
-            $result_page = $this->api_call('GET', 'contacts', '', '', '?page='.$i.'&size=100&direction=ASC&property=name');
+            $result_page = $this->api_call('GET', 'contacts', '', '', '?page='.$i.'&size=250&direction=ASC&property=name');
             foreach ($result_page->content as $contact) {
                 $contacts[] = $contact;
             }
