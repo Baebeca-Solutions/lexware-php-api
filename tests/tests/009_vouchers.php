@@ -58,6 +58,41 @@ try {
         ],
         'taxType' => "net",
         'totalTaxAmount' => '1548.51',
+        'remark' => 'Erdbeerkuchen',
+    ]);
+
+    if ($request->id) {
+        test('voucher created - id: '.$request->id);
+        test_finished(true);
+    } else {
+        test_finished(false);
+    }
+} catch(lexoffice_exception $e) {
+    test($e->getMessage());
+    test(print_r($e->get_error(), true));
+    test_finished(false);
+}
+
+test_start('create voucher #74228');
+try {
+    $request = $lexoffice->create_voucher([
+        'version' => 0,
+        'type' => 'salesinvoice',
+        'voucherNumber' => '6126',
+        'voucherDate' => '2021-09-13',
+        'dueDate' => '2021-09-20',
+        'useCollectiveContact' => true,
+        'totalGrossAmount' => 175.37,
+        'taxType' => "gross",
+        'totalTaxAmount' => 28.00,
+        'voucherItems' => [
+            [
+                'amount' => 175.37,
+                'taxAmount' => 28.00,
+                'taxRatePercent' => 19,
+                'categoryId' => '8f8664a1-fd86-11e1-a21f-0800200c9a66',
+            ],
+        ],
     ]);
 
     if ($request->id) {
