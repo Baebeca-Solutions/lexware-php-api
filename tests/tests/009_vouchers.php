@@ -106,3 +106,19 @@ try {
     test(print_r($e->get_error(), true));
     test_finished(false);
 }
+
+test_start('get all vouchers');
+try {
+    $request = $lexoffice->get_vouchers('salesinvoice', 'draft,open,paid,paidoff,voided,transferred,sepadebit,accepted,rejected', 'both');
+
+    if (count($request)) {
+        test('get '.count($request).' vouchers');
+        test_finished(true);
+    } else {
+        test_finished(false);
+    }
+} catch(lexoffice_exception $e) {
+    test($e->getMessage());
+    test(print_r($e->get_error(), true));
+    test_finished(false);
+}

@@ -512,7 +512,7 @@ class lexoffice_client {
                 'Requested Payload' => $data,
                 'Response' => json_decode($result),
             ]);
-        // rate limit, repeat
+            // rate limit, repeat
         } elseif ($http_status == 429 && $repeatable === true) {
             sleep(3);
             return $this->api_call($type, $resource, $uuid, $data, $params, $return_http_header, false);
@@ -705,23 +705,73 @@ class lexoffice_client {
         return $this->api_call('GET', 'vouchers', $uuid);
     }
 
-    public function get_vouchers($type = 'invoice,creditnote,orderconfirmation', $state = 'draft,open,paid,paidoff,voided,accepted,rejected', $archived = 'both') {
-        if ($archived == 'true') {
-            $archived = '&archived=true';
-        } elseif ($archived == 'false') {
-            $archived = '&archived=false';
-        } else {
-            $archived = '';
+    public function get_vouchers(
+        $type = 'invoice,creditnote,orderconfirmation',
+        $state = 'draft,open,paid,paidoff,voided,accepted,rejected',
+        $archived = 'both',
+        $date_from = '',
+        $date_to = ''
+    ) {
+        $filter_archived = '';
+        if ($archived == 'true' || $archived === true) {
+            $filter_archived = '&archived=true';
+        } elseif ($archived == 'false' || $archived === false) {
+            $filter_archived = '&archived=false';
         }
 
-        $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.$archived);
+        $filter_date_from = '';
+        if (!empty($date_from)) $filter_date_from = '&voucherDateFrom='.$date_from;
+        $filter_date_to = '';
+        if (!empty($date_to)) $filter_date_to = '&voucherDateTo='.$date_to;
+
+        $result = $this->api_call(
+            'GET',
+            'voucherlist',
+            '',
+            '',
+            '?page=0&size=250&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.$filter_archived.$filter_date_from.$filter_date_to
+        );
 
         // #69724 - warning - lexoffice::init::vouchers
         // at the moment it is not possible to request more than 10K items due lexoffice internal restrictions
         // the lexoffice-API will throw an HTTP 500, so lets abort it until lexoffice has integrated a solution for this limitation
         // check it here: https://github.com/Baebeca-Solutions/lexoffice-php-api/issues/31
-        if ($result->totalPages >= 100) {
-            throw new lexoffice_exception('lexoffice-php-api: more than 10K voucher items requested. Check details via $e->get_error()', ['response' => $result]);
+        if ($result->totalPages >= 40) { // 40 pages * 250 items == 10k
+            // we have to split it up in smaller requests
+            // lets start again
+            $result = [];
+
+            if (empty($date_from)) $date_from = '2011-01-01'; // set start day to lexoffice deployment date
+
+            // store stop timetsamp
+            $date_to_timestamp_end = time();
+            if (!empty($date_to)) $date_to_timestamp_end = strtotime($date_to.'T00:00:00.000+01:00');
+
+            // get next timespan
+            $date_to_timestamp = strtotime($date_from.'T00:00:00.000+01:00')+(60*60*24*30); // +1 Month
+            // reduce if lower timeframe was set by user
+            if ($date_to_timestamp > $date_to_timestamp_end) $date_to_timestamp = $date_to_timestamp_end;
+            $date_to = date('Y-m-d', $date_to_timestamp);
+
+            // execute until we have reached today or date_to
+            while (strtotime($date_from.'T00:00:00.000+01:00') < strtotime($date_to.'T00:00:00.000+01:00')) {
+                $result_tmp = $this->get_vouchers($type, $state, $archived, $date_from, $date_to);
+
+                // extract results
+                foreach ($result_tmp as $tmp) {
+                    array_push($result, $tmp);
+                }
+                unset($result_tmp, $tmp); // cleanup
+
+                // get next timespan, update +1 month
+                $date_from = date('Y-m-d', strtotime($date_to.'T00:00:00.000+01:00')+(60*60*25)); // +1 day (dont need same day twice)
+                $date_to_timestamp = strtotime($date_from.'T00:00:00.000+01:00')+(60*60*24*30); // +1 month
+                // reduce if lower timeframe was set by user
+                if ($date_to_timestamp > $date_to_timestamp_end) $date_to_timestamp = $date_to_timestamp_end;
+                $date_to = date('Y-m-d', $date_to_timestamp);
+            }
+
+            return $result;
         }
 
         if (isset($result->content)) {
@@ -729,7 +779,7 @@ class lexoffice_client {
             unset($result->content);
 
             for ($i = 1; $i < $result->totalPages; $i++) {
-                $result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=100&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.$archived);
+                $result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=250&sort=voucherNumber,DESC&voucherType='.$type.'&voucherStatus='.$state.$filter_archived.$filter_date_from.$filter_date_to);
                 foreach ($result_page->content as $voucher) {
                     $vouchers[] = $voucher;
                 }
