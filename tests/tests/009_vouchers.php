@@ -107,6 +107,63 @@ try {
     test_finished(false);
 }
 
+test_start('create voucher with pdf');
+$voucher_id = false;
+try {
+    $request = $lexoffice->create_voucher([
+        'version' => 0,
+        'type' => 'salesinvoice',
+        'voucherNumber' => 'dummy_pdf_upload',
+        'voucherDate' => '2021-09-13',
+        'dueDate' => '2021-09-20',
+        'useCollectiveContact' => true,
+        'totalGrossAmount' => 175.37,
+        'taxType' => "gross",
+        'totalTaxAmount' => 28.00,
+        'voucherItems' => [
+            [
+                'amount' => 175.37,
+                'taxAmount' => 28.00,
+                'taxRatePercent' => 19,
+                'categoryId' => '8f8664a1-fd86-11e1-a21f-0800200c9a66',
+            ],
+        ],
+    ]);
+
+    if ($request->id) {
+        test('voucher created - id: '.$request->id);
+        try {
+            $voucher_id = $request->id; // used in next test
+            $lexoffice->upload_voucher($request->id, __DIR__.'/files/dummy.pdf');
+            test_finished(true);
+        } catch(lexoffice_exception $e) {
+            test($e->getMessage());
+            test(print_r($e->get_error(), true));
+            test_finished(false);
+        }
+    } else {
+        test_finished(false);
+    }
+} catch(lexoffice_exception $e) {
+    test($e->getMessage());
+    test(print_r($e->get_error(), true));
+    test_finished(false);
+}
+
+test_start('add additonal pdf to previous created voucher');
+try {
+    if (empty($voucher_id)) test_finished(false);
+    $lexoffice->upload_voucher($voucher_id, __DIR__.'/files/dummy_2.pdf');
+    test_finished(true);
+} catch(lexoffice_exception $e) {
+    test($e->getMessage());
+    test(print_r($e->get_error(), true));
+    test_finished(false);
+}
+
+
+/** only enabled if needed */
+/*
 test_start('get all vouchers');
 try {
     $request = $lexoffice->get_vouchers('salesinvoice', 'draft,open,paid,paidoff,voided,transferred,sepadebit,accepted,rejected', 'both');
@@ -122,3 +179,4 @@ try {
     test(print_r($e->get_error(), true));
     test_finished(false);
 }
+*/
