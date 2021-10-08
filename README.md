@@ -27,7 +27,7 @@ Die Dokumentation mit allen Informationen findest du in unserem [Wiki](https://w
 An wen kann ich mich wenden, wenn ich Probleme oder Fragen habe?<br>
 Für diese Frage ist entscheidend, ob du eine Nutzungslizenz für unsere lexoffice-php-api erworben hast oder die kostenlose Variante nutzt.
 
-* Sofern eine Nutzungslizenz vorhanden ist, kannst du dich sich jederzeit gerne wiefolgt an uns wenden:
+* Sofern eine Nutzungslizenz vorhanden ist, kannst du dich sich jederzeit gerne wie folgt an uns wenden:
   * per Mail an support@baebeca.de
   * per Telefon an 02261-8161691
   * einen Github [issue](https://github.com/Baebeca-Solutions/lexoffice-php-api/issues) öffnen
