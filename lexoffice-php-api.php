@@ -867,6 +867,9 @@ class lexoffice_client {
                 $filter = rawurlencode($filter);
             }
 
+            // replace spacer | sometimes on appended lastname which is already encoded and skipped above
+            $filter = str_replace(' ', '%20', $filter);
+
             if (($index == 'customer' || $index == 'vendor') && $filter !== '') {
                 // bool to text
                 if ($filter === true) $filter = 'true';
