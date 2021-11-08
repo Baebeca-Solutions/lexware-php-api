@@ -998,28 +998,60 @@ class lexoffice_client {
             // Ware/Dienstleistung ohne OSS
             if ($oss === false) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
 
-            // check oss tax rate
-            $oss_taxrates = $this->get_taxrates($country_code, $date);
+            // oss "destination" configuration (we have to check with target country taxrates)
+            if ($oss === 'destination') {
+                // check oss tax rate
+                $oss_taxrates = $this->get_taxrates($country_code, $date);
 
-            if (empty($oss_taxrates)) throw new lexoffice_exception('lexoffice-php-api: unknown OSS booking scenario, cannot decide correct taxrates', [
-                'taxrate' => $taxrate,
-                'country_code' => $country_code,
-                'european_vatid' => $euopean_vatid,
-                'b2b_business' => $b2b_business,
-                'physical_good' => $physical_good,
+                if (empty($oss_taxrates)) throw new lexoffice_exception('lexoffice-php-api: unknown OSS booking scenario, cannot decide correct taxrates', [
+                    'taxrate' => $taxrate,
+                    'country_code' => $country_code,
+                    'european_vatid' => $euopean_vatid,
+                    'b2b_business' => $b2b_business,
+                    'physical_good' => $physical_good,
+                ]);
+
+                if (!$this->check_taxrate($taxrate, $country_code, $date)) throw new lexoffice_exception('lexoffice-php-api: invalid OSS taxrate for given country', [
+                    'taxrate' => $taxrate,
+                    'country_code' => $country_code,
+                    'date' => $date,
+                    'european_vatid' => $euopean_vatid,
+                    'b2b_business' => $b2b_business,
+                    'physical_good' => $physical_good,
+                    'oss_valid_taxrates' => $oss_taxrates,
+                ]);
+
+                return $this->get_oss_voucher_category($country_code, $date, ($physical_good ? 1 : 2));
+            }
+
+            // oss "origin" configuration (we have to check with DE taxrates)
+            if ($oss === 'origin') {
+                $oss_taxrates = $this->get_taxrates('DE', $date);
+
+                if (empty($oss_taxrates)) throw new lexoffice_exception('lexoffice-php-api: unknown OSS booking scenario, cannot decide correct taxrates', [
+                    'taxrate' => $taxrate,
+                    'country_code' => 'DE',
+                    'european_vatid' => $euopean_vatid,
+                    'b2b_business' => $b2b_business,
+                    'physical_good' => $physical_good,
+                ]);
+
+                if (!$this->check_taxrate($taxrate, 'DE', $date)) throw new lexoffice_exception('lexoffice-php-api: invalid OSS taxrate for given country', [
+                    'taxrate' => $taxrate,
+                    'country_code' => 'DE',
+                    'date' => $date,
+                    'european_vatid' => $euopean_vatid,
+                    'b2b_business' => $b2b_business,
+                    'physical_good' => $physical_good,
+                    'oss_valid_taxrates' => $oss_taxrates,
+                ]);
+
+                return $this->get_oss_voucher_category($country_code, $date, ($physical_good ? 1 : 2));
+            }
+
+            throw new lexoffice_exception('lexoffice-php-api: unknown OSS configuration', [
+                'oss' => $oss,
             ]);
-
-            if (!$this->check_taxrate($taxrate, $country_code, $date)) throw new lexoffice_exception('lexoffice-php-api: invalid OSS taxrate for given country', [
-                'taxrate' => $taxrate,
-                'country_code' => $country_code,
-                'date' => $date,
-                'european_vatid' => $euopean_vatid,
-                'b2b_business' => $b2b_business,
-                'physical_good' => $physical_good,
-                'oss_valid_taxrates' => $oss_taxrates,
-            ]);
-
-            return $this->get_oss_voucher_category($country_code, $date, ($physical_good ? 1 : 2));
         }
 
         // Welt (inkl. Schweiz)
@@ -1145,11 +1177,13 @@ class lexoffice_client {
      */
     public function get_oss_voucher_category(string $country_code, int $date, int $booking_category = 1): string {
         $oss_type = $this->is_oss_needed($country_code, $date);
+        // german taxrates
         if ($oss_type === 'origin') {
             if ($booking_category === 1) return '7c112b66-0565-479c-bc18-5845e080880a';
             if ($booking_category === 2) return 'd73b880f-c24a-41ea-a862-18d90e1c3d82';
             throw new lexoffice_exception('lexoffice-php-api: invalid given booking_category', ['booking_category' => $booking_category]);
         }
+        // target country taxrates
         elseif ($oss_type === 'destination') {
             if ($booking_category === 1) return '4ebd965a-7126-416c-9d8c-a5c9366ee473';
             if ($booking_category === 2) return 'efa82f40-fd85-11e1-a21f-0800200c9a66';
