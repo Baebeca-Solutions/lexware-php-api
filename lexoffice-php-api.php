@@ -32,7 +32,7 @@ class lexoffice_client {
 
         // sandboxes
         if (array_key_exists('sandbox', $settings) && $settings['sandbox'] === true) $this->api_endpoint = 'https://api-sandbox.grld.eu';
-        if (array_key_exists('sandbox_sso', $settings) && $settings['sandbox_sso'] === true) $this->api_endpoint = 'https://api-oss-sandbox.grld.eu';
+        if (array_key_exists('sandbox_oss', $settings) && $settings['sandbox_oss'] === true) $this->api_endpoint = 'https://api-oss-sandbox.grld.eu';
 
         $this->load_country_definition();
 
@@ -1129,7 +1129,7 @@ class lexoffice_client {
         if ($profile->smallBusiness) return false; // not used for taxless businesses
         if ($country_code === strtoupper('DE')) return false; // not for own country
         if (!$this->is_european_member($country_code, $date)) return false; // not for outside EU
-        if (empty($profile->distanceSalesPrinciple)) throw new lexoffice_exception('lexoffice-php-api: missing SSO configuration in lexoffice account'); // not configured in lexoffice
+        if (empty($profile->distanceSalesPrinciple)) throw new lexoffice_exception('lexoffice-php-api: missing OSS configuration in lexoffice account'); // not configured in lexoffice
         return strtolower($profile->distanceSalesPrinciple);
     }
 
@@ -1156,7 +1156,7 @@ class lexoffice_client {
             throw new lexoffice_exception('lexoffice-php-api: invalid given booking_category', ['booking_category' => $booking_category]);
         }
         else {
-            throw new lexoffice_exception('lexoffice-php-api: no possible SSO voucher category id');
+            throw new lexoffice_exception('lexoffice-php-api: no possible OSS voucher category id');
         }
     }
 
