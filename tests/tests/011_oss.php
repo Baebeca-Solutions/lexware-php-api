@@ -2,7 +2,7 @@
 test_start('test taxrates unknown country');
 try {
     $request = $lexoffice->get_taxrates('ZZ', strtotime('2021-07-05'));
-    if (empty($request)) {
+    if ($request['default'] === null) {
         test_finished(true);
     } else {
         var_dump($request);
@@ -76,6 +76,7 @@ try {
     if ($request === 'destination') {
         test_finished(true);
     } else {
+        var_dump($request);
         test_finished(false);
     }
 }
@@ -132,7 +133,7 @@ try {
     test_finished(false);
 }
 catch (lexoffice_exception $e) {
-    if ($e->getMessage() === 'lexoffice-php-api: no possible SSO voucher category id') {
+    if ($e->getMessage() === 'lexoffice-php-api: no possible OSS voucher category id') {
         test_finished(true);
     } else {
         test_finished(false);
@@ -145,7 +146,7 @@ try {
     test_finished(false);
 }
 catch (lexoffice_exception $e) {
-    if ($e->getMessage() === 'lexoffice-php-api: no possible SSO voucher category id') {
+    if ($e->getMessage() === 'lexoffice-php-api: no possible OSS voucher category id') {
         test_finished(true);
     } else {
         test_finished(false);
@@ -163,6 +164,36 @@ try {
 }
 catch (lexoffice_exception $e) {
     test($e->getMessage());
+    test_finished(false);
+}
+
+test_start('check Innergemeinschaftliche Lieferung');
+try {
+    $request = $lexoffice->get_needed_voucher_booking_id(0, 'PT', strtotime('2021-07-05'), true, true);
+    if ($request === '9075a4e3-66de-4795-a016-3889feca0d20') {
+        test_finished(true);
+    } else {
+        test_finished(false);
+    }
+}
+catch (lexoffice_exception $e) {
+    test(print_r($e->get_error(), true));
+    test_finished(false);
+}
+
+test_start('check Fernverkauf | vatid but not business');
+try {
+    $request = $lexoffice->get_needed_voucher_booking_id(23, 'PT', strtotime('2021-07-05'), true, false);
+    test($request);
+    #if ($request === '7c112b66-0565-479c-bc18-5845e080880a') { // distance
+    if ($request === '4ebd965a-7126-416c-9d8c-a5c9366ee473') { // origin
+        test_finished(true);
+    } else {
+        test_finished(false);
+    }
+}
+catch (lexoffice_exception $e) {
+    test(print_r($e->get_error(), true));
     test_finished(false);
 }
 

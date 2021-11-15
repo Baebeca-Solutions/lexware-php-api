@@ -989,7 +989,7 @@ class lexoffice_client {
         if ($this->is_european_member($country_code, $date)) {
             // B2B
             // Ware/Dienstleistung
-            if ($taxrate > 0 && $euopean_vatid && $b2b_business) return '9075a4e3-66de-4795-a016-3889feca0d20'; // Innergemeinschaftliche Lieferung
+            if ($taxrate == 0 && $euopean_vatid && $b2b_business) return '9075a4e3-66de-4795-a016-3889feca0d20'; // Innergemeinschaftliche Lieferung
 
             // Check OSS Stuff
             $oss = $this->is_oss_needed($country_code, $date);
