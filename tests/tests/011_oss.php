@@ -197,6 +197,23 @@ catch (lexoffice_exception $e) {
     test_finished(false);
 }
 
+test_start('check Fernverkauf | SE | private');
+try {
+    $request = $lexoffice->get_needed_voucher_booking_id(25, 'SE', strtotime('2021-07-05'), false, false);
+
+    #if ($request === '7c112b66-0565-479c-bc18-5845e080880a') { // distance
+    if ($request === '4ebd965a-7126-416c-9d8c-a5c9366ee473') { // origin
+        test_finished(true);
+    } else {
+        test('failed with: '.$request);
+        test_finished(false);
+    }
+}
+catch (lexoffice_exception $e) {
+    test(print_r($e->get_error(), true));
+    test_finished(false);
+}
+
 test_start('create netto oss voucher 13% / 23% Portugal with get_oss_voucher_category()');
 try {
     // create contact
