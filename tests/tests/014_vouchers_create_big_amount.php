@@ -1,13 +1,13 @@
 <?php
 
 // disabled in default test, only used for special tests
-$amount_k_vouchers = 20;
-$upload_vouchers_without_image = 0;
-$upload_vouchers_with_image = 0;
+$amount_k = 1;
+$upload_vouchers_without_image = false;
+$upload_vouchers_with_image = false;
 
 if ($upload_vouchers_without_image) {
-    test_start('create '.$amount_k_vouchers.'k vouchers without image');
-    $amount_vouchers = $amount_k_vouchers*1000;
+    test_start('create '.$amount_k.'k vouchers without image');
+    $amount_vouchers = $amount_k*1000;
     for ($i = 0; $i <= $amount_vouchers; $i++) {
         try {
             $day = rand(1, 28);
@@ -51,8 +51,8 @@ if ($upload_vouchers_without_image) {
 }
 
 if ($upload_vouchers_with_image) {
-    test_start('create '.$amount_k_vouchers.'k vouchers with image');
-    $amount_vouchers = $amount_k_vouchers*1000;
+    test_start('create '.$amount_k.'k vouchers with image');
+    $amount_vouchers = $amount_k*1000;
     for ($i = 0; $i <= $amount_vouchers; $i++) {
         try {
             $day = rand(1, 28);
