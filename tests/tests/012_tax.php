@@ -156,3 +156,123 @@ catch (lexoffice_exception $e) {
     test($e->getMessage());
     test_finished(false);
 }
+
+test_start('check taxrate DE 19% - ok');
+try {
+    $request = $lexoffice->check_taxrate(19, 'DE', strtotime('2020-06-04'));
+    test_finished($request);
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}
+
+test_start('check taxrate DE 19% - nok');
+try {
+    $request = $lexoffice->check_taxrate(19, 'DE', strtotime('2020-07-02'));
+    test_finished(!$request);
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}
+
+test_start('check taxrate DE 19% - ok');
+try {
+    $request = $lexoffice->check_taxrate(19, 'DE', strtotime('2021-06-04'));
+    test_finished($request);
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}
+
+test_start('check taxrate DE 7% - ok');
+try {
+    $request = $lexoffice->check_taxrate(7, 'DE', strtotime('2020-06-04'));
+    test_finished($request);
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}
+
+test_start('check taxrate DE 7% - nok');
+try {
+    $request = $lexoffice->check_taxrate(7, 'DE', strtotime('2020-07-02'));
+    test_finished(!$request);
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}
+
+test_start('check taxrate DE 7% - ok');
+try {
+    $request = $lexoffice->check_taxrate(7, 'DE', strtotime('2021-06-04'));
+    test_finished($request);
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}
+
+test_start('check taxrate DE 16% - nok');
+try {
+    $request = $lexoffice->check_taxrate(16, 'DE', strtotime('2020-01-01'));
+    test_finished(!$request);
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}
+
+test_start('check taxrate DE 16% - ok');
+try {
+    $request = $lexoffice->check_taxrate(16, 'DE', strtotime('2020-07-04'));
+    test_finished($request);
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}
+
+test_start('check taxrate DE 16% - nok');
+try {
+    $request = $lexoffice->check_taxrate(16, 'DE', strtotime('2021-01-01'));
+    test_finished(!$request);
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}
+
+test_start('check taxrate DE 5% - nok');
+try {
+    $request = $lexoffice->check_taxrate(5, 'DE', strtotime('2020-01-01'));
+    test_finished(!$request);
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}
+
+test_start('check taxrate DE 5% - ok');
+try {
+    $request = $lexoffice->check_taxrate(5, 'DE', strtotime('2020-07-04'));
+    test_finished($request);
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}
+
+test_start('check taxrate DE 5% - nok');
+try {
+    $request = $lexoffice->check_taxrate(5, 'DE', strtotime('2021-01-01'));
+    test_finished(!$request);
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}

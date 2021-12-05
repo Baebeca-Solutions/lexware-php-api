@@ -1108,7 +1108,12 @@ class lexoffice_client {
         // add zero taxrate to array
         $this->countries->{strtoupper($country_code)}->taxrates->reduced[] = 0;
 
-        // overwrite until 01.07.2021
+        // adjust german taxrate (corona tax change) (01.07.2020 - 31.12.2020)
+        if ($date >= 1593554400 && $date <= 1609455599) {
+            return $this->check_adjusted_taxrate($country_code, (array) $this->countries->{strtoupper($country_code)}->taxrates, $date);
+        }
+
+        // overwrite until 01.07.2021, no OSS needed
         if ($date <= 1625090400 && strtoupper($country_code) != 'DE') return $this->get_taxrates('DE', $date);
 
         return $this->check_adjusted_taxrate($country_code, (array) $this->countries->{strtoupper($country_code)}->taxrates, $date);
@@ -1122,6 +1127,13 @@ class lexoffice_client {
      * @return array
      */
     private function check_adjusted_taxrate(string $country_code, array $taxrates, int $date): array {
+
+        // german temporary corona tax change (01.07.2020 - 31.12.2020)
+        if ($date >= 1593554400 && $date <= 1609455599) {
+            $taxrates['default'] = 16;
+            $taxrates['reduced'] = [5];
+        }
+
         return $taxrates;
     }
 
