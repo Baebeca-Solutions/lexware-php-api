@@ -1131,7 +1131,7 @@ class lexoffice_client {
         // german temporary corona tax change (01.07.2020 - 31.12.2020)
         if ($date >= 1593554400 && $date <= 1609455599) {
             $taxrates['default'] = 16;
-            $taxrates['reduced'] = [5];
+            $taxrates['reduced'] = [5, 0];
         }
 
         return $taxrates;
@@ -1150,6 +1150,7 @@ class lexoffice_client {
         // iterate because in_array() not like floats for equal check :/
         if (empty($taxrates['reduced'])) return false;
         foreach ($taxrates['reduced'] as $taxrate_reduced) {
+            if ($taxrate_reduced === 0) return true;
             if (abs(floatval($taxrate_reduced)-$taxrate) < 0.00001) return true;
         }
         return false;
