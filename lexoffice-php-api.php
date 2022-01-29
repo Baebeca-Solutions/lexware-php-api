@@ -670,6 +670,10 @@ class lexoffice_client {
         }
     }
 
+    public function get_down_payment_invoice($uuid) {
+        return $this->api_call('GET', 'down-payment-invoices', $uuid);
+    }
+
     public function get_quotation($uuid) {
         return $this->api_call('GET', 'quotations', $uuid);
     }
@@ -689,16 +693,28 @@ class lexoffice_client {
     }
 
     public function get_pdf($type, $uuid, $filename): bool {
-        $request = $this->api_call('GET', $type, $uuid, '', '/document');
-        if ($request && isset($request->documentFileId)) {
-            $request_file = $this->api_call('GET', 'files', $request->documentFileId);
+        if ($type === 'downpaymentinvoice') {
+            $request = $this->get_down_payment_invoice($uuid);
+            if (empty($request->files->documentFileId)) return false;
+            $request_file = $this->api_call('GET', 'files', $request->files->documentFileId);
             if ($request_file) {
                 file_put_contents($filename, $request_file);
                 return true;
             }
             return false;
         }
-        return false;
+        else {
+            $request = $this->api_call('GET', $type, $uuid, '', '/document');
+            if ($request && isset($request->documentFileId)) {
+                $request_file = $this->api_call('GET', 'files', $request->documentFileId);
+                if ($request_file) {
+                    file_put_contents($filename, $request_file);
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
     }
 
     public function get_voucher($uuid) {
