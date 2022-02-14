@@ -1,7 +1,7 @@
 <?php
 
 // disabled in default test, only used for special tests
-$amount_k = 1;
+$amount_k = 10;
 $upload_vouchers_without_image = false;
 $upload_vouchers_with_image = false;
 

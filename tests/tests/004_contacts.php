@@ -152,6 +152,99 @@ try {
 	test_finished(false);
 }
 
+test_start('create contact and update billing address');
+try {
+    $request = $lexoffice->create_contact(array(
+        'version' => 0,
+        'roles' => array(
+            'customer' => array(
+                'number' => '',
+            ),
+        ),
+        'person' => array(
+            'salutation' => 'Herr',
+            'firstName' => 'John',
+            'lastName' => 'Doe',
+        ),
+        'addresses' => array(
+            'billing' => array(
+                array(
+                    'street' => 'Genklerhardt 6',
+                    'zip' => '51647',
+                    'city' => 'Gummersbach',
+                    'countryCode' => 'DE',
+                ),
+            ),
+        ),
+        'emailAddresses' => array(
+            'business' => array(
+                'support@baebeca.de'
+            ),
+        ),
+        'phoneNumbers' => array(
+            'business' => array(
+                '022619202930'
+            ),
+        ),
+        'note' => '',
+    ));
+
+    if ($request->id) {
+        test('contact created - id: '.$request->id);
+
+        try {
+            $request = $lexoffice->update_contact($request->id, array(
+                'version' => 1,
+                'roles' => array(
+                    'customer' => array(
+                        'number' => '',
+                    ),
+                ),
+                'person' => array(
+                    'salutation' => 'Herr',
+                    'firstName' => 'John',
+                    'lastName' => 'Doe',
+                ),
+                'addresses' => array(
+                    'billing' => array(
+                        array(
+                            'street' => 'Genklerhardt 6 Updated',
+                            'zip' => '51647',
+                            'city' => 'Gummersbach',
+                            'countryCode' => 'DE',
+                        ),
+                    ),
+                ),
+                'emailAddresses' => array(
+                    'business' => array(
+                        'support@baebeca.de'
+                    ),
+                ),
+                'phoneNumbers' => array(
+                    'business' => array(
+                        '022619202930'
+                    ),
+                ),
+                'note' => '',
+            ));
+            test('contact updated - id: '.$request->id);
+        } catch(lexoffice_exception $e) {
+            test($e->getMessage());
+            test(print_r($e->get_error(), true));
+            test_finished(false);
+        }
+
+        test_finished(true);
+    } else {
+        test_finished(false);
+    }
+
+} catch(lexoffice_exception $e) {
+    test($e->getMessage());
+    test(print_r($e->get_error(), true));
+    test_finished(false);
+}
+
 $random_contact_name = 'contact_'.rand(11111111, 999999999999).' (AG)';
 test_start('create contact with speacial chars - company');
 try {
