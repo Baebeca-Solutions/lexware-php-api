@@ -187,6 +187,16 @@ catch (lexoffice_exception $e) {
     test_finished(false);
 }
 
+test_start('check taxrate ES 22% - nok');
+try {
+    $request = $lexoffice->check_taxrate(22, 'ES', strtotime('2022-06-04'));
+    test_finished(!$request);
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}
+
 test_start('check taxrate DE 7% - ok');
 try {
     $request = $lexoffice->check_taxrate(7, 'DE', strtotime('2020-06-04'));

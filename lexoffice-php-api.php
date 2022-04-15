@@ -1121,17 +1121,12 @@ class lexoffice_client {
             'reduced' => [0]
         ];
 
+        $taxrates = $this->countries->{strtoupper($country_code)}->taxrates;
+
         // add zero taxrate to array
-        $this->countries->{strtoupper($country_code)}->taxrates->reduced[] = 0;
+        $taxrates->reduced[] = 0;
 
-        // adjust german taxrate (corona tax change) (01.07.2020 - 31.12.2020)
-        if ($date >= 1593554400 && $date <= 1609455599) {
-            return $this->check_adjusted_taxrate($country_code, (array) $this->countries->{strtoupper($country_code)}->taxrates, $date);
-        }
-
-        // overwrite until 01.07.2021, no OSS needed
-        if ($date <= 1625090400 && strtoupper($country_code) != 'DE') return $this->get_taxrates('DE', $date);
-
+        // overwrite taxrates if needed
         return $this->check_adjusted_taxrate($country_code, (array) $this->countries->{strtoupper($country_code)}->taxrates, $date);
     }
 
@@ -1145,10 +1140,13 @@ class lexoffice_client {
     private function check_adjusted_taxrate(string $country_code, array $taxrates, int $date): array {
 
         // german temporary corona tax change (01.07.2020 - 31.12.2020)
-        if ($date >= 1593554400 && $date <= 1609455599) {
+        if (strtoupper($country_code) === 'DE' && $date >= 1593554400 && $date <= 1609455599) {
             $taxrates['default'] = 16;
             $taxrates['reduced'] = [5, 0];
         }
+
+        // overwrite until 01.07.2021, no OSS needed so german taxes should give back
+        if ($date <= 1625090400 && strtoupper($country_code) != 'DE') return $this->get_taxrates('DE', $date);
 
         return $taxrates;
     }
@@ -1166,7 +1164,7 @@ class lexoffice_client {
         // iterate because in_array() not like floats for equal check :/
         if (empty($taxrates['reduced'])) return false;
         foreach ($taxrates['reduced'] as $taxrate_reduced) {
-            if ($taxrate_reduced === 0) return true;
+            if ($taxrate === $taxrate_reduced) return true;
             if (abs(floatval($taxrate_reduced)-$taxrate) < 0.00001) return true;
         }
         return false;
