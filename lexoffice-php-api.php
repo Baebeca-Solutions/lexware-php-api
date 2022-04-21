@@ -1029,6 +1029,7 @@ class lexoffice_client {
                 ]);
 
                 if (!$this->check_taxrate($taxrate, $country_code, $date)) throw new lexoffice_exception('lexoffice-php-api: invalid OSS taxrate for given country', [
+                    'type' => 'destination',
                     'taxrate' => $taxrate,
                     'country_code' => $country_code,
                     'date' => $date,
@@ -1054,6 +1055,7 @@ class lexoffice_client {
                 ]);
 
                 if (!$this->check_taxrate($taxrate, 'DE', $date)) throw new lexoffice_exception('lexoffice-php-api: invalid OSS taxrate for given country', [
+                    'type' => 'origin',
                     'taxrate' => $taxrate,
                     'country_code' => 'DE',
                     'date' => $date,
