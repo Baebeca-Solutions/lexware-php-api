@@ -576,8 +576,15 @@ class lexoffice_client {
         return $this->api_call('POST', 'quotations', '', $data, ($finalized ? '?finalize=true' : ''));
     }
 
-    public function create_creditnote($data, $finalized = false) {
-        return $this->api_call('POST', 'credit-notes', '', $data, ($finalized ? '?finalize=true' : ''));
+    public function create_creditnote($data, $finalized = false, $linked_invoice_id = '') {
+        $params_url = '';
+        $params = [];
+        if ($finalized) $params[] = 'finalize=true';
+        if (!empty($linked_invoice_id)) $params[] = 'precedingSalesVoucherId='.$linked_invoice_id;
+
+        if (!empty($params)) $params_url = '?'.implode('&', $params);
+
+        return $this->api_call('POST', 'credit-notes', '', $data, $params_url);
     }
 
     public function create_invoice($data, $finalized = false) {
