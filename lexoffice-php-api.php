@@ -371,7 +371,7 @@ class lexoffice_client {
                     'reduced' => [11.11, 12, 15],
                     'nullrate' => false,
                 ],
-                'europe_member' => true,
+                'europe_member' => false,
             ],
         ];
     }
