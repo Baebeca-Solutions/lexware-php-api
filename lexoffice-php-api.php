@@ -1134,7 +1134,7 @@ class lexoffice_client {
         $taxrates = $this->countries->{strtoupper($country_code)}->taxrates;
 
         // add zero taxrate to array
-        $taxrates->reduced[] = 0;
+        if (!in_array(0, $taxrates->reduced)) $taxrates->reduced[] = 0;
 
         // overwrite taxrates if needed
         return $this->check_adjusted_taxrate($country_code, (array) $this->countries->{strtoupper($country_code)}->taxrates, $date);
