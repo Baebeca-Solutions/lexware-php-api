@@ -1046,7 +1046,7 @@ class lexoffice_client {
                     'oss_valid_taxrates' => $oss_taxrates,
                 ]);
 
-                return $this->get_oss_voucher_category($country_code, $date, ($physical_good ? 1 : 2));
+                return $this->get_oss_voucher_category($country_code, $date, ($physical_good ? 1 : 2), $taxrate);
             }
 
             // oss "origin" configuration (we have to check with DE taxrates)
@@ -1072,7 +1072,7 @@ class lexoffice_client {
                     'oss_valid_taxrates' => $oss_taxrates,
                 ]);
 
-                return $this->get_oss_voucher_category($country_code, $date, ($physical_good ? 1 : 2));
+                return $this->get_oss_voucher_category($country_code, $date, ($physical_good ? 1 : 2), $taxrate);
             }
 
             throw new lexoffice_exception('lexoffice-php-api: unknown OSS configuration', [
@@ -1209,19 +1209,22 @@ class lexoffice_client {
      * @param int $booking_category
      *  1 => Fernverkauf
      *  2 => Elektronische Dienstleistung
+     * @param float|int $taxrate
      * @return string lexoffice voucher booking category id
      * @throws \lexoffice_exception
      */
-    public function get_oss_voucher_category(string $country_code, int $date, int $booking_category = 1): string {
+    public function get_oss_voucher_category(string $country_code, int $date, int $booking_category = 1, $taxrate = 0): string {
         $oss_type = $this->is_oss_needed($country_code, $date);
         // german taxrates
         if ($oss_type === 'origin') {
+            if (empty($taxrate)) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahme
             if ($booking_category === 1) return '7c112b66-0565-479c-bc18-5845e080880a';
             if ($booking_category === 2) return 'd73b880f-c24a-41ea-a862-18d90e1c3d82';
             throw new lexoffice_exception('lexoffice-php-api: invalid given booking_category', ['booking_category' => $booking_category]);
         }
         // target country taxrates
         elseif ($oss_type === 'destination') {
+            if (empty($taxrate)) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahme
             if ($booking_category === 1) return '4ebd965a-7126-416c-9d8c-a5c9366ee473';
             if ($booking_category === 2) return 'efa82f40-fd85-11e1-a21f-0800200c9a66';
             throw new lexoffice_exception('lexoffice-php-api: invalid given booking_category', ['booking_category' => $booking_category]);
