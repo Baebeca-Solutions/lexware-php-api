@@ -1090,15 +1090,25 @@ class lexoffice_client {
             // Welt (inkl. Schweiz)
             // B2C
             if ($taxrate == 0 && !$b2b_business) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
-            // Dienstleistung
+
+            throw new lexoffice_exception('lexoffice-php-api: unknown booking scenario, world shipping with taxes. cannot decide correct booking category', [
+                'taxrate' => $taxrate,
+                'country_code' => $country_code,
+                'date' => $date,
+                'european_vatid' => $euopean_vatid,
+                'b2b_business' => $b2b_business,
+                'physical_good' => $physical_good,
+            ]);
+
+        // Dienstleistung
         } else {
             // Welt (inkl. Schweiz)
             // B2B
-            if ($taxrate == 0 && $b2b_business) return 'ef5b1a6e-f690-4004-9a19-91276348894f'; // Dienstleistung an Drittländer
+            if ($taxrate == 0) return 'ef5b1a6e-f690-4004-9a19-91276348894f'; // Dienstleistung an Drittländer
 
             // Welt (inkl. Schweiz)
             // B2C
-            if ($taxrate > 0 && !$b2b_business) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
+            if ($taxrate > 0) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
         }
 
         throw new lexoffice_exception('lexoffice-php-api: unknown booking scenario, cannot decide correct booking category', [
