@@ -1104,7 +1104,8 @@ class lexoffice_client {
         } else {
             // Welt (inkl. Schweiz)
             // B2B
-            if ($taxrate == 0) return 'ef5b1a6e-f690-4004-9a19-91276348894f'; // Dienstleistung an Drittländer
+            if ($taxrate == 0 && $b2b_business) return 'ef5b1a6e-f690-4004-9a19-91276348894f'; // Dienstleistung an Drittländer
+            if ($taxrate == 0 && !$b2b_business) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen | #87248 - API - individual_person_not_applicable_service_third_party (lexoffice does not support the correct booking type)
 
             // Welt (inkl. Schweiz)
             // B2C
