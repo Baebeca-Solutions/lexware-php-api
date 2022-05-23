@@ -80,7 +80,7 @@ catch (lexoffice_exception $e) {
 test_start('check voucher booking id - nl digital good sell - 0% - after oss');
 try {
     $request = $lexoffice->get_needed_voucher_booking_id(0, 'nl', strtotime('2021-07-05'),false, true, false);
-    test_finished($request === 'efa82f40-fd85-11e1-a21f-0800200c9a66');
+    test_finished($request === '7ecea006-844c-4c98-a02d-aa3142640dd5');
 }
 catch (lexoffice_exception $e) {
     test($e->getMessage());
@@ -120,7 +120,7 @@ catch (lexoffice_exception $e) {
 test_start('check voucher booking id - nl digital good sell - 9% - after oss');
 try {
     $request = $lexoffice->get_needed_voucher_booking_id(9, 'nl', strtotime('2021-07-05'), false, false, false);
-    test_finished($request === 'efa82f40-fd85-11e1-a21f-0800200c9a66');
+    test_finished($request === '7ecea006-844c-4c98-a02d-aa3142640dd5');
 }
 catch (lexoffice_exception $e) {
     test($e->getMessage());

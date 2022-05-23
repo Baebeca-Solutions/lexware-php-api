@@ -1011,15 +1011,16 @@ class lexoffice_client {
 
         // Europa
         if ($this->is_european_member($country_code, $date)) {
-            // B2B
-            // Ware/Dienstleistung
-            if ($taxrate == 0 && $euopean_vatid && $b2b_business) return '9075a4e3-66de-4795-a016-3889feca0d20'; // Innergemeinschaftliche Lieferung
+            // B2B - Warenlieferung
+            if ($taxrate == 0 && $euopean_vatid && $b2b_business && $physical_good) return '9075a4e3-66de-4795-a016-3889feca0d20'; // Innergemeinschaftliche Lieferung
+            // B2B - Dienstleistung
+            if ($taxrate == 0 && $euopean_vatid && $b2b_business && !$physical_good) return '380a20cb-d04c-426e-b49c-84c22adfa362'; // Fremdleistungen §13b
 
             // Check OSS Stuff
             $oss = $this->is_oss_needed($country_code, $date);
 
             // Europa B2C
-            // Ware/Dienstleistung ohne OSS
+            // Waren und Dienstleistungen ohne OSS
             if ($oss === false) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
 
             // oss "destination" configuration (we have to check with target country taxrates)
@@ -1080,14 +1081,10 @@ class lexoffice_client {
             ]);
         }
 
-        // Welt (inkl. Schweiz)
-        // Warenlieferung
+        // Welt (inkl. Schweiz) - Warenlieferung
         if ($physical_good) {
-            // Welt (inkl. Schweiz)
             // B2B
             if ($taxrate == 0 && $b2b_business) return '93d24c20-ea84-424e-a731-5e1b78d1e6a9'; // Ausfuhrlieferungen an Drittländer
-
-            // Welt (inkl. Schweiz)
             // B2C
             if ($taxrate == 0 && !$b2b_business) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
 
@@ -1099,17 +1096,25 @@ class lexoffice_client {
                 'b2b_business' => $b2b_business,
                 'physical_good' => $physical_good,
             ]);
-
-        // Dienstleistung
-        } else {
-            // Welt (inkl. Schweiz)
+        }
+        // Welt (inkl. Schweiz) - Dienstleistung
+        else {
             // B2B
             if ($taxrate == 0 && $b2b_business) return 'ef5b1a6e-f690-4004-9a19-91276348894f'; // Dienstleistung an Drittländer
+            // B2C
             if ($taxrate == 0 && !$b2b_business) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen | #87248 - API - individual_person_not_applicable_service_third_party (lexoffice does not support the correct booking type)
 
-            // Welt (inkl. Schweiz)
-            // B2C
-            if ($taxrate > 0) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
+            // Welt (inkl. Schweiz) - B2C
+            #if ($taxrate > 0) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
+
+            throw new lexoffice_exception('lexoffice-php-api: unknown booking scenario, world service with taxes. cannot decide correct booking category', [
+                'taxrate' => $taxrate,
+                'country_code' => $country_code,
+                'date' => $date,
+                'european_vatid' => $euopean_vatid,
+                'b2b_business' => $b2b_business,
+                'physical_good' => $physical_good,
+            ]);
         }
 
         throw new lexoffice_exception('lexoffice-php-api: unknown booking scenario, cannot decide correct booking category', [
@@ -1228,16 +1233,14 @@ class lexoffice_client {
         $oss_type = $this->is_oss_needed($country_code, $date);
         // german taxrates
         if ($oss_type === 'origin') {
-            if (empty($taxrate)) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahme
-            if ($booking_category === 1) return '7c112b66-0565-479c-bc18-5845e080880a';
-            if ($booking_category === 2) return 'd73b880f-c24a-41ea-a862-18d90e1c3d82';
+            if ($booking_category === 1) return '7c112b66-0565-479c-bc18-5845e080880a'; // Fernverkauf
+            if ($booking_category === 2) return 'd73b880f-c24a-41ea-a862-18d90e1c3d82'; // Elektronische Dienstleistungen
             throw new lexoffice_exception('lexoffice-php-api: invalid given booking_category', ['booking_category' => $booking_category]);
         }
         // target country taxrates
         elseif ($oss_type === 'destination') {
-            if (empty($taxrate)) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahme
-            if ($booking_category === 1) return '4ebd965a-7126-416c-9d8c-a5c9366ee473';
-            if ($booking_category === 2) return 'efa82f40-fd85-11e1-a21f-0800200c9a66';
+            if ($booking_category === 1) return '4ebd965a-7126-416c-9d8c-a5c9366ee473'; // Fernverkauf in EU-Land steuerpflichtig
+            if ($booking_category === 2) return '7ecea006-844c-4c98-a02d-aa3142640dd5'; // Elektronische Dienstleistung in EU-Land steuerpflichtig
             throw new lexoffice_exception('lexoffice-php-api: invalid given booking_category', ['booking_category' => $booking_category]);
         }
         else {
