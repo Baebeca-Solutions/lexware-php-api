@@ -140,11 +140,10 @@ catch (lexoffice_exception $e) {
 test_start('check voucher booking id - ch b2c digital good sell');
 try {
     $request = $lexoffice->get_needed_voucher_booking_id(19, 'ch', strtotime('2021-07-05'),false, false, false);
-    test_finished($request === '8f8664a1-fd86-11e1-a21f-0800200c9a66');
+    test_finished(false);
 }
 catch (lexoffice_exception $e) {
-    test($e->getMessage());
-    test_finished(false);
+    test_finished($e->getMessage() === 'lexoffice-php-api: unknown booking scenario, world service with taxes. cannot decide correct booking category');
 }
 
 test_start('check taxrate Österreich');

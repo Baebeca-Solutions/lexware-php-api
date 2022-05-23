@@ -1,4 +1,10 @@
 <?php
+
+if (!empty($oss_config) && $oss_config !== 'destination') {
+    test('skip this testfile because not valid in your local test configuration');
+    goto end_oss_destination;
+}
+
 test_start('test taxrates unknown country');
 try {
     $request = $lexoffice->get_taxrates('ZZ', strtotime('2021-07-05'));
@@ -153,10 +159,24 @@ catch (lexoffice_exception $e) {
     }
 }
 
-test_start('test oss voucher category - NL');
+test_start('test oss voucher category - NL - physical');
 try {
-    $request = $lexoffice->get_oss_voucher_category('NL', strtotime('2021-07-05'));
+    $request = $lexoffice->get_oss_voucher_category('NL', strtotime('2021-07-05'), 1);
     if ($request === '4ebd965a-7126-416c-9d8c-a5c9366ee473') {
+        test_finished(true);
+    } else {
+        test_finished(false);
+    }
+}
+catch (lexoffice_exception $e) {
+    test($e->getMessage());
+    test_finished(false);
+}
+
+test_start('test oss voucher category - NL - service');
+try {
+    $request = $lexoffice->get_oss_voucher_category('NL', strtotime('2021-07-05'), 2);
+    if ($request === '7ecea006-844c-4c98-a02d-aa3142640dd5') {
         test_finished(true);
     } else {
         test_finished(false);
@@ -181,12 +201,26 @@ catch (lexoffice_exception $e) {
     test_finished(false);
 }
 
-test_start('check Fernverkauf | vatid but not business');
+test_start('check Fernverkauf | vatid but not business, physical');
 try {
-    $request = $lexoffice->get_needed_voucher_booking_id(23, 'PT', strtotime('2021-07-05'), true, false);
+    $request = $lexoffice->get_needed_voucher_booking_id(23, 'PT', strtotime('2021-07-05'), true, false, true);
     test($request);
-    #if ($request === '7c112b66-0565-479c-bc18-5845e080880a') { // distance
-    if ($request === '4ebd965a-7126-416c-9d8c-a5c9366ee473') { // origin
+    if ($request === '4ebd965a-7126-416c-9d8c-a5c9366ee473') {
+        test_finished(true);
+    } else {
+        test_finished(false);
+    }
+}
+catch (lexoffice_exception $e) {
+    test(print_r($e->get_error(), true));
+    test_finished(false);
+}
+
+test_start('check Fernverkauf | vatid but not business, service');
+try {
+    $request = $lexoffice->get_needed_voucher_booking_id(23, 'PT', strtotime('2021-07-05'), true, false, false);
+    test($request);
+    if ($request === '7ecea006-844c-4c98-a02d-aa3142640dd5') {
         test_finished(true);
     } else {
         test_finished(false);
@@ -489,3 +523,5 @@ try {
     test(print_r($e->get_error(), true));
     test_finished(false);
 }
+
+end_oss_destination:

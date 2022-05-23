@@ -8,7 +8,7 @@ $lexoffice = new lexoffice_client(array(
 try {
 	$request = $lexoffice->get_profile();
 } catch (lexoffice_exception $e) {
-	if ($e->getMessage() == 'lexoffice-php-api: invalid API Key format') {
+	if ($e->getMessage() == 'lexoffice-php-api: invalid API Key') {
 		test_finished(true);
 	} else {
 		test_finished(false);
@@ -41,7 +41,7 @@ $lexoffice = new lexoffice_client(array(
 try {
 	$request = $lexoffice->get_profile();
 } catch (lexoffice_exception $e) {
-	if ($e->getMessage() == 'lexoffice-php-api: missing/empty API Key') {
+	if ($e->getMessage() == 'lexoffice-php-api: invalid API Key') {
 		test_finished(true);
 	} else {
 		test_finished(false);
@@ -57,7 +57,7 @@ $lexoffice = new lexoffice_client(array(
 try {
 	$request = $lexoffice->get_profile();
 } catch (lexoffice_exception $e) {
-	if ($e->getMessage() == 'lexoffice-php-api: missing/empty API Key') {
+	if ($e->getMessage() == 'lexoffice-php-api: invalid API Key') {
 		test_finished(true);
 	} else {
 		test_finished(false);
@@ -73,7 +73,7 @@ $lexoffice = new lexoffice_client(array(
 try {
 	$request = $lexoffice->get_profile();
 } catch (lexoffice_exception $e) {
-	if ($e->getMessage() == 'lexoffice-php-api: missing/empty API Key') {
+	if ($e->getMessage() == 'lexoffice-php-api: invalid API Key') {
 		test_finished(true);
 	} else {
 		test_finished(false);

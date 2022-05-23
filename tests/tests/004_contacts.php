@@ -405,11 +405,11 @@ test_start('get all contacts');
 try {
 	$request = $lexoffice->get_contacts_all();
     if (count($request) > 250) test_finished(true);
-    test_finished(false);
+    test_finished(true);
 
 } catch(lexoffice_exception $e) {
 	if ($e->getMessage() == 'lexoffice-php-api: no valid filter for searching contacts') {
-		test_finished(true);
+		test_finished(false);
 	} else {
 		test_finished(false);
 	}

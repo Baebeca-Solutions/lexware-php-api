@@ -8,6 +8,19 @@ if (is_file(__DIR__.'/../_local_test_settings.php')) {
 	exit('no "_local_test_settings.php" found in root doc');
 }
 
+/** local test configuration */
+#$run_specific_test = 11;
+$debug = true;
+
+// enable your current oss config
+#$oss_config = 'origin';
+$oss_config = 'destination';
+
+// current german taxrates
+$taxrate_19 = 19;
+$taxrate_7 = 7;
+/** local test configuration */
+
 if (!isset($sandbox)) $sandbox = false;
 $lexoffice = new lexoffice_client(array(
 	'api_key' => $api_key,
@@ -16,9 +29,6 @@ $lexoffice = new lexoffice_client(array(
 	'sandbox_sso' => $sandbox_sso,
 ));
 
-// special for german taxrate change
-$taxrate_19 = 19;
-$taxrate_7 = 7;
 
 $logfile_current_test = false;
 $logfile_current_test_content = '';
@@ -52,14 +62,10 @@ function test_finished($result) {
 	$logfile_current_test_content = '';
 }
 
-
-$run_specific_test = 9;
-$debug = true;
-
 $tests = array_slice(scandir('./tests'), 2);
 foreach ($tests as $test) {
 	$test_tmp = explode('_', $test);
-	if (!$run_specific_test || $run_specific_test == (int)$test_tmp[0]) {
+	if (empty($run_specific_test) || $run_specific_test == (int)$test_tmp[0]) {
 		if (substr($test, -4) != '.php') continue;
 		test('include test: '.'./tests/'.$test, true);
 		require_once ('./tests/'.$test);
