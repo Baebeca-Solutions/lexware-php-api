@@ -1212,6 +1212,7 @@ class lexoffice_client {
 
         $profile = $this->get_profile();
         if ($profile->smallBusiness) return false; // not used for taxless businesses
+        if ($profile->taxType === 'vatfree') return false; // no taxes in this account
         if ($country_code === strtoupper('DE')) return false; // not for own country
         if (!$this->is_european_member($country_code, $date)) return false; // not for outside EU
         if (empty($profile->distanceSalesPrinciple)) throw new lexoffice_exception('lexoffice-php-api: missing OSS configuration in lexoffice account'); // not configured in lexoffice
