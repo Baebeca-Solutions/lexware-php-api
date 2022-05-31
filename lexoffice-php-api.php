@@ -351,7 +351,7 @@ class lexoffice_client {
                     'reduced' => [11],
                     'nullrate' => false,
                 ],
-                'europe_member' => false,
+                'europe_member' => true, // efta member
             ],
             'LI' => (object)[
                 'title' => 'Liechtenstein',
@@ -361,7 +361,7 @@ class lexoffice_client {
                     'reduced' => [2.5, 3.7],
                     'nullrate' => false,
                 ],
-                'europe_member' => false,
+                'europe_member' => true,  // efta member
             ],
             'NO' => (object)[
                 'title' => 'Norwegen',
@@ -371,7 +371,7 @@ class lexoffice_client {
                     'reduced' => [11.11, 12, 15],
                     'nullrate' => false,
                 ],
-                'europe_member' => false,
+                'europe_member' => true,  // efta member
             ],
         ];
     }
