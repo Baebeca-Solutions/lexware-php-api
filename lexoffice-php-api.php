@@ -248,7 +248,7 @@ class lexoffice_client {
                 'taxtitle' => 'TVA',
                 'taxrates' => (object)[
                     'default' => 17,
-                    'reduced' => [3, 8],
+                    'reduced' => [3, 8, 14],
                     'nullrate' => false,
                 ],
                 'europe_member' => true,
