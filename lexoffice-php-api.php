@@ -567,7 +567,8 @@ class lexoffice_client {
         // support a technical race condition in lexoffice database system
         // lexoffice statement: we have to wait 500ms before we can do anything with the delivered contact id because clustersync need synctime
         // 202202 increased to 700ms because sometimes 500ms is not enough :/
-        usleep(700000);
+        // #88420 202206 increased to 1s because sometimes 700ms is not enough :/
+        sleep(1);
 
         return $new_contact;
     }
