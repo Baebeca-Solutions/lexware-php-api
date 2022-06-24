@@ -691,6 +691,10 @@ class lexoffice_client {
         return $this->api_call('GET', 'order-confirmations', $uuid);
     }
 
+    public function get_deliverynote($uuid) {
+        return $this->api_call('GET', 'delivery-notes', $uuid);
+    }
+
     /* legacy function - will be removed in futere releases */
     /* use get_pdf($type, $uuid, $filename) instead */
     public function get_invoice_pdf($uuid, $filename) {
