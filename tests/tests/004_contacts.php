@@ -58,6 +58,41 @@ try {
 	test_finished(false);
 }
 
+test_start('rename previous - private person');
+try {
+    $contact = $lexoffice->get_contact($request->id);
+
+    // change name
+    $contact->person->firstName = 'John changed';
+    $contact->person->lastName = 'John changed';
+
+    $request = $lexoffice->update_contact($request->id, $contact);
+
+    if ($request->id) {
+        test('contact changed - id: '.$request->id);
+
+        $contact_new = $lexoffice->get_contact($request->id);
+
+        if (
+            $contact->person->firstName === $contact_new->person->firstName &&
+            $contact->person->lastName === $contact_new->person->lastName
+        ) {
+            test_finished(true);
+        }
+        else {
+            test_finished(false);
+        }
+    } else {
+        test_finished(false);
+    }
+
+} catch(lexoffice_exception $e) {
+    test($e->getMessage());
+    test(print_r($e->get_error(), true));
+    test_finished(false);
+}
+
+
 $random_contact_name = 'contact_'.rand(11111111, 999999999999);
 test_start('create contact - company');
 try {
