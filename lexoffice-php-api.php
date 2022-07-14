@@ -1012,7 +1012,8 @@ class lexoffice_client {
         if ($this->is_tax_free_company()) return '7a1efa0e-6283-4cbf-9583-8e88d3ba5960'; // §19 Kleinunternehmer
 
         // Deutschland
-        if (strtoupper($country_code) == 'DE') return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
+        if (strtoupper($country_code) == 'DE' && $physical_good) return '8f8664a8-fd86-11e1-a21f-0800200c9a66'; // Einnahmen -> Warenlieferung
+        if (strtoupper($country_code) == 'DE') return '8f8664a0-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
 
         // Europa
         if ($this->is_european_member($country_code, $date)) {
