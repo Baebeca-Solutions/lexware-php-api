@@ -558,7 +558,11 @@ class lexoffice_client {
     }
 
     public function create_contact(array $data) {
-        // todo some validation checks
+        // todo more validation checks
+        if (isset($data['company']['name']) && empty($data['company']['name'])) $data['company']['name'] = '-- ohne Firmenname --';
+        if (isset($data['person']['firstName']) && empty($data['person']['firstName'])) $data['person']['firstName'] = '-- ohne Vorname --';
+        if (isset($data['person']['lastName']) && empty($data['person']['lastName'])) $data['person']['lastName'] = '-- ohne Nachname --';
+
         // set version to 0 to create a new contact
         $data['version'] = 0;
         $new_contact = $this->api_call('POST', 'contacts', '', $data);
