@@ -40,4 +40,4 @@ solange Sie Ihr Projekt dann ebenso Quelloffen unter den in der Lizenz genannten
 zur Verfügung stellen.
 
 Wenn Sie Ihre Lösung nicht veröffentlichen möchten, Support benötigen, individuelle 
-Erweiterungen benötigen oder dieses Projekt einfach Unterstützen möchten, können Sie für 99,- EUR/Netto eine lifetime Nutzungslizenz erhalten. Setzte dich diesbezüglich einfach kurz mit uns via support@baebeca.de, 02261-8161691 oder unsere [Website](https://www.baebeca.de/softwareentwicklung/projekte/lexoffice-php-client/) in Verbindung.
+Erweiterungen benötigen oder dieses Projekt einfach Unterstützen möchten, können Sie für 99,- EUR/Netto eine lifetime Nutzungslizenz erhalten. Setzte dich diesbezüglich einfach kurz mit uns via support@baebeca.de, 02261-8161691 oder über unsere [Website](https://www.baebeca.de/softwareentwicklung/projekte/lexoffice-php-client/) in Verbindung.
