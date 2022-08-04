@@ -450,3 +450,47 @@ try {
 	}
 }
 
+test_start('create contact - norway private person');
+try {
+    $request = $lexoffice->create_contact(array(
+        'version' => 0,
+        'roles' => array(
+            'customer' => array(
+                'number' => '',
+            ),
+        ),
+        'person' => array(
+            'salutation' => '',
+            'firstName' => 'Håvard',
+            'lastName' => 'Doe',
+        ),
+        'addresses' => array(
+            'billing' => array(
+                array(
+                    'street' => 'Genklerhardt 6',
+                    'zip' => '51647',
+                    'city' => 'BOLSØYA',
+                    'countryCode' => 'NO',
+                ),
+            ),
+        ),
+        'emailAddresses' => array(
+            'business' => array(
+                'support@baebeca.de'
+            ),
+        ),
+        'note' => '',
+    ));
+
+    if ($request->id) {
+        test('contact created - id: '.$request->id);
+        test_finished(true);
+    } else {
+        test_finished(false);
+    }
+
+} catch(lexoffice_exception $e) {
+    test($e->getMessage());
+    test(print_r($e->get_error(), true));
+    test_finished(false);
+}
