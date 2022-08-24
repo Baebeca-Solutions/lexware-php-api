@@ -572,7 +572,8 @@ class lexoffice_client {
         // lexoffice statement: we have to wait 500ms before we can do anything with the delivered contact id because clustersync need synctime
         // 202202 increased to 700ms because sometimes 500ms is not enough :/
         // #88420 202206 increased to 1s because sometimes 700ms is not enough :/
-        sleep(1);
+        // #90527 202208 increased to 2s because sometimes 1s is not enough :/
+        sleep(2);
 
         return $new_contact;
     }
