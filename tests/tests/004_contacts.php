@@ -494,3 +494,61 @@ try {
     test(print_r($e->get_error(), true));
     test_finished(false);
 }
+
+test_start('create contact with multiple phone numbers in on eattribute - private person');
+try {
+    $request = $lexoffice->create_contact(array(
+        'version' => 0,
+        'roles' => array(
+            'customer' => array(
+                'number' => '',
+            ),
+        ),
+        'person' => array(
+            'salutation' => 'Herr',
+            'firstName' => 'John - phone numbers',
+            'lastName' => 'Doe',
+        ),
+        'addresses' => array(
+            'billing' => array(
+                array(
+                    'street' => 'Genklerhardt 6',
+                    'zip' => '51647',
+                    'city' => 'Gummersbach',
+                    'countryCode' => 'DE',
+                ),
+            ),
+            'shipping' => array(
+                array(
+                    'street' => 'Genklerhardt 6',
+                    'zip' => '51647',
+                    'city' => 'Gummersbach',
+                    'countryCode' => 'DE',
+                ),
+            ),
+        ),
+        'emailAddresses' => array(
+            'business' => array(
+                'support@baebeca.de'
+            ),
+        ),
+        'phoneNumbers' => array(
+            'business' => array(
+                '+49 1735868143 oder +491721486210'
+            ),
+        ),
+        'note' => '',
+    ));
+
+    if ($request->id) {
+        test('contact created - id: '.$request->id);
+        test_finished(true);
+    } else {
+        test_finished(false);
+    }
+
+} catch(lexoffice_exception $e) {
+    test($e->getMessage());
+    test(print_r($e->get_error(), true));
+    test_finished(false);
+}
