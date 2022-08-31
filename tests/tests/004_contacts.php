@@ -534,7 +534,7 @@ try {
         ),
         'phoneNumbers' => array(
             'business' => array(
-                '+49 1735868143 oder +491721486210'
+                '+49 1735860000 oder +491721480000'
             ),
         ),
         'note' => '',
