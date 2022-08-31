@@ -558,10 +558,7 @@ class lexoffice_client {
     }
 
     public function create_contact(array $data) {
-        // todo more validation checks
-        if (isset($data['company']['name']) && empty($data['company']['name'])) $data['company']['name'] = '-- ohne Firmenname --';
-        if (isset($data['person']['firstName']) && empty($data['person']['firstName'])) $data['person']['firstName'] = '-- ohne Vorname --';
-        if (isset($data['person']['lastName']) && empty($data['person']['lastName'])) $data['person']['lastName'] = '-- ohne Nachname --';
+        $data = $this->validate_contact_data($data);
 
         // set version to 0 to create a new contact
         $data['version'] = 0;
@@ -1258,6 +1255,49 @@ class lexoffice_client {
         else {
             throw new lexoffice_exception('lexoffice-php-api: no possible OSS voucher category id');
         }
+    }
+
+    private function validate_contact_data(array $data): array {
+        if (isset($data['company']['name']) && empty($data['company']['name'])) $data['company']['name'] = '-- ohne Firmenname --';
+        if (isset($data['person']['firstName']) && empty($data['person']['firstName'])) $data['person']['firstName'] = '-- ohne Vorname --';
+        if (isset($data['person']['lastName']) && empty($data['person']['lastName'])) $data['person']['lastName'] = '-- ohne Nachname --';
+
+        // separate multiple phonenumbers in one field
+        $phone_numbers_types = ['business', 'office', 'mobile', 'private', 'fax', 'other'];
+        $delimiters = ['oder', ','];
+        foreach ($phone_numbers_types as $type) {
+            if (empty($data['phoneNumbers'][$type])) continue;
+            foreach ($data['phoneNumbers'][$type] as $key => $number) {
+                $changed = false;
+                foreach ($delimiters as $delimiter) {
+                    if (stripos($number, $delimiter) === false) continue;
+                    $number = strtolower($number);
+                    $tmp = explode($delimiter, $number);
+                    foreach ($tmp as $tmp_item) {
+                        $data['phoneNumbers'][$type][] = trim($tmp_item);
+                    }
+                    $changed = true;
+                }
+
+                // cleanup
+                if ($changed) unset($data['phoneNumbers'][$type][$key]);
+                $data['phoneNumbers'][$type] = array_unique($data['phoneNumbers'][$type]);
+                $data['phoneNumbers'][$type] = array_values($data['phoneNumbers'][$type]);
+            }
+        }
+
+        // respect lexoffice issue
+        // it's only possible to create and change contacts with a
+        // maximum of one entry in each lists
+        foreach ($phone_numbers_types as $type) {
+            if (empty($data['phoneNumbers'][$type]) || count($data['phoneNumbers'][$type]) === 1) continue;
+            // only use the first item
+            $tmp = $data['phoneNumbers'][$type][0];
+            $data['phoneNumbers'][$type] = [];
+            $data['phoneNumbers'][$type][] = trim($tmp);
+        }
+
+        return $data;
     }
 
     /* legacy wrapper */
