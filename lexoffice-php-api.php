@@ -1286,6 +1286,24 @@ class lexoffice_client {
             }
         }
 
+        // remove chars from numbers
+        foreach ($phone_numbers_types as $type) {
+            if (empty($data['phoneNumbers'][$type])) continue;
+            foreach ($data['phoneNumbers'][$type] as $key => $number) {
+                $data['phoneNumbers'][$type][$key] = trim(preg_replace('/[A-Za-z]/', '', $data['phoneNumbers'][$type][$key]));
+            }
+        }
+
+        // eliminate to long numbers
+        foreach ($phone_numbers_types as $type) {
+            if (empty($data['phoneNumbers'][$type])) continue;
+            foreach ($data['phoneNumbers'][$type] as $key => $number) {
+                if (strlen($data['phoneNumbers'][$type][$key] > 30)) unset($data['phoneNumbers'][$type][$key]);
+            }
+            $data['phoneNumbers'][$type] = array_values($data['phoneNumbers'][$type]);
+        }
+
+
         // respect lexoffice issue
         // it's only possible to create and change contacts with a
         // maximum of one entry in each lists
