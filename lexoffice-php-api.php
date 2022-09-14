@@ -1315,6 +1315,37 @@ class lexoffice_client {
             $data['phoneNumbers'][$type][] = trim($tmp);
         }
 
+
+        $email_types = ['business', 'office', 'private', 'other'];
+        // remove empty values from nested emailAddresses array
+        foreach ($email_types as $type) {
+            if (!isset($data['emailAddresses'][$type])) continue;
+
+            foreach ($data['emailAddresses'][$type] as $key => $email) {
+                if (empty($email)) unset($data['emailAddresses'][$type][$key]);
+            }
+            if (count($data['emailAddresses'][$type]) === 0) {
+                unset($data['emailAddresses'][$type]);
+            }
+            else {
+                $data['emailAddresses'][$type] = array_values($data['emailAddresses'][$type]);
+            }
+        }
+
+        // remove empty emailAddresses array
+        if (empty($data['emailAddresses'])) unset($data['emailAddresses']);
+
+        // respect lexoffice issue
+        // it's only possible to create and change contacts with a
+        // maximum of one entry in each lists
+        foreach ($email_types as $type) {
+            if (empty($data['emailAddresses'][$type]) || count($data['emailAddresses'][$type]) === 1) continue;
+            // only use the first item
+            $tmp = $data['emailAddresses'][$type][0];
+            $data['emailAddresses'][$type] = [];
+            $data['emailAddresses'][$type][] = trim($tmp);
+        }
+
         return $data;
     }
 

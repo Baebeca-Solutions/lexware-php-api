@@ -611,3 +611,119 @@ try {
     test_finished(false);
 }
 
+test_start('create contact with invalid empty email - private person');
+try {
+    $request = $lexoffice->create_contact(array(
+        'version' => 0,
+        'roles' => array(
+            'customer' => array(
+                'number' => '',
+            ),
+        ),
+        'person' => array(
+            'salutation' => 'Herr',
+            'firstName' => 'John - phone numbers',
+            'lastName' => 'Doe',
+        ),
+        'addresses' => array(
+            'billing' => array(
+                array(
+                    'street' => 'Genklerhardt 6',
+                    'zip' => '51647',
+                    'city' => 'Gummersbach',
+                    'countryCode' => 'DE',
+                ),
+            ),
+            'shipping' => array(
+                array(
+                    'street' => 'Genklerhardt 6',
+                    'zip' => '51647',
+                    'city' => 'Gummersbach',
+                    'countryCode' => 'DE',
+                ),
+            ),
+        ),
+        'emailAddresses' => array(
+            'business' => [
+                ''
+            ]
+        ),
+        'phoneNumbers' => array(
+            'business' => array(
+                '01234585252451584265155154156156153'
+            ),
+        ),
+        'note' => '',
+    ));
+
+    if ($request->id) {
+        test('contact created - id: '.$request->id);
+        test_finished(true);
+    } else {
+        test_finished(false);
+    }
+
+} catch(lexoffice_exception $e) {
+    test($e->getMessage());
+    test(print_r($e->get_error(), true));
+    test_finished(false);
+}
+
+test_start('create contact with to much email adresses - private person');
+try {
+    $request = $lexoffice->create_contact(array(
+        'version' => 0,
+        'roles' => array(
+            'customer' => array(
+                'number' => '',
+            ),
+        ),
+        'person' => array(
+            'salutation' => 'Herr',
+            'firstName' => 'John - phone numbers',
+            'lastName' => 'Doe',
+        ),
+        'addresses' => array(
+            'billing' => array(
+                array(
+                    'street' => 'Genklerhardt 6',
+                    'zip' => '51647',
+                    'city' => 'Gummersbach',
+                    'countryCode' => 'DE',
+                ),
+            ),
+            'shipping' => array(
+                array(
+                    'street' => 'Genklerhardt 6',
+                    'zip' => '51647',
+                    'city' => 'Gummersbach',
+                    'countryCode' => 'DE',
+                ),
+            ),
+        ),
+        'emailAddresses' => array(
+            'business' => [
+                'test@test.de',
+                'test2@test.de',
+            ]
+        ),
+        'phoneNumbers' => array(
+            'business' => array(
+                '01234585252451584265155154156156153'
+            ),
+        ),
+        'note' => '',
+    ));
+
+    if ($request->id) {
+        test('contact created - id: '.$request->id);
+        test_finished(true);
+    } else {
+        test_finished(false);
+    }
+
+} catch(lexoffice_exception $e) {
+    test($e->getMessage());
+    test(print_r($e->get_error(), true));
+    test_finished(false);
+}
