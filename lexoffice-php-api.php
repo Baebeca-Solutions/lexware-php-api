@@ -604,6 +604,10 @@ class lexoffice_client {
         return $this->api_call('POST', 'vouchers', '', $data);
     }
 
+    public function create_delivery_note($data) {
+        return $this->api_call('POST', 'delivery-notes', '', $data);
+    }
+
     public function get_event($uuid) {
         return $this->api_call('GET', 'event-subscriptions', $uuid);
     }
