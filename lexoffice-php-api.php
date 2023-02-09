@@ -1143,21 +1143,27 @@ class lexoffice_client {
      * Returns an array with the possible taxrates for the given country
      * @param string $country_code  2-letter country code
      * @param int    $date          booking date timestamp
-     * @return array
+     * @return array if $return_unsorted = false
      *  [
-     *      'default' => 19
-     *      'reduced' => [7, 5]
+     *      'default' => 19,
+     *      'reduced' => [7, 5],
+     *      'nullrate' => false
      *  ]
+     * array if $return_unsorted = true
+     *  [ 19, 7, 5 ]
      */
-    public function get_taxrates(string $country_code, int $date): array {
+    public function get_taxrates(string $country_code, int $date, $return_unsorted = false): array {
         // load country definition, needed in extending classes with own constructor
         if (is_null($this->countries)) $this->load_country_definition();
 
         // unknown country
-        if (empty($this->countries->{strtoupper($country_code)})) return [
-            'default' => null,
-            'reduced' => [0]
-        ];
+        if (empty($this->countries->{strtoupper($country_code)})) {
+            if (!$return_unsorted) return [
+                'default' => null,
+                'reduced' => [0]
+            ];
+            return [0];
+        }
 
         $taxrates = $this->countries->{strtoupper($country_code)}->taxrates;
 
@@ -1165,7 +1171,18 @@ class lexoffice_client {
         if (!in_array(0, $taxrates->reduced)) $taxrates->reduced[] = 0;
 
         // overwrite taxrates if needed
-        return $this->check_adjusted_taxrate($country_code, (array) $this->countries->{strtoupper($country_code)}->taxrates, $date);
+        $taxrates = $this->check_adjusted_taxrate($country_code, (array) $this->countries->{strtoupper($country_code)}->taxrates, $date);
+        if (!$return_unsorted) return $taxrates;
+
+        // unsorted return
+        $return = [];
+        if (isset($taxrates['default'])) $return[] = $taxrates['default'];
+        if (isset($taxrates['reduced']) && count($taxrates['reduced'])) {
+            foreach ($taxrates['reduced'] as $reduced) {
+                $return[] = $reduced;
+            }
+        }
+        return $return;
     }
 
     /**
