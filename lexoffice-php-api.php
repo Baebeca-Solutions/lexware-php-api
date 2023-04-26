@@ -1211,7 +1211,7 @@ class lexoffice_client {
 
         // spanien temporary inflation tax change (01.01.2021 - 31.12.2022)
         if (strtoupper($country_code) === 'ES' && $date >= 1672531200 && $date <= 1703977199) {
-            $taxrates['reduced'][] = [5];
+            $taxrates['reduced'][] = 5;
         }
 
         return $taxrates;
