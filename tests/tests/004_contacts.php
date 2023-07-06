@@ -171,7 +171,7 @@ try {
 		'name' => $random_contact_name,
 		'number' => '',
 		'customer' => '', // bool
-		'venodr' => '', // bool
+		'vendor' => '', // bool
 	));
 
 	if (count($request->content) == 1) {
@@ -358,7 +358,7 @@ try {
         'name' => $random_contact_name,
         'number' => '',
         'customer' => '', // bool
-        'venodr' => '', // bool
+        'vendor' => '', // bool
     ));
 
     if (count($request->content) == 1) {
@@ -381,7 +381,7 @@ try {
         'name' => rawurlencode($random_contact_name),
         'number' => '',
         'customer' => '', // bool
-        'venodr' => '', // bool
+        'vendor' => '', // bool
     ));
 
     if (count($request->content) == 1) {
@@ -405,7 +405,7 @@ try {
 		'name' => 'Jo',
 		'number' => '',
 		'customer' => '', // bool
-		'venodr' => '', // bool
+		'vendor' => '', // bool
 	));
 	test_finished(false);
 
@@ -424,7 +424,7 @@ try {
 		'name' => '',
 		'number' => '',
 		'customer' => '',
-		'venodr' => '',
+		'vendor' => '',
 	));
 	test_finished(false);
 
