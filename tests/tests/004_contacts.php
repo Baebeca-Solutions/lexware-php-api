@@ -345,7 +345,8 @@ try {
         test_finished(false);
     }
 
-} catch(lexoffice_exception $e) {
+}
+catch(lexoffice_exception $e) {
     test($e->getMessage());
     test(print_r($e->get_error(), true));
     test_finished(false);
@@ -368,7 +369,8 @@ try {
         test_finished(false);
     }
 
-} catch(lexoffice_exception $e) {
+}
+catch(lexoffice_exception $e) {
     test($e->getMessage());
     test(print_r($e->get_error(), true));
     test_finished(false);

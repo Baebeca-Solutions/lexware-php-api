@@ -892,11 +892,33 @@ class lexoffice_client {
         return $this->api_call('DELETE', 'event-subscriptions', $uuid);
     }
 
-    public function search_contact(array $filters) {
+    public function search_contact(array $filters, bool $wildcards = false) {
         // todo integrate pagination
 
         $filter_string = '';
         foreach ($filters as $index => $filter) {
+            if (empty($filter)) continue;
+
+            // escape wildcards if needed
+            if (!$wildcards) {
+                // respect versions that are already encoded
+                if ($filter === rawurldecode($filter)) {
+                    $filter = str_replace(
+                        ['_', '%'],
+                        ['\_', '\%'],
+                        $filter
+                    );
+                }
+                else {
+                    $filter = str_replace(
+                        ['_', '%'],
+                        ['\_', '\%'],
+                        rawurldecode($filter)
+                    );
+                    $filter = rawurlencode($filter);
+                }
+            }
+
             // check if is not already encoded
             if (strpos($filter, '%') === false || $filter == rawurldecode($filter)) {
                 $filter = rawurlencode($filter);
