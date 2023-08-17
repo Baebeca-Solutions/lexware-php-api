@@ -382,7 +382,7 @@ class lexoffice_client {
         unset($this->api_key);
     }
 
-    protected function api_call($type, $resource, $uuid = '', $data = '', $params = '', $return_http_header = false, int $rate_limit_reached = 0) {
+    protected function api_call($type, $resource, $uuid = '', $data = '', $params = '', $return_http_header = false, int $count = 1) {
         // check api_key
         if ($this->api_key === true || $this->api_key === false || $this->api_key === '') throw new lexoffice_exception('lexoffice-php-api: invalid API Key', ['api_key' => $this->api_key]);
 
@@ -529,11 +529,11 @@ class lexoffice_client {
         elseif (
             $http_status === 429 &&
             $this->rate_limit_repeat &&
-            $rate_limit_reached <= $this->rate_limit_max_tries
+            $count <= $this->rate_limit_max_tries
         ) {
+            sleep($this->rate_limit_seconds*$count);
             if (is_callable($this->rate_limit_callable))call_user_func($this->rate_limit_callable, true);
-            sleep($this->rate_limit_seconds*$rate_limit_reached);
-            return $this->api_call($type, $resource, $uuid, $data, $params, $return_http_header, $rate_limit_reached++);
+            return $this->api_call($type, $resource, $uuid, $data, $params, $return_http_header, $count++);
         }
         // rate limit exceeded
         elseif ($http_status === 429) {
