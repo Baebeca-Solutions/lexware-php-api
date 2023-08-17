@@ -21,6 +21,7 @@ class lexoffice_client {
     protected $callback = '';
     protected $api_version = 'v1';
     protected $countries;
+    private $rate_limit_repeat, $rate_limit_seconds, $rate_limit_max_tries, $rate_limit_callable;
 
     public function __construct($settings) {
         if (!is_array($settings)) throw new lexoffice_exception('lexoffice-php-api: settings should be an array');
@@ -35,6 +36,8 @@ class lexoffice_client {
         if (array_key_exists('sandbox_oss', $settings) && $settings['sandbox_oss'] === true) $this->api_endpoint = 'https://api-oss-sandbox.grld.eu';
 
         $this->load_country_definition();
+        $this->configure_rate_limit();
+        $this->configure_rate_limit_callable();
 
         return true;
     }
@@ -380,7 +383,7 @@ class lexoffice_client {
         unset($this->api_key);
     }
 
-    protected function api_call($type, $resource, $uuid = '', $data = '', $params = '', $return_http_header = false, $repeatable = true) {
+    protected function api_call($type, $resource, $uuid = '', $data = '', $params = '', $return_http_header = false, int $rate_limit_reached = 0) {
         // check api_key
         if ($this->api_key === true || $this->api_key === false || $this->api_key === '') throw new lexoffice_exception('lexoffice-php-api: invalid API Key', ['api_key' => $this->api_key]);
 
@@ -401,7 +404,8 @@ class lexoffice_client {
                 ]);
             }
 
-        } elseif ($type == 'PUT') {
+        }
+        elseif ($type == 'PUT') {
             $data = json_encode($data);
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer '.$this->api_key,
@@ -412,7 +416,8 @@ class lexoffice_client {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
-        } elseif ($type == 'POST') {
+        }
+        elseif ($type == 'POST') {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 
             if (
@@ -435,13 +440,15 @@ class lexoffice_client {
                 ]);
             }
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        } elseif ($type == 'DELETE') {
+        }
+        elseif ($type == 'DELETE') {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer '.$this->api_key,
                 'Accept: application/json',
             ]);
-        } else {
+        }
+        else {
             throw new lexoffice_exception('lexoffice-php-api: unknown request type "'.$type.'" for api_call');
         }
 
@@ -475,69 +482,87 @@ class lexoffice_client {
             } else {
                 return true;
             }
-        } elseif ($http_status == 400) {
+        }
+        elseif ($http_status == 400) {
             throw new lexoffice_exception('lexoffice-php-api: Malformed syntax or a bad query', [
                 'HTTP Status' => $http_status,
                 'Requested URI' => $curl_url,
                 'Requested Payload' => $data,
                 'Response' => json_decode($result),
             ]);
-        } elseif ($http_status == 401) {
+        }
+        elseif ($http_status == 401) {
             throw new lexoffice_exception('lexoffice-php-api: invalid API Key', [
                 'HTTP Status' => $http_status,
                 'Requested URI' => $curl_url,
                 'Requested Payload' => $data,
                 'Response' => json_decode($result),
             ]);
-        } elseif ($http_status == 402) {
+        }
+        elseif ($http_status == 402) {
             throw new lexoffice_exception('lexoffice-php-api: action not possible due a lexoffice contract issue');
-        } elseif ($http_status == 403) {
+        }
+        elseif ($http_status == 403) {
             throw new lexoffice_exception('lexoffice-php-api: Authenticated but insufficient scope or insufficient access rights in lexoffice', [
                 'HTTP Status' => $http_status,
                 'Requested URI' => $curl_url,
                 'Requested Payload' => $data,
                 'Response' => json_decode($result),
             ]);
-        } elseif ($http_status == 404) {
+        }
+        elseif ($http_status == 404) {
             throw new lexoffice_exception('lexoffice-php-api: Requested resource does no exist (anymore)', [
                 'HTTP Status' => $http_status,
                 'Requested URI' => $curl_url,
                 'Requested Payload' => $data,
                 'Response' => json_decode($result),
             ]);
-        } elseif ($http_status == 405) {
+        }
+        elseif ($http_status == 405) {
             throw new lexoffice_exception('lexoffice-php-api: Method not allowed on resource', [
                 'HTTP Status' => $http_status,
                 'Requested URI' => $curl_url,
                 'Requested Payload' => $data,
                 'Response' => json_decode($result),
             ]);
-            // rate limit, repeat
-        } elseif ($http_status == 429 && $repeatable === true) {
-            sleep(3);
-            return $this->api_call($type, $resource, $uuid, $data, $params, $return_http_header, false);
-        } elseif ($http_status == 429) {
-            throw new lexoffice_exception('lexoffice-php-api: Endpoint exceeds the limit of throttling. This request should be called again at a later time', [
+        }
+        // rate limit, repeat it
+        elseif (
+            $http_status === 429 &&
+            $this->rate_limit_repeat &&
+            $rate_limit_reached <= $this->rate_limit_max_tries
+        ) {
+            if (is_callable($this->rate_limit_callable))call_user_func($this->rate_limit_callable, true);
+            sleep($this->rate_limit_seconds*$rate_limit_reached);
+            return $this->api_call($type, $resource, $uuid, $data, $params, $return_http_header, $rate_limit_reached++);
+        }
+        // rate limit exceeded
+        elseif ($http_status === 429) {
+            if (is_callable($this->rate_limit_callable)) call_user_func($this->rate_limit_callable, false);
+            throw new lexoffice_exception('lexoffice-php-api: Rate limit exceeded', [
                 'HTTP Status' => $http_status,
                 'Requested URI' => $curl_url,
                 'Requested Payload' => $data,
                 'Response' => json_decode($result),
             ]);
-        } elseif ($http_status == 500) {
+        }
+        elseif ($http_status == 500) {
             throw new lexoffice_exception('lexoffice-php-api: Internal server error.', [
                 'HTTP Status' => $http_status,
                 'Requested URI' => $curl_url,
                 'Requested Payload' => $data,
                 'Response' => json_decode($result),
             ]);
-        } elseif ($http_status == 503) {
+        }
+        elseif ($http_status == 503) {
             throw new lexoffice_exception('lexoffice-php-api: API Service currently unavailable', [
                 'HTTP Status' => $http_status,
                 'Requested URI' => $curl_url,
                 'Requested Payload' => $data,
                 'Response' => json_decode($result),
             ]);
-        } else {
+        }
+        else {
             // all other codes https://developers.lexoffice.io/docs/#http-status-codes
             throw new lexoffice_exception('lexoffice-php-api: error in api request - check details via $e->get_error()', [
                 'HTTP Status' => $http_status,
@@ -1401,6 +1426,16 @@ class lexoffice_client {
         }
 
         return $data;
+    }
+
+    public function configure_rate_limit(bool $repeat = true, int $seconds_to_sleep = 1, int $max_tries = 10) : void {
+        $this->rate_limit_repeat = $repeat;
+        $this->rate_limit_seconds = $seconds_to_sleep;
+        $this->rate_limit_max_tries = $max_tries;
+    }
+
+    public function configure_rate_limit_callable(callable $callback = null) : void {
+        $this->rate_limit_callable = $callback;
     }
 
     /* legacy wrapper */
