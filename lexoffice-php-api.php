@@ -35,7 +35,6 @@ class lexoffice_client {
         if (array_key_exists('sandbox', $settings) && $settings['sandbox'] === true) $this->api_endpoint = 'https://api-sandbox.grld.eu';
         if (array_key_exists('sandbox_oss', $settings) && $settings['sandbox_oss'] === true) $this->api_endpoint = 'https://api-oss-sandbox.grld.eu';
 
-        $this->load_country_definition();
         $this->configure_rate_limit();
         $this->configure_rate_limit_callable();
 
