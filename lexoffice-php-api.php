@@ -1376,7 +1376,7 @@ class lexoffice_client {
         foreach ($phone_numbers_types as $type) {
             if (empty($data['phoneNumbers'][$type])) continue;
             foreach ($data['phoneNumbers'][$type] as $key => $number) {
-                if (strlen($data['phoneNumbers'][$type][$key] > 30)) unset($data['phoneNumbers'][$type][$key]);
+                if (strlen($data['phoneNumbers'][$type][$key]) > 30) unset($data['phoneNumbers'][$type][$key]);
             }
             $data['phoneNumbers'][$type] = array_values($data['phoneNumbers'][$type]);
         }
