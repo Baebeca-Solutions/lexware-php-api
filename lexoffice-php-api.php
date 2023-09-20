@@ -1249,7 +1249,7 @@ class lexoffice_client {
         // overwrite until 01.07.2021, no OSS needed so german taxes should give back
         if ($date <= 1625090400 && strtoupper($country_code) != 'DE') return $this->get_taxrates('DE', $date);
 
-        // luxemburg temporary inflation tax change (01.01.2021 - 31.12.2022)
+        // luxemburg temporary inflation tax change (01.01.2021 - 31.12.2023)
         if (strtoupper($country_code) === 'LU' && $date >= 1672531200 && $date <= 1703977199) {
             $taxrates['default'] = 16;
             $taxrates['reduced'] = [0, 3, 7, 13];
