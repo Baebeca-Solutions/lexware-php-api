@@ -586,7 +586,17 @@ class lexoffice_client {
 
         // set version to 0 to create a new contact
         $data['version'] = 0;
-        $new_contact = $this->api_call('POST', 'contacts', '', $data);
+        try {
+            $new_contact = $this->api_call('POST', 'contacts', '', $data);
+        }
+        catch (lexoffice_exception $e) {
+            $e = $e->get_error();
+            // try again if new and account_number_already_exists | #188208
+            if (isset($e['Response']->IssueList[0]->i18nKey) && $e['Response']->IssueList[0]->i18nKey === 'account_number_already_exists') {
+                sleep(3);
+                $new_contact = $this->api_call('POST', 'contacts', '', $data);
+            }
+        }
 
         // #73917
         // support a technical race condition in lexoffice database system

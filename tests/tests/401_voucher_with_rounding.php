@@ -1,6 +1,6 @@
 <?php
 
-test_start('voucher with rounding #105687');
+test_start('voucher with missing rounding #105687');
 try {
 	$request = $lexoffice->create_voucher([
 		'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
