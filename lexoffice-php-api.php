@@ -590,12 +590,13 @@ class lexoffice_client {
             $new_contact = $this->api_call('POST', 'contacts', '', $data);
         }
         catch (lexoffice_exception $e) {
-            $e = $e->get_error();
+            $error = $e->get_error();
             // try again if new and account_number_already_exists | #188208
-            if (isset($e['Response']->IssueList[0]->i18nKey) && $e['Response']->IssueList[0]->i18nKey === 'account_number_already_exists') {
+            if (isset($error['Response']->IssueList[0]->i18nKey) && $error['Response']->IssueList[0]->i18nKey === 'account_number_already_exists') {
                 sleep(3);
                 $new_contact = $this->api_call('POST', 'contacts', '', $data);
             }
+            throw $e;
         }
 
         // #73917
@@ -1391,6 +1392,14 @@ class lexoffice_client {
             $data['phoneNumbers'][$type] = array_values($data['phoneNumbers'][$type]);
         }
 
+        // remove empty numbers
+        foreach ($phone_numbers_types as $type) {
+            if (empty($data['phoneNumbers'][$type])) continue;
+            foreach ($data['phoneNumbers'][$type] as $key => $number) {
+                if (empty($data['phoneNumbers'][$type][$key])) unset($data['phoneNumbers'][$type][$key]);
+            }
+            $data['phoneNumbers'][$type] = array_values($data['phoneNumbers'][$type]);
+        }
 
         // respect lexoffice issue
         // it's only possible to create and change contacts with a
