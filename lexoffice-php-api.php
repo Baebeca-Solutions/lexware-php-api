@@ -546,7 +546,7 @@ class lexoffice_client {
             ]);
         }
         elseif ($http_status == 500) {
-            throw new lexoffice_exception('lexoffice-php-api: Internal server error.', [
+            throw new lexoffice_exception('lexoffice-php-api: Internal server error', [
                 'HTTP Status' => $http_status,
                 'Requested URI' => $curl_url,
                 'Requested Payload' => $data,
