@@ -915,6 +915,7 @@ class lexoffice_client {
     }
 
     public function update_contact($uuid, $data) {
+        $data = $this->validate_contact_data($data);
         return $this->api_call('PUT', 'contacts', $uuid, $data);
     }
 
@@ -1410,6 +1411,23 @@ class lexoffice_client {
             $tmp = $data['phoneNumbers'][$type][0];
             $data['phoneNumbers'][$type] = [];
             $data['phoneNumbers'][$type][] = trim($tmp);
+        }
+
+        //validation for contactPersons number in company
+        if (isset($data['company']['contactPersons'][0]['phoneNumber'])) {
+            $data['company']['contactPersons'][0]['phoneNumber'] = trim(preg_replace('/[A-Za-z]/', '', $data['company']['contactPersons'][0]['phoneNumber']));
+            //if delimeters - leave first correct number
+            foreach ($delimiters as $delimiter) {
+                if (stripos($data['company']['contactPersons'][0]['phoneNumber'], $delimiter) === false) continue;
+                $tmp = explode($delimiter, $data['company']['contactPersons'][0]['phoneNumber']);
+                foreach ($tmp as $tmp_item) {
+                    if (empty($tmp_item)) continue;
+                    $data['company']['contactPersons'][0]['phoneNumber'] = trim($tmp_item);
+                    break;
+                }
+            }
+            if (empty($data['company']['contactPersons'][0]['phoneNumber']) || strlen($data['company']['contactPersons'][0]['phoneNumber']) > 30)
+                unset($data['company']['contactPersons'][0]['phoneNumber']);
         }
 
 
