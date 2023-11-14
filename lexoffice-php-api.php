@@ -1421,10 +1421,9 @@ class lexoffice_client {
                 if (stripos($data['company']['contactPersons'][0]['phoneNumber'], $delimiter) === false) continue;
                 $tmp = explode($delimiter, $data['company']['contactPersons'][0]['phoneNumber']);
                 foreach ($tmp as $tmp_item) {
-                    if (!empty($tmp_item)) {
-                        $data['company']['contactPersons'][0]['phoneNumber'] = trim($tmp_item);
-                        break;
-                    }
+                    if (empty($tmp_item)) continue;
+                    $data['company']['contactPersons'][0]['phoneNumber'] = trim($tmp_item);
+                    break;
                 }
             }
             if (empty($data['company']['contactPersons'][0]['phoneNumber']) || strlen($data['company']['contactPersons'][0]['phoneNumber']) > 30)
