@@ -14,11 +14,11 @@
  **/
 
 // Official Lexoffice Documentation: https://developers.lexoffice.io/docs/
-#[AllowDynamicProperties]
 class lexoffice_client {
     protected $api_key = '';
     protected $api_endpoint = 'https://api.lexoffice.io';
     protected $callback = '';
+    protected $ssl_verify = '';
     protected $api_version = 'v1';
     protected $countries;
     private $rate_limit_repeat, $rate_limit_seconds, $rate_limit_max_tries, $rate_limit_callable;
