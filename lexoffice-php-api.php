@@ -14,7 +14,7 @@
  **/
 
 // Official Lexoffice Documentation: https://developers.lexoffice.io/docs/
-
+#[AllowDynamicProperties]
 class lexoffice_client {
     protected $api_key = '';
     protected $api_endpoint = 'https://api.lexoffice.io';
