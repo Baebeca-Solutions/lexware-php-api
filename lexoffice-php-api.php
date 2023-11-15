@@ -14,26 +14,27 @@
  **/
 
 // Official Lexoffice Documentation: https://developers.lexoffice.io/docs/
+
 class lexoffice_client {
     protected $api_key = '';
     protected $api_endpoint = 'https://api.lexoffice.io';
-    protected $callback = '';
-    protected $ssl_verify = '';
+    protected $callback = false;
+    protected $ssl_verify = true;
     protected $api_version = 'v1';
     protected $countries;
     private $rate_limit_repeat, $rate_limit_seconds, $rate_limit_max_tries, $rate_limit_callable;
 
     public function __construct($settings) {
         if (!is_array($settings)) throw new lexoffice_exception('lexoffice-php-api: settings should be an array');
-        if (!array_key_exists('api_key', $settings)) throw new lexoffice_exception('lexoffice-php-api: no api_key is given');
+        if (empty($settings['api_key'])) throw new lexoffice_exception('lexoffice-php-api: no api_key is given');
 
         $this->api_key = $settings['api_key'];
-        array_key_exists('callback', $settings) ? $this->callback = $settings['callback'] : $this->callback = false;
-        array_key_exists('ssl_verify', $settings) ? $this->ssl_verify = $settings['ssl_verify'] : $this->ssl_verify = true;
+        if (isset($settings['callback'])) $this->callback = $settings['callback'];
+        if (isset($settings['ssl_verify'])) $this->ssl_verify = $settings['ssl_verify'];
 
         // sandboxes
-        if (array_key_exists('sandbox', $settings) && $settings['sandbox'] === true) $this->api_endpoint = 'https://api-sandbox.grld.eu';
-        if (array_key_exists('sandbox_oss', $settings) && $settings['sandbox_oss'] === true) $this->api_endpoint = 'https://api-oss-sandbox.grld.eu';
+        if (isset($settings['sandbox']) && $settings['sandbox'] === true) $this->api_endpoint = 'https://api-sandbox.grld.eu';
+        if (isset($settings['sandbox_oss']) && $settings['sandbox_oss'] === true) $this->api_endpoint = 'https://api-oss-sandbox.grld.eu';
 
         $this->configure_rate_limit();
         $this->configure_rate_limit_callable();
