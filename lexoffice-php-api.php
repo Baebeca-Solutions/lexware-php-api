@@ -471,16 +471,21 @@ class lexoffice_client {
         if ($data !== '' && is_string($data)) $data = json_decode($data);
 
         if ($http_status == 200 || $http_status == 201 || $http_status == 202 || $http_status == 204) {
-            if (!empty($result) && $result && !($type == 'GET' && $resource == 'files') && !$return_http_header) {
+            if (!empty($result) && !($type == 'GET' && $resource == 'files') && !$return_http_header) {
                 return json_decode($result);
                 // full http_header
-            } else if (!empty($result) && $result && $return_http_header) {
+            } else if (!empty($result) && $return_http_header) {
                 return ['header' => curl_getinfo($ch), 'body' => $result];
                 // binary or full http_header
-            } else if (!empty($result) && $result) {
+            } else if (!empty($result)) {
                 return $result;
             } else {
-                return true;
+                throw new lexoffice_exception('lexoffice-php-api: empty response', [
+                    'HTTP Status' => $http_status,
+                    'Requested URI' => $curl_url,
+                    'Requested Payload' => $data,
+                    'Response' => $result,
+                ]);
             }
         }
         elseif ($http_status == 400) {
