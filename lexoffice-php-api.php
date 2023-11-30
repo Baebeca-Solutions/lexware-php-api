@@ -466,11 +466,13 @@ class lexoffice_client {
 
         $result = curl_exec($ch);
         $http_status = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+        $error = '';
 
         // prepare data for error message
         if ($data !== '' && is_string($data)) $data = json_decode($data);
 
-        if ($http_status == 200 || $http_status == 201 || $http_status == 202 || $http_status == 204) {
+        // 200 ok, 201 created, 202 accepted
+        if (in_array($http_status, [200, 201, 202])) {
             if (!empty($result) && !($type == 'GET' && $resource == 'files') && !$return_http_header) {
                 return json_decode($result);
                 // full http_header
@@ -480,57 +482,20 @@ class lexoffice_client {
             } else if (!empty($result)) {
                 return $result;
             } else {
-                throw new lexoffice_exception('lexoffice-php-api: empty response', [
-                    'HTTP Status' => $http_status,
-                    'Requested URI' => $curl_url,
-                    'Requested Payload' => $data,
-                    'Response' => $result,
-                ]);
+                $error = 'empty response';
             }
         }
-        elseif ($http_status == 400) {
-            throw new lexoffice_exception('lexoffice-php-api: Malformed syntax or a bad query', [
-                'HTTP Status' => $http_status,
-                'Requested URI' => $curl_url,
-                'Requested Payload' => $data,
-                'Response' => json_decode($result),
-            ]);
-        }
-        elseif ($http_status == 401) {
-            throw new lexoffice_exception('lexoffice-php-api: invalid API Key', [
-                'HTTP Status' => $http_status,
-                'Requested URI' => $curl_url,
-                'Requested Payload' => $data,
-                'Response' => json_decode($result),
-            ]);
-        }
-        elseif ($http_status == 402) {
-            throw new lexoffice_exception('lexoffice-php-api: action not possible due a lexoffice contract issue');
-        }
-        elseif ($http_status == 403) {
-            throw new lexoffice_exception('lexoffice-php-api: Authenticated but insufficient scope or insufficient access rights in lexoffice', [
-                'HTTP Status' => $http_status,
-                'Requested URI' => $curl_url,
-                'Requested Payload' => $data,
-                'Response' => json_decode($result),
-            ]);
-        }
-        elseif ($http_status == 404) {
-            throw new lexoffice_exception('lexoffice-php-api: Requested resource does no exist (anymore)', [
-                'HTTP Status' => $http_status,
-                'Requested URI' => $curl_url,
-                'Requested Payload' => $data,
-                'Response' => json_decode($result),
-            ]);
-        }
-        elseif ($http_status == 405) {
-            throw new lexoffice_exception('lexoffice-php-api: Method not allowed on resource', [
-                'HTTP Status' => $http_status,
-                'Requested URI' => $curl_url,
-                'Requested Payload' => $data,
-                'Response' => json_decode($result),
-            ]);
-        }
+        // ok, but no content
+        elseif ($http_status == 204) { return true; }
+        elseif ($http_status == 400) { $error = 'Malformed syntax or a bad query'; }
+        elseif ($http_status == 401) { $error = 'invalid API Key'; }
+        elseif ($http_status == 402) { $error = 'action not possible due a lexoffice contract issue'; }
+        elseif ($http_status == 403) { $error = 'Authenticated but insufficient scope or insufficient access rights in lexoffice'; }
+        elseif ($http_status == 404) { $error = 'Requested resource does no exist (anymore)'; }
+        elseif ($http_status == 405) { $error = 'Method not allowed on resource'; }
+        elseif ($http_status == 406) { $error = 'Validation issues due to invalid data'; }
+        elseif ($http_status == 409) { $error = 'Conflict on ressource'; }
+        elseif ($http_status == 415) { $error = 'Missing/Unsupported Content-Type header'; }
         // rate limit, repeat it
         elseif (
             $http_status === 429 &&
@@ -544,38 +509,19 @@ class lexoffice_client {
         // rate limit exceeded
         elseif ($http_status === 429) {
             if (is_callable($this->rate_limit_callable)) call_user_func($this->rate_limit_callable, false);
-            throw new lexoffice_exception('lexoffice-php-api: Rate limit exceeded', [
-                'HTTP Status' => $http_status,
-                'Requested URI' => $curl_url,
-                'Requested Payload' => $data,
-                'Response' => json_decode($result),
-            ]);
+            $error = 'Rate limit exceeded';
         }
-        elseif ($http_status == 500) {
-            throw new lexoffice_exception('lexoffice-php-api: Internal server error', [
-                'HTTP Status' => $http_status,
-                'Requested URI' => $curl_url,
-                'Requested Payload' => $data,
-                'Response' => json_decode($result),
-            ]);
-        }
-        elseif ($http_status == 503) {
-            throw new lexoffice_exception('lexoffice-php-api: API Service currently unavailable', [
-                'HTTP Status' => $http_status,
-                'Requested URI' => $curl_url,
-                'Requested Payload' => $data,
-                'Response' => json_decode($result),
-            ]);
-        }
-        else {
-            // all other codes https://developers.lexoffice.io/docs/#http-status-codes
-            throw new lexoffice_exception('lexoffice-php-api: error in api request - check details via $e->get_error()', [
-                'HTTP Status' => $http_status,
-                'Requested URI' => $curl_url,
-                'Requested Payload' => $data,
-                'Response' => json_decode($result),
-            ]);
-        }
+        elseif ($http_status == 500) { $error = 'Internal server error'; }
+        elseif ($http_status == 501) { $error = 'HTTP operation not supported'; }
+        elseif ($http_status == 503) { $error = 'API Service currently unavailable'; }
+        elseif ($http_status == 504) { $error = 'API Service Endpoint request timeout'; }
+
+        throw new lexoffice_exception('lexoffice-php-api: '.(!empty($error) ? $error : 'error in api request - check details via $e->get_error()'), [
+            'HTTP Status' => $http_status,
+            'Requested URI' => $curl_url,
+            'Requested Payload' => $data,
+            'Response' => json_decode($result),
+        ]);
     }
 
     public function create_event($event, $callback = false) {
