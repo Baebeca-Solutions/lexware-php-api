@@ -1,9 +1,9 @@
 # lexoffice-php-api
-PHP Client für [lexoffice](https://www.awin1.com/awclick.php?gid=368497&mid=13787&awinaffid=635216&linkid=2537216&clickref=) REST API
+PHP Client für [lexoffice.de](https://www.lexoffice.de/?cid=6143&pid=pmc&utm_medium=affiliate&utm_source=baebeca&utm_campaign=start) Public API
 
 Wir lieben Automatisierung und die nahtlose Verzahnung von Systemen!
 
-[lexoffice](https://www.awin1.com/awclick.php?gid=368497&mid=13787&awinaffid=635216&linkid=2537216&clickref=) stellt seinen Kunden eine öffentliche API-Schnittstelle zur Verfügung über die 
+[lexoffice.de](https://www.lexoffice.de/?cid=6143&pid=pmc&utm_medium=affiliate&utm_source=baebeca&utm_campaign=start) stellt seinen Kunden eine öffentliche API-Schnittstelle zur Verfügung über die 
 bestehende Systeme integriert und Prozesse automatisiert werden können. Für diesen Ansatz haben 
 wir einen PHP-Client entwickelt und stellen diesen kostenfrei zur Verfügung. 
 
@@ -12,10 +12,10 @@ Alle weiteren Informationen finden Sie hier:
 * Eine technische Dokumentation in unserem [Wiki](https://wiki.baebeca.de/index.php?title=lexoffice-php-api)
  
 ## Baebeca Solutions bei lexoffice.de
-* [Integrationspartner](https://www.lexoffice.de/partner/public-api/integrationspartner/)
-* [Softwarepartner](https://www.lexoffice.de/partner/)
+* [Integrationspartner](https://www.lexoffice.de/partner/public-api/integrationspartner/?cid=6143&pid=pmc&utm_medium=affiliate&utm_source=baebeca&utm_campaign=start)
+* [Softwarepartner](https://www.lexoffice.de/partner/?cid=6143&pid=pmc&utm_medium=affiliate&utm_source=baebeca&utm_campaign=start)
 
-[![lexoffice](https://www.baebeca.de/wp-content/uploads/2021/10/lexoffice-technologiepartner-badge-300x199.png)](https://www.awin1.com/awclick.php?gid=368497&mid=13787&awinaffid=635216&linkid=2537216&clickref=)
+[![lexoffice](https://www.baebeca.de/wp-content/uploads/2021/10/lexoffice-technologiepartner-badge-300x199.png)](https://www.lexoffice.de/?cid=6143&pid=pmc&utm_medium=affiliate&utm_source=baebeca&utm_campaign=start)
 
 ## lexoffice.de API-Dokumentation
 Die offizielle lexoffice API-Dokumentation findest du [hier](https://developers.lexoffice.io/docs/).
