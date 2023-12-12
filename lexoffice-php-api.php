@@ -1304,6 +1304,19 @@ class lexoffice_client {
         if (isset($data['person']['firstName']) && empty($data['person']['firstName'])) $data['person']['firstName'] = '-- ohne Vorname --';
         if (isset($data['person']['lastName']) && empty($data['person']['lastName'])) $data['person']['lastName'] = '-- ohne Nachname --';
 
+        // fix to long salutations
+        if (!empty($data['person']['salutation']) && strlen($data['person']['salutation'] > 25)) {
+            if (str_contains($data['person']['salutation'], 'Frau')) {
+                $data['person']['salutation'] = 'Frau';
+            }
+            elseif (str_contains($data['person']['salutation'], 'Herr')) {
+                $data['person']['salutation'] = 'Herr';
+            }
+            else {
+                $data['person']['salutation'] = substr($data['person']['salutation'], 0, 25);
+            }
+        }
+
         // separate multiple phonenumbers in one field
         $phone_numbers_types = ['business', 'office', 'mobile', 'private', 'fax', 'other'];
         $delimiters = ['oder', ','];
@@ -1365,7 +1378,27 @@ class lexoffice_client {
             $data['phoneNumbers'][$type][] = trim($tmp);
         }
 
-        //validation for contactPersons number in company
+        // validation for contactPersons in company
+        if (!empty($data['company']['contactPersons'])) {
+            foreach ($data['company']['contactPersons'] as $key => $person) {
+                // fix to long salutations
+                if (!empty($person['salutation']) && strlen($person['salutation'] > 25)) {
+                    if (str_contains($person['salutation'], 'Frau')) {
+                        $data['company']['contactPersons'][$key]['salutation'] = 'Frau';
+                    }
+                    elseif (str_contains($person['salutation'], 'Herr')) {
+                        $data['company']['contactPersons'][$key]['salutation'] = 'Herr';
+                    }
+                    else {
+                        $data['company']['contactPersons'][$key]['salutation'] = substr($person['salutation'], 0, 25);
+                    }
+                }
+                if (empty($person['firstName'])) $data['company']['contactPersons'][$key]['firstName'] = '-- ohne Vorname --';
+                if (empty($person['lastName'])) $data['company']['contactPersons'][$key]['lastName'] = '-- ohne Nachname --';
+            }
+        }
+
+        // validation for contactPersons number in company
         if (isset($data['company']['contactPersons'][0]['phoneNumber'])) {
             $data['company']['contactPersons'][0]['phoneNumber'] = trim(preg_replace('/[A-Za-z]/', '', $data['company']['contactPersons'][0]['phoneNumber']));
             //if delimeters - leave first correct number
