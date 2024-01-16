@@ -17,7 +17,7 @@ try {
 		'addresses' => array(
 			'billing' => array(
 				array(
-					'street' => 'Genklerhardt 6',
+					'street' => 'Brink 1',
 					'zip' => '51647',
 					'city' => 'Gummersbach',
 					'countryCode' => 'DE',
@@ -25,7 +25,7 @@ try {
 			),
 			'shipping' => array(
 				array(
-					'street' => 'Genklerhardt 6',
+					'street' => 'Brink 1',
 					'zip' => '51647',
 					'city' => 'Gummersbach',
 					'countryCode' => 'DE',
@@ -106,7 +106,7 @@ try {
 		'company' => array(
 			// use random name, use it in later search check
 			'name' => $random_contact_name,
-			'street' => 'Genklerhardt 6',
+			'street' => 'Brink 1',
 			'zip' => '51647',
 			'city' => 'Gummersbach',
 			'countryCode' => 'DE',
@@ -123,7 +123,7 @@ try {
 		'addresses' => array(
 			'billing' => array(
 				array(
-					'street' => 'Genklerhardt 6',
+					'street' => 'Brink 1',
 					'zip' => '51647',
 					'city' => 'Gummersbach',
 					'countryCode' => 'DE',
@@ -131,7 +131,7 @@ try {
 			),
 			'shipping' => array(
 				array(
-					'street' => 'Genklerhardt 6',
+					'street' => 'Brink 1',
 					'zip' => '51647',
 					'city' => 'Gummersbach',
 					'countryCode' => 'DE',
@@ -204,7 +204,7 @@ try {
         'addresses' => array(
             'billing' => array(
                 array(
-                    'street' => 'Genklerhardt 6',
+                    'street' => 'Brink 1',
                     'zip' => '51647',
                     'city' => 'Gummersbach',
                     'countryCode' => 'DE',
@@ -243,7 +243,7 @@ try {
                 'addresses' => array(
                     'billing' => array(
                         array(
-                            'street' => 'Genklerhardt 6 Updated',
+                            'street' => 'Brink 1 Updated',
                             'zip' => '51647',
                             'city' => 'Gummersbach',
                             'countryCode' => 'DE',
@@ -293,7 +293,7 @@ try {
         'company' => array(
             // use random name, use it in later search check
             'name' => $random_contact_name,
-            'street' => 'Genklerhardt 6',
+            'street' => 'Brink 1',
             'zip' => '51647',
             'city' => 'Gummersbach',
             'countryCode' => 'DE',
@@ -310,7 +310,7 @@ try {
         'addresses' => array(
             'billing' => array(
                 array(
-                    'street' => 'Genklerhardt 6',
+                    'street' => 'Brink 1',
                     'zip' => '51647',
                     'city' => 'Gummersbach',
                     'countryCode' => 'DE',
@@ -318,7 +318,7 @@ try {
             ),
             'shipping' => array(
                 array(
-                    'street' => 'Genklerhardt 6',
+                    'street' => 'Brink 1',
                     'zip' => '51647',
                     'city' => 'Gummersbach',
                     'countryCode' => 'DE',
@@ -469,7 +469,7 @@ try {
         'addresses' => array(
             'billing' => array(
                 array(
-                    'street' => 'Genklerhardt 6',
+                    'street' => 'Brink 1',
                     'zip' => '51647',
                     'city' => 'BOLSØYA',
                     'countryCode' => 'NO',
@@ -514,7 +514,7 @@ try {
         'addresses' => array(
             'billing' => array(
                 array(
-                    'street' => 'Genklerhardt 6',
+                    'street' => 'Brink 1',
                     'zip' => '51647',
                     'city' => 'Gummersbach',
                     'countryCode' => 'DE',
@@ -522,7 +522,7 @@ try {
             ),
             'shipping' => array(
                 array(
-                    'street' => 'Genklerhardt 6',
+                    'street' => 'Brink 1',
                     'zip' => '51647',
                     'city' => 'Gummersbach',
                     'countryCode' => 'DE',
@@ -572,7 +572,7 @@ try {
         'addresses' => array(
             'billing' => array(
                 array(
-                    'street' => 'Genklerhardt 6',
+                    'street' => 'Brink 1',
                     'zip' => '51647',
                     'city' => 'Gummersbach',
                     'countryCode' => 'DE',
@@ -580,7 +580,7 @@ try {
             ),
             'shipping' => array(
                 array(
-                    'street' => 'Genklerhardt 6',
+                    'street' => 'Brink 1',
                     'zip' => '51647',
                     'city' => 'Gummersbach',
                     'countryCode' => 'DE',
@@ -630,7 +630,7 @@ try {
         'addresses' => array(
             'billing' => array(
                 array(
-                    'street' => 'Genklerhardt 6',
+                    'street' => 'Brink 1',
                     'zip' => '51647',
                     'city' => 'Gummersbach',
                     'countryCode' => 'DE',
@@ -638,7 +638,7 @@ try {
             ),
             'shipping' => array(
                 array(
-                    'street' => 'Genklerhardt 6',
+                    'street' => 'Brink 1',
                     'zip' => '51647',
                     'city' => 'Gummersbach',
                     'countryCode' => 'DE',
@@ -688,7 +688,7 @@ try {
         'addresses' => array(
             'billing' => array(
                 array(
-                    'street' => 'Genklerhardt 6',
+                    'street' => 'Brink 1',
                     'zip' => '51647',
                     'city' => 'Gummersbach',
                     'countryCode' => 'DE',
@@ -696,7 +696,7 @@ try {
             ),
             'shipping' => array(
                 array(
-                    'street' => 'Genklerhardt 6',
+                    'street' => 'Brink 1',
                     'zip' => '51647',
                     'city' => 'Gummersbach',
                     'countryCode' => 'DE',

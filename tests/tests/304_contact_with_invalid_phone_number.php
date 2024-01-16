@@ -12,7 +12,7 @@ try {
 		),
 		'company' => array(
 			'name' => $random_contact_name,
-			'street' => 'Genklerhardt 6',
+			'street' => 'Brink 1',
 			'zip' => '51647',
 			'city' => 'Gummersbach',
 			'countryCode' => 'DE',
@@ -29,7 +29,7 @@ try {
 		'addresses' => array(
 			'billing' => array(
 				array(
-					'street' => 'Genklerhardt 6',
+					'street' => 'Brink 1',
 					'zip' => '51647',
 					'city' => 'Gummersbach',
 					'countryCode' => 'DE',

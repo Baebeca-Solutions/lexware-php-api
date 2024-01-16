@@ -19,7 +19,7 @@ if ($create_tons_of_customers) {
                 'company' => array(
                     // use random name, use it in later search check
                     'name' => $random_contact_name,
-                    'street' => 'Genklerhardt 6',
+                    'street' => 'Brink 1',
                     'zip' => '51647',
                     'city' => 'Gummersbach',
                     'countryCode' => 'DE',
@@ -36,7 +36,7 @@ if ($create_tons_of_customers) {
                 'addresses' => array(
                     'billing' => array(
                         array(
-                            'street' => 'Genklerhardt 6',
+                            'street' => 'Brink 1',
                             'zip' => '51647',
                             'city' => 'Gummersbach',
                             'countryCode' => 'DE',
@@ -44,7 +44,7 @@ if ($create_tons_of_customers) {
                     ),
                     'shipping' => array(
                         array(
-                            'street' => 'Genklerhardt 6',
+                            'street' => 'Brink 1',
                             'zip' => '51647',
                             'city' => 'Gummersbach',
                             'countryCode' => 'DE',
