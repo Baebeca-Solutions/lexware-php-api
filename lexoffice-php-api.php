@@ -1299,10 +1299,26 @@ class lexoffice_client {
         }
     }
 
+    private function valid_vat_id($vat_id) {
+        $vat_id = trim($vat_id);
+        $country_chars = substr($vat_id, 0, 2);
+        $vat_id_length = strlen($vat_id);
+
+        return (
+            $country_chars === 'GB' && $vat_id_length === 7 ||
+            in_array($country_chars, array('CZ', 'DK', 'FI', 'HU', 'IE', 'LU', 'MT', 'SI')) && $vat_id_length === 10 ||
+            in_array($country_chars, array('AT', 'BG', 'CY', 'CZ', 'DE', 'EE', 'EL', 'ES', 'GB', 'IE', 'LT', 'PT', 'RO')) && $vat_id_length === 11 ||
+            in_array($country_chars, array('BE', 'BG', 'CZ', 'PL', 'SK')) && $vat_id_length === 12 ||
+            in_array($country_chars, array('FR', 'HR', 'IT', 'LV')) && $vat_id_length === 13 ||
+            in_array($country_chars, array('GB', 'LT', 'NL', 'SE')) && $vat_id_length === 14
+        );
+    }
+
     private function validate_contact_data(array $data): array {
         if (isset($data['company']['name']) && empty($data['company']['name'])) $data['company']['name'] = '-- ohne Firmenname --';
         if (isset($data['person']['firstName']) && empty($data['person']['firstName'])) $data['person']['firstName'] = '-- ohne Vorname --';
         if (isset($data['person']['lastName']) && empty($data['person']['lastName'])) $data['person']['lastName'] = '-- ohne Nachname --';
+        if (!$this->valid_vat_id($data['company']['vatRegistrationId'])) unset($data['company']['vatRegistrationId']);
 
         // fix to long salutations
         if (!empty($data['person']['salutation']) && strlen($data['person']['salutation'] > 25)) {
