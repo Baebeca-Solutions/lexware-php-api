@@ -603,6 +603,25 @@ class lexoffice_client {
         return $this->api_call('GET', 'event-subscriptions');
     }
 
+    public function get_recurring_template($uuid) {
+        return $this->api_call('GET', 'recurring-templates', $uuid);
+    }
+
+    public function get_recurring_templates_all() {
+        $result = $this->api_call('GET', 'recurring-templates', '', '', '?page=0&size=250&sort=createdDate,ASC');
+        $recurring_templates = $result->content;
+        unset($result->content);
+
+        for ($i = 1; $i < $result->totalPages; $i++) {
+            $result_page = $this->api_call('GET', 'recurring-templates', '', '', '?page='.$i.'&size=250&sort=createdDate,ASC');
+            foreach ($result_page->content as $recurring_template) {
+                $recurring_templates[] = $recurring_template;
+            }
+            unset($result_page->content);
+        }
+        return($recurring_templates);
+    }
+    
     public function get_contact($uuid) {
         return $this->api_call('GET', 'contacts', $uuid);
     }
