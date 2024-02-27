@@ -66,7 +66,7 @@ try {
     $contact->person->firstName = 'John changed';
     $contact->person->lastName = 'John changed';
 
-    $request = $lexoffice->update_contact($request->id, $contact);
+    $request = $lexoffice->update_contact($request->id, json_decode(json_encode($contact), true));
 
     if ($request->id) {
         test('contact changed - id: '.$request->id);
