@@ -922,13 +922,23 @@ class lexoffice_client {
                         ['\_', '\%'],
                         rawurldecode($filter)
                     );
+                    if ($filter === htmlspecialchars_decode($filter)) {
+                        $filter = htmlspecialchars($filter);
+                    }
                     $filter = rawurlencode($filter);
                 }
             }
 
             // check if is not already encoded
             if (strpos($filter, '%') === false || $filter == rawurldecode($filter)) {
+                if ($filter === htmlspecialchars_decode($filter)) {
+                    $filter = htmlspecialchars($filter);
+                }
                 $filter = rawurlencode($filter);
+            }
+            //if urlencoded, but not html
+            elseif (rawurldecode($filter) == htmlspecialchars_decode(rawurldecode($filter))) {
+                $filter = rawurlencode(htmlspecialchars(rawurldecode($filter)));
             }
 
             // replace spacer | sometimes on appended lastname which is already encoded and skipped above
