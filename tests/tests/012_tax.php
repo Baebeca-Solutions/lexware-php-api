@@ -28,6 +28,7 @@ try {
 }
 
 test_start('check voucher booking id - germany sell before oss');
+$lexoffice->test_set_profile('vatfree', false, 'DESTINATION');
 try {
     $request = $lexoffice->get_needed_voucher_booking_id(0, 'de', strtotime('2021-06-27'), false, true, true);
     test_finished($request === '8f8664a1-fd86-11e1-a21f-0800200c9a66');

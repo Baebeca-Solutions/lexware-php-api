@@ -1503,6 +1503,31 @@ class lexoffice_client {
     public function create_credit_note($data, $finalized = false) {
         return $this->create_creditnote($data, $finalized);
     }
+
+    public function test_set_profile($taxType = 'net', $smallBusiness = false, $distanceSalesPrinciple = 'ORIGIN', $organizationId = '', $companyName = 'Testfirma', $userId = '',
+                              $userName = '', $userEmail = '', $date = null,  $connectionId = '', $features = [], $businessFeatures = [], $subscriptionStatus = 'active') {
+        $this->cache_profile = (object) array([
+            'organizationId' => $organizationId,
+            'companyName' => $companyName,
+            'created' => [
+                'userId' => $userId,
+                'userName' => $userName,
+                'userEmail' => $userEmail,
+                'date' => $date
+            ],
+            'connectionId' => $connectionId,
+            'features' => $features,
+            'businessFeatures' => $businessFeatures,
+            'subscriptionStatus' => $subscriptionStatus,
+            'taxType' => $taxType,
+            'smallBusiness' => $smallBusiness,
+            'distanceSalesPrinciple' => $distanceSalesPrinciple
+        ]);
+    }
+
+    public function test_clear_profile() {
+        $this->cache_profile = null;
+    }
 }
 
 class lexoffice_exception extends Exception {
