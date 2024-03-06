@@ -1504,25 +1504,25 @@ class lexoffice_client {
         return $this->create_creditnote($data, $finalized);
     }
 
-    public function test_set_profile($taxType = 'net', $smallBusiness = false, $distanceSalesPrinciple = 'ORIGIN', $organizationId = '', $companyName = 'Testfirma', $userId = '',
-                              $userName = '', $userEmail = '', $date = null,  $connectionId = '', $features = [], $businessFeatures = [], $subscriptionStatus = 'active') {
-        $this->cache_profile = (object) array([
-            'organizationId' => $organizationId,
-            'companyName' => $companyName,
+    public function test_set_profile($taxType = 'net', $smallBusiness = false, $distanceSalesPrinciple = 'ORIGIN') {
+        $profile = [
+            'organizationId' => null,
+            'companyName' => 'Testname',
             'created' => [
-                'userId' => $userId,
-                'userName' => $userName,
-                'userEmail' => $userEmail,
-                'date' => $date
+                'userId' => null,
+                'userName' => null,
+                'userEmail' => null,
+                'date' => null
             ],
-            'connectionId' => $connectionId,
-            'features' => $features,
-            'businessFeatures' => $businessFeatures,
-            'subscriptionStatus' => $subscriptionStatus,
+            'connectionId' => null,
+            'features' => [],
+            'businessFeatures' => [],
+            'subscriptionStatus' => 'active',
             'taxType' => $taxType,
             'smallBusiness' => $smallBusiness,
             'distanceSalesPrinciple' => $distanceSalesPrinciple
-        ]);
+        ];
+        $this->cache_profile = (object) $profile;
     }
 
     public function test_clear_profile() {
