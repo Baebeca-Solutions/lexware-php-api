@@ -922,8 +922,8 @@ class lexoffice_client {
                         ['\_', '\%'],
                         rawurldecode($filter)
                     );
-                    if ($filter === htmlspecialchars_decode($filter)) {
-                        $filter = htmlspecialchars($filter);
+                    if ($filter === htmlspecialchars_decode($filter, ENT_NOQUOTES)) {
+                        $filter = htmlspecialchars($filter, ENT_NOQUOTES);
                     }
                     $filter = rawurlencode($filter);
                 }
@@ -931,14 +931,14 @@ class lexoffice_client {
 
             // check if is not already encoded
             if (strpos($filter, '%') === false || $filter == rawurldecode($filter)) {
-                if ($filter === htmlspecialchars_decode($filter)) {
-                    $filter = htmlspecialchars($filter);
+                if ($filter === htmlspecialchars_decode($filter, ENT_NOQUOTES)) {
+                    $filter = htmlspecialchars($filter, ENT_NOQUOTES);
                 }
                 $filter = rawurlencode($filter);
             }
             //if urlencoded, but not html
-            elseif (rawurldecode($filter) == htmlspecialchars_decode(rawurldecode($filter))) {
-                $filter = rawurlencode(htmlspecialchars(rawurldecode($filter)));
+            elseif (rawurldecode($filter) == htmlspecialchars_decode(rawurldecode($filter), ENT_NOQUOTES)) {
+                $filter = rawurlencode(htmlspecialchars(rawurldecode($filter), ENT_NOQUOTES));
             }
 
             // replace spacer | sometimes on appended lastname which is already encoded and skipped above
@@ -1328,7 +1328,7 @@ class lexoffice_client {
         }
     }
 
-    private function valid_vat_id($vat_id) {
+    public function valid_vat_id($vat_id) {
         $vat_id = trim($vat_id);
         $country_chars = substr($vat_id, 0, 2);
         $vat_id_length = strlen($vat_id);

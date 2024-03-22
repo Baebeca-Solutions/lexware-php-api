@@ -33,15 +33,13 @@ try {
 
 
 test_start('empty api key');
-$lexoffice = new lexoffice_client(array(
-	'api_key' => '',
-	'ssl_verify' => false,
-));
-
 try {
-	$request = $lexoffice->get_profile();
+    $lexoffice = new lexoffice_client(array(
+        'api_key' => '',
+        'ssl_verify' => false,
+    ));
 } catch (lexoffice_exception $e) {
-	if ($e->getMessage() == 'lexoffice-php-api: invalid API Key') {
+	if ($e->getMessage() == 'lexoffice-php-api: no api_key is given') {
 		test_finished(true);
 	} else {
 		test_finished(false);
@@ -49,15 +47,13 @@ try {
 }
 
 test_start('false api key');
-$lexoffice = new lexoffice_client(array(
-	'api_key' => false,
-	'ssl_verify' => false,
-));
-
 try {
-	$request = $lexoffice->get_profile();
+    $lexoffice = new lexoffice_client(array(
+        'api_key' => false,
+        'ssl_verify' => false,
+    ));
 } catch (lexoffice_exception $e) {
-	if ($e->getMessage() == 'lexoffice-php-api: invalid API Key') {
+	if ($e->getMessage() == 'lexoffice-php-api: no api_key is given') {
 		test_finished(true);
 	} else {
 		test_finished(false);
