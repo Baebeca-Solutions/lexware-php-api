@@ -1178,6 +1178,16 @@ class lexoffice_client {
         ]);
     }
 
+    public function get_needed_tax_type(string $customer_country_code, string $vat_id, bool $physical_good, int $timestamp): string {
+        if (strtoupper($customer_country_code) === 'DE') return 'net';
+        if (!empty($vat_id) && $this->is_european_member($customer_country_code, $timestamp)) return 'intraCommunitySupply';
+        if (!$this->is_european_member($customer_country_code, $timestamp)) {
+            if ($physical_good) return 'thirdPartyCountryDelivery';
+            return 'thirdPartyCountryService';
+        }
+        return 'net';
+    }
+
     /**
      * Returns an array with the possible taxrates for the given country
      * @param string $country_code  2-letter country code
