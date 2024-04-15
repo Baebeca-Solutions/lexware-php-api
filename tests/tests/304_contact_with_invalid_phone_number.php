@@ -70,7 +70,7 @@ try {
     $contact = $lexoffice->get_contact($request->id);
     $contact->phoneNumbers->office[0] = "Manager Julius Cesar 034247632477mistake";
     $contact->phoneNumbers->business[0] = "Crazy 098934343444544654689893844345345436546456 Frog";
-    $request = $lexoffice->update_contact($request->id, json_decode(json_encode($contact), true));
+    $request = $lexoffice->update_contact($request->id, $contact);
     if ($request->id) {
         test('contact updated - id: '.$request->id);
         $contact_new = $lexoffice->get_contact($request->id);
