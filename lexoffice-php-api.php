@@ -885,7 +885,7 @@ class lexoffice_client {
         return $this->api_call('GET', 'credit-notes', $uuid);
     }
 
-    public function update_contact($uuid, $data) {
+    public function update_contact($uuid, array|object $data) {
         if (is_object($data)) $data = json_decode(json_encode($data, true), true);
         $data = $this->validate_contact_data($data);
         return $this->api_call('PUT', 'contacts', $uuid, $data);
