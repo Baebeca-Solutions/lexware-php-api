@@ -546,7 +546,17 @@ class lexoffice_client {
             // try again if new and account_number_already_exists | #188208
             if (isset($error['Response']->IssueList[0]->i18nKey) && $error['Response']->IssueList[0]->i18nKey === 'account_number_already_exists') {
                 sleep(3);
-                $new_contact = $this->create_contact($data);
+                try {
+                    $new_contact = $this->api_call('POST', 'contacts', '', $data);
+                }
+                catch (lexoffice_exception $e) {
+                    $error = $e->get_error();
+                    if (isset($error['Response']->IssueList[0]->i18nKey) && $error['Response']->IssueList[0]->i18nKey === 'account_number_already_exists') {
+                        sleep(3);
+                        $new_contact = $this->api_call('POST', 'contacts', '', $data);
+                    }
+                    else throw $e;
+                }
             }
             else throw $e;
         }
