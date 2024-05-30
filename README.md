@@ -1,5 +1,5 @@
 # lexoffice-php-api
-PHP (minimum PHP 8.0) Client für [lexoffice.de](https://www.lexoffice.de/?cid=6143&pid=pmc&utm_medium=affiliate&utm_source=baebeca&utm_campaign=start) Public API
+PHP (minimum 7.4 oder 8.0) Client für [lexoffice.de](https://www.lexoffice.de/?cid=6143&pid=pmc&utm_medium=affiliate&utm_source=baebeca&utm_campaign=start) Public API
 
 Wir lieben Automatisierung und die nahtlose Verzahnung von Systemen!
 
