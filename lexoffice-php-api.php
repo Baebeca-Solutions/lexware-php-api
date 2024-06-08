@@ -533,6 +533,26 @@ class lexoffice_client {
         }
     }
 
+    public function create_article($uuid, array|object $data) {
+        if (is_object($data)) $data = json_decode(json_encode($data, true), true);
+        //todo some validation checks
+        return $this->api_call('POST', 'articles', '', $data);
+    }
+
+    public function get_article($uuid) {
+        return $this->api_call('GET', 'articles', $uuid);
+    }
+
+    public function update_article($uuid, array|object $data) {
+        if (is_object($data)) $data = json_decode(json_encode($data, true), true);
+        //todo some validation checks
+        return $this->api_call('PUT', 'articles', $uuid, $data);
+    }
+
+    public function delete_article($uuid) {
+        return $this->api_call('DELETE', 'articles', $uuid);
+    }
+
     public function create_contact(array $data) {
         $data = $this->validate_contact_data($data);
 
@@ -631,7 +651,7 @@ class lexoffice_client {
         }
         return($recurring_templates);
     }
-    
+
     public function get_contact($uuid) {
         return $this->api_call('GET', 'contacts', $uuid);
     }
