@@ -1508,7 +1508,10 @@ class lexoffice_client {
             if (!isset($data['emailAddresses'][$type])) continue;
 
             foreach ($data['emailAddresses'][$type] as $key => $email) {
-                if (empty($email)) unset($data['emailAddresses'][$type][$key]);
+                $email = idn_to_ascii(mb_strtolower($email));
+                if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    unset($data['emailAddresses'][$type][$key]);
+                }
             }
             if (count($data['emailAddresses'][$type]) === 0) {
                 unset($data['emailAddresses'][$type]);
