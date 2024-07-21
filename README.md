@@ -2,9 +2,9 @@
 PHP Client für [lexoffice.de](https://www.lexoffice.de/?cid=6143&pid=pmc&utm_medium=affiliate&utm_source=baebeca&utm_campaign=start) Public API
 
 PHP Versionen:
-* PHP 7.4 (legacy, siehe Branch [master-php-7.4](https://github.com/Baebeca-Solutions/lexoffice-php-api/tree/master-php-7.4)
-* PHP 8.0 (legacy, siehe Branch [master-php-8.0](https://github.com/Baebeca-Solutions/lexoffice-php-api/tree/master-php-8.0)
 * PHP 8.3 (siehe Branch [master-php-8.3](https://github.com/Baebeca-Solutions/lexoffice-php-api/tree/master-php-8.3)
+* PHP 8.0 (legacy, siehe Branch [master-php-8.0](https://github.com/Baebeca-Solutions/lexoffice-php-api/tree/master-php-8.0)
+* PHP 7.4 (legacy, siehe Branch [master-php-7.4](https://github.com/Baebeca-Solutions/lexoffice-php-api/tree/master-php-7.4)
 
 Wir lieben Automatisierung und die nahtlose Verzahnung von Systemen!
 
