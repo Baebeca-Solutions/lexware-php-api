@@ -1501,6 +1501,12 @@ class lexoffice_client {
                 unset($data['company']['contactPersons'][0]['phoneNumber']);
         }
 
+        if (isset($data['company']['contactPersons'][0]['emailAddress'])) {
+            $email = idn_to_ascii(mb_strtolower($data['company']['contactPersons'][0]['emailAddress']));
+            if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                unset($data['company']['contactPersons'][0]['emailAddress']);
+            }
+        }
 
         $email_types = ['business', 'office', 'private', 'other'];
         // remove empty values from nested emailAddresses array
