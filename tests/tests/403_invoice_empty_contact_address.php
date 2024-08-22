@@ -124,7 +124,6 @@ try {
 
     if ($request_2->id) {
         test('invoice created - id: '.$request_2->id);
-        test(print_r($request_2, true));
         test_finished(true);
     } else {
         test_finished(false);
