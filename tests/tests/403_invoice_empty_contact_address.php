@@ -71,6 +71,8 @@ try {
     if ($e->get_error()['Response']->message == 'Referenced contact needs to have exactly one billing address, but 0 addresses were found.') {
         test_finished(true);
     } else {
+        test('We expect that this invoice will fail, because the contact has no address. seems like a lexoffice bug.');
+        test('If this bug on lexoffice side is fixed, please revert all the changes from case #215872 in related projects');
         test($e->getMessage());
         test(print_r($e->get_error(), true));
         test_finished(false);
