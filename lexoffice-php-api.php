@@ -533,7 +533,7 @@ class lexoffice_client {
         }
     }
 
-    public function create_article($uuid, array|object $data) {
+    public function create_article(array|object $data) {
         if (is_object($data)) $data = json_decode(json_encode($data, true), true);
         //todo some validation checks
         return $this->api_call('POST', 'articles', '', $data);
@@ -541,6 +541,21 @@ class lexoffice_client {
 
     public function get_article($uuid) {
         return $this->api_call('GET', 'articles', $uuid);
+    }
+
+    public function get_articles_all() {
+        $result = $this->api_call('GET', 'articles', '', '', '?page=0&size=250&direction=ASC&property=name');
+        $articles = $result->content;
+        unset($result->content);
+
+        for ($i = 1; $i < $result->totalPages; $i++) {
+            $result_page = $this->api_call('GET', 'articles', '', '', '?page='.$i.'&size=250&direction=ASC&property=name');
+            foreach ($result_page->content as $article) {
+                $articles[] = $article;
+            }
+            unset($result_page->content);
+        }
+        return($articles);
     }
 
     public function update_article($uuid, array|object $data) {
