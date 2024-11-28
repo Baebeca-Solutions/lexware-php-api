@@ -592,17 +592,17 @@ class lexoffice_client {
         return $this->api_call('POST', 'invoices', '', $data, ($finalized ? '?finalize=true' : ''));
     }
 
-    public function create_orderconfirmation($data) {
+    public function create_orderconfirmation($data, $finalized = false) {
         //todo some validation checks
-        return $this->api_call('POST', 'order-confirmations', '', $data);
+        return $this->api_call('POST', 'order-confirmations', '', $data, ($finalized ? '?finalize=true' : ''));
     }
 
     public function create_voucher($data) {
         return $this->api_call('POST', 'vouchers', '', $data);
     }
 
-    public function create_delivery_note($data) {
-        return $this->api_call('POST', 'delivery-notes', '', $data);
+    public function create_delivery_note($data, $finalized = false) {
+        return $this->api_call('POST', 'delivery-notes', '', $data, ($finalized ? '?finalize=true' : ''));
     }
 
     public function get_event($uuid) {
