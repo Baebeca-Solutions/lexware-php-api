@@ -8,9 +8,8 @@ if (is_file(__DIR__.'/_local_settings.php')) {
 	exit('no "/tests/_local_settings.php" found');
 }
 
-/** local test configuration */
-#$run_specific_test = 11;
-$debug = true;
+if (!isset($run_specific_test)) exit('$run_specific_test not defined');
+if (!isset($debug)) exit('$debug not defined');
 
 // enable your current oss config
 #$oss_config = 'origin';

@@ -394,10 +394,11 @@ class lexoffice_client {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 
             if ($resource == 'files') {
-                curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                    'Authorization: Bearer '.$this->api_key,
-                ]);
-            } else {
+                $header = ['Authorization: Bearer '.$this->api_key];
+                if (!empty($data)) $header[] = 'Accept: '.$data;
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+            }
+            else {
                 curl_setopt($ch, CURLOPT_HTTPHEADER, [
                     'Authorization: Bearer '.$this->api_key,
                     'Accept: application/json',
@@ -717,8 +718,9 @@ class lexoffice_client {
         return $this->api_call('GET', 'delivery-notes', $uuid);
     }
 
-    /* legacy function - will be removed in futere releases */
-    /* use get_pdf($type, $uuid, $filename) instead */
+    /**
+    *  @deprecated use get_pdf($type, $uuid, $filename) instead / will be removed in futere releases
+    */
     public function get_invoice_pdf($uuid, $filename) {
         // check if invoice is a draft
         $invoice = $this->get_invoice($uuid);
@@ -731,25 +733,36 @@ class lexoffice_client {
         if ($type === 'downpaymentinvoice') {
             $request = $this->get_down_payment_invoice($uuid);
             if (empty($request->files->documentFileId)) return false;
-            $request_file = $this->api_call('GET', 'files', $request->files->documentFileId);
-            if ($request_file) {
-                file_put_contents($filename, $request_file);
-                return true;
-            }
-            return false;
+            $documentFileId = $request->files->documentFileId;
         }
         else {
             $request = $this->api_call('GET', $type, $uuid, '', '/document');
-            if ($request && isset($request->documentFileId)) {
-                $request_file = $this->api_call('GET', 'files', $request->documentFileId);
-                if ($request_file) {
-                    file_put_contents($filename, $request_file);
-                    return true;
-                }
-                return false;
-            }
-            return false;
+            if (empty($request->documentFileId)) return false;
+            $documentFileId = $request->documentFileId;
         }
+
+        $request_file = $this->api_call('GET', 'files', $documentFileId);
+        if (!$request_file) return false;
+        file_put_contents($filename, $request_file);
+
+        // check additonal X-Rechnung XML
+        try {
+            $request_file = $this->api_call('GET', 'files', $request->documentFileId, 'application/xml');
+            if ($request_file) file_put_contents($filename.'.xml', $request_file);
+        }
+        catch (lexoffice_exception $e) {
+            if ($e->get_error()['HTTP Status'] === 404) {
+                // ingore it, it is not an X-Rechnung
+            }
+            elseif ($e->get_error()['HTTP Status'] === 500) {
+                // send if not an X-Rechnung
+                // todo lexoffice bug, wait for feedback from lex-dev (#223790)
+            }
+            else {
+                throw $e;
+            }
+        }
+        return true;
     }
 
     public function get_voucher($uuid) {
@@ -850,6 +863,7 @@ class lexoffice_client {
         $i = 1;
         $saved_files = [];
         foreach ($voucher->files as $uuid_file) {
+            $xRechnung = false;
             $request = $this->api_call('GET', 'files', $uuid_file, '', '', true);
 
             // unsused at the moment
@@ -868,6 +882,10 @@ class lexoffice_client {
                 case 'application/pdf':
                     $extension = 'pdf';
                     break;
+                case 'application/xml':
+                    $extension = 'xml';
+                    $xRechnung = true;
+                    break;
                 default:
                     throw new lexoffice_exception('lexoffice-php-api: unknown mime/type "'.$request['header']['content_type'].'". Check details via $e->get_error()', ['voucher_id' => $uuid, 'response' => $request]);
             }
@@ -875,8 +893,19 @@ class lexoffice_client {
             $filename = $filename_prefix.'_'.$i.'.'.$extension;
             file_put_contents($filename, $body);
             $saved_files[] = $filename;
+
+            // get additional visual files
+            if ($xRechnung) {
+                $request = $this->api_call('GET', 'files', $uuid_file, 'application/pdf', '', true);
+                $body = substr($request['body'], $request['header']['header_size']);
+                $filename = $filename_prefix.'_'.$i.'.pdf';
+                file_put_contents($filename, $body);
+                $saved_files[] = $filename;
+            }
+
             $i++;
         }
+
         return $saved_files;
     }
 
@@ -979,7 +1008,7 @@ class lexoffice_client {
         if (filesize($file) > 5*1024*1024) throw new lexoffice_exception('lexoffice-php-api: filesize to big', ['file' => $file, 'filesize' => filesize($file).' byte']);
         // use mimetype type from filename
         if (
-            in_array(substr(strtolower($file), -4), ['.pdf', '.jpg', '.png']) ||
+            in_array(substr(strtolower($file), -4), ['.pdf', '.jpg', '.png', '.xml']) ||
             in_array(substr(strtolower($file), -5), ['.jpeg'])
         ) {
             return $this->api_call('POST', 'files', '', ['file' => new CURLFile($file), 'type' => 'voucher']);
@@ -997,6 +1026,9 @@ class lexoffice_client {
             case 'image/jpeg':
                 $dummy_title = 'dummy.jpg';
                 break;
+            case 'application/xml':
+                $dummy_title = 'dummy.xml';
+                break;
             default:
                 throw new lexoffice_exception('lexoffice-php-api: invalid mime type', ['file' => $file]);
         }
@@ -1008,7 +1040,7 @@ class lexoffice_client {
         if (filesize($file) > 5*1024*1024) throw new lexoffice_exception('lexoffice-php-api: filesize to big', ['file' => $file, 'filesize' => filesize($file).' byte']);
         // use mimetype type from filename
         if (
-            in_array(substr(strtolower($file), -4), ['.pdf', '.jpg', '.png']) ||
+            in_array(substr(strtolower($file), -4), ['.pdf', '.jpg', '.png', '.xml']) ||
             in_array(substr(strtolower($file), -5), ['.jpeg'])
         ) {
             return $this->api_call('POST', 'vouchers', $uuid, ['file' => new CURLFile($file)], '/files');
@@ -1025,6 +1057,9 @@ class lexoffice_client {
                 break;
             case 'image/jpeg':
                 $dummy_title = 'dummy.jpg';
+                break;
+            case 'application/xml':
+                $dummy_title = 'dummy.xml';
                 break;
             default:
                 throw new lexoffice_exception('lexoffice-php-api: invalid mime type', ['file' => $file]);
