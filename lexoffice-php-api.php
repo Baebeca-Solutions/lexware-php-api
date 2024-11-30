@@ -883,6 +883,7 @@ class lexoffice_client {
                     $extension = 'pdf';
                     break;
                 case 'application/xml':
+                case 'text/xml':
                     $extension = 'xml';
                     $xRechnung = true;
                     break;
@@ -1027,6 +1028,7 @@ class lexoffice_client {
                 $dummy_title = 'dummy.jpg';
                 break;
             case 'application/xml':
+            case 'text/xml':
                 $dummy_title = 'dummy.xml';
                 break;
             default:
@@ -1059,6 +1061,7 @@ class lexoffice_client {
                 $dummy_title = 'dummy.jpg';
                 break;
             case 'application/xml':
+            case 'text/xml':
                 $dummy_title = 'dummy.xml';
                 break;
             default:
