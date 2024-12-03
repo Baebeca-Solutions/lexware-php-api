@@ -747,7 +747,7 @@ class lexoffice_client {
 
         // check additonal X-Rechnung XML
         try {
-            $request_file = $this->api_call('GET', 'files', $request->documentFileId, 'application/xml');
+            $request_file = $this->api_call('GET', 'files', $documentFileId, 'application/xml');
             if ($request_file) file_put_contents($filename.'.xml', $request_file);
         }
         catch (lexoffice_exception $e) {
