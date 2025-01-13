@@ -1,5 +1,5 @@
 # lexware-php-api (ehemals lexoffice-php-api)
-PHP Client für [office.lexware.de](https://office.lexware.de/?cid=6143&pid=pmc&utm_medium=affiliate&utm_source=baebeca&utm_campaign=start) Public API
+PHP Client für [office.lexware.de](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de) Public API
 
 PHP Versionen:
 * PHP 8.3 (siehe Branch [master-php-8.3](https://github.com/Baebeca-Solutions/lexware-php-api/tree/master-php-8.3)
@@ -8,7 +8,7 @@ PHP Versionen:
 
 Wir lieben Automatisierung und die nahtlose Verzahnung von Systemen!
 
-[office.lexware.de](https://office.lexware.de/?cid=6143&pid=pmc&utm_medium=affiliate&utm_source=baebeca&utm_campaign=start) stellt seinen Kunden eine öffentliche API-Schnittstelle zur Verfügung über die 
+[office.lexware.de](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de) stellt seinen Kunden eine öffentliche API-Schnittstelle zur Verfügung über die 
 bestehende Systeme integriert und Prozesse automatisiert werden können. Für diesen Ansatz haben 
 wir einen PHP-Client entwickelt und stellen diesen kostenfrei zur Verfügung. 
 
@@ -17,10 +17,10 @@ Alle weiteren Informationen finden Sie hier:
 * Eine technische Dokumentation in unserem [Wiki](https://wiki.baebeca.de/index.php?title=lexware-php-api)
  
 ## Baebeca Solutions bei office.lexware.de
-* [Integrationspartner](https://office.lexware.de/partner/public-api/integrationspartner/?cid=6143&pid=pmc&utm_medium=affiliate&utm_source=baebeca&utm_campaign=start)
-* [Softwarepartner](https://office.lexware.de/partner/?cid=6143&pid=pmc&utm_medium=affiliate&utm_source=baebeca&utm_campaign=start)
+* [Integrationspartner](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)
+* [Softwarepartner](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)
 
-[![Lexware Office - Technologie Partner](https://www.baebeca.de/wp-content/uploads/2024/09/Lexware-Office_TP_Badge_rgb-1-300x199.png)](https://office.lexware.de/?cid=6143&pid=pmc&utm_medium=affiliate&utm_source=baebeca&utm_campaign=start)
+[![Lexware Office - Technologie Partner](https://www.baebeca.de/wp-content/uploads/2024/09/Lexware-Office_TP_Badge_rgb-1-300x199.png)](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)
 
 ## office.lexware.de API-Dokumentation
 Die offizielle Lexware Office API-Dokumentation findest du [hier](https://developers.lexoffice.io/docs/).
