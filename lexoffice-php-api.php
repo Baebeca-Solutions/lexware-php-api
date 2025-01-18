@@ -519,6 +519,10 @@ class lexoffice_client {
 
         throw new lexoffice_exception('lexoffice-php-api: '.(!empty($error) ? $error : 'error in api request - check details via $e->get_error()'), [
             'HTTP Status' => $http_status,
+            'Requested Method' => $type,
+            'Requested Resource' => $resource,
+            'Requested Params' => $params,
+            'Requested Data' => $data,
             'Requested URI' => $curl_url,
             'Requested Payload' => $data,
             'Response' => json_decode($result),
@@ -667,7 +671,7 @@ class lexoffice_client {
         }
         return($recurring_templates);
     }
-
+    
     public function get_contact($uuid) {
         return $this->api_call('GET', 'contacts', $uuid);
     }
