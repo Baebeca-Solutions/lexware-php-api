@@ -1614,7 +1614,7 @@ class lexoffice_client {
         $this->rate_limit_max_tries = $max_tries;
     }
 
-    public function configure_rate_limit_callable(callable $callback = null) : void {
+    public function configure_rate_limit_callable(?callable $callback = null) : void {
         $this->rate_limit_callable = $callback;
     }
 
