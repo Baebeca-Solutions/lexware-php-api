@@ -2,7 +2,8 @@
 PHP Client für [office.lexware.de](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de) Public API
 
 PHP Versionen:
-* PHP 8.3 (siehe Branch [master-php-8.3](https://github.com/Baebeca-Solutions/lexware-php-api/tree/master-php-8.3)
+* PHP 8.4 (siehe Branch [master-php-8.4](https://github.com/Baebeca-Solutions/lexware-php-api/tree/master-php-8.4)
+* PHP 8.3 (legacy, siehe Branch [master-php-8.3](https://github.com/Baebeca-Solutions/lexware-php-api/tree/master-php-8.3)
 * PHP 8.0 (legacy, siehe Branch [master-php-8.0](https://github.com/Baebeca-Solutions/lexware-php-api/tree/master-php-8.0)
 * PHP 7.4 (legacy, siehe Branch [master-php-7.4](https://github.com/Baebeca-Solutions/lexware-php-api/tree/master-php-7.4)
 
