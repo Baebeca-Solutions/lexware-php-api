@@ -320,8 +320,8 @@ class lexoffice_client {
                 'title' => 'Slowakische Republik',
                 'taxtitle' => 'DPH',
                 'taxrates' => (object)[
-                    'default' => 20,
-                    'reduced' => [10],
+                    'default' => 23,
+                    'reduced' => [5, 19],
                     'nullrate' => false,
                 ],
                 'europe_member' => true,
@@ -1310,6 +1310,12 @@ class lexoffice_client {
         // spanien temporary inflation tax change (01.01.2021 - 31.12.2022)
         if (strtoupper($country_code) === 'ES' && $date >= 1672531200 && $date <= 1703977199) {
             $taxrates['reduced'][] = 5;
+        }
+
+        // Slowakische Republik old tax before 01.01.2025
+        if (strtoupper($country_code) === 'SK' && $date <= 1735685999) {
+            $taxrates['default'] = 20;
+            $taxrates['reduced'] = [0, 5, 10];
         }
 
         return $taxrates;
