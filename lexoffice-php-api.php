@@ -56,6 +56,8 @@ class lexoffice_client {
 
             /** europe_member | Europäischen Wirtschaftsraums (EWR) */
 
+            // https://www.wko.at/steuern/mehrwertsteuersaetze-eu
+
             'AT' => (object)[
                 'title' => 'Österreich',
                 'taxtitle' => 'USt',
@@ -111,7 +113,7 @@ class lexoffice_client {
                 'taxtitle' => 'DPH',
                 'taxrates' => (object)[
                     'default' => 21,
-                    'reduced' => [10, 15],
+                    'reduced' => [12],
                     'nullrate' => false,
                 ],
                 'europe_member' => true,
@@ -140,8 +142,8 @@ class lexoffice_client {
                 'title' => 'Estland',
                 'taxtitle' => 'KMKR',
                 'taxrates' => (object)[
-                    'default' => 20,
-                    'reduced' => [9],
+                    'default' => 22,
+                    'reduced' => [9, 13],
                     'nullrate' => false,
                 ],
                 'europe_member' => true,
@@ -160,7 +162,7 @@ class lexoffice_client {
                 'title' => 'Finnland',
                 'taxtitle' => 'AVL',
                 'taxrates' => (object)[
-                    'default' => 24,
+                    'default' => 25.5,
                     'reduced' => [10, 14],
                     'nullrate' => true,
                 ],
