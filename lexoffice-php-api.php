@@ -795,10 +795,6 @@ class lexoffice_client {
             if ($e->get_error()['HTTP Status'] === 404) {
                 // ingore it, it is not an X-Rechnung
             }
-            elseif ($e->get_error()['HTTP Status'] === 500) {
-                // send if not an X-Rechnung
-                // todo lexoffice bug, wait for feedback from lex-dev (#223790)
-            }
             else {
                 throw $e;
             }

@@ -9,6 +9,8 @@ test_start('download pdf with additional xml from an X-Rechnung');
 try {
     $lexoffice->get_pdf('invoices', $id_xrechnung, __DIR__.'/tmp/120_XRechnung.pdf');
     if (file_exists(__DIR__.'/tmp/120_XRechnung.pdf') && file_exists(__DIR__.'/tmp/120_XRechnung.pdf.xml')) {
+        unlink(__DIR__.'\tmp\120_XRechnung.pdf');
+        unlink(__DIR__.'\tmp\120_XRechnung.pdf.xml');
         test_finished(true);
     }
     else {
@@ -25,6 +27,7 @@ test_start('download pdf without additional xml from an default invoice');
 try {
     $lexoffice->get_pdf('invoices', $id_defaultInvoice, __DIR__.'/tmp/120_Rechnung.pdf');
     if (file_exists(__DIR__.'/tmp/120_Rechnung.pdf') && !file_exists(__DIR__.'/tmp/120_Rechnung.pdf.xml')) {
+        unlink(__DIR__.'\tmp\120_Rechnung.pdf');
         test_finished(true);
     }
     else {
