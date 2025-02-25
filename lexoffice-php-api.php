@@ -521,6 +521,10 @@ class lexoffice_client {
 
         throw new lexoffice_exception('lexoffice-php-api: '.(!empty($error) ? $error : 'error in api request - check details via $e->get_error()'), [
             'HTTP Status' => $http_status,
+            'Requested Method' => $type,
+            'Requested Resource' => $resource,
+            'Requested Params' => $params,
+            'Requested Data' => $data,
             'Requested URI' => $curl_url,
             'Requested Payload' => $data,
             'Response' => json_decode($result),
@@ -1523,6 +1527,10 @@ class lexoffice_client {
                 unset($data['company']['contactPersons'][0]['phoneNumber']);
         }
 
+        if (isset($data['company']['contactPersons'][0]['emailAddress'])) {
+            // only to lower, dont remove invalid emails! process should be stopped with error, otherwise search for this contact will be negative
+            $data['company']['contactPersons'][0]['emailAddress'] = mb_strtolower($data['company']['contactPersons'][0]['emailAddress']);
+        }
 
         $email_types = ['business', 'office', 'private', 'other'];
         // remove empty values from nested emailAddresses array
@@ -1530,7 +1538,8 @@ class lexoffice_client {
             if (!isset($data['emailAddresses'][$type])) continue;
 
             foreach ($data['emailAddresses'][$type] as $key => $email) {
-                if (empty($email)) unset($data['emailAddresses'][$type][$key]);
+                // only to lower, dont remove invalid emails! process should be stopped with error, otherwise search for this contact will be negative
+                $data['emailAddresses'][$type][$key] = mb_strtolower($data['emailAddresses'][$type][$key]);
             }
             if (count($data['emailAddresses'][$type]) === 0) {
                 unset($data['emailAddresses'][$type]);
