@@ -1563,14 +1563,8 @@ class lexoffice_client {
         }
 
         if (isset($data['company']['contactPersons'][0]['emailAddress'])) {
-            $email = mb_strtolower($data['company']['contactPersons'][0]['emailAddress']);
-            if (!empty($email)) $email = idn_to_ascii(mb_strtolower($data['company']['contactPersons'][0]['emailAddress']));
-            if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                unset($data['company']['contactPersons'][0]['emailAddress']);
-            }
-            else {
-                $data['company']['contactPersons'][0]['emailAddress'] = mb_strtolower($data['company']['contactPersons'][0]['emailAddress']);
-            }
+            // only to lower, dont remove invalid emails! process should be stopped with error, otherwise search for this contact will be negative
+            $data['company']['contactPersons'][0]['emailAddress'] = mb_strtolower($data['company']['contactPersons'][0]['emailAddress']);
         }
 
         $email_types = ['business', 'office', 'private', 'other'];
@@ -1579,14 +1573,8 @@ class lexoffice_client {
             if (!isset($data['emailAddresses'][$type])) continue;
 
             foreach ($data['emailAddresses'][$type] as $key => $email) {
-                $email = mb_strtolower($email);
-                if (!empty($email)) $email = idn_to_ascii(mb_strtolower($email));
-                if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    unset($data['emailAddresses'][$type][$key]);
-                }
-                else {
-                    $data['emailAddresses'][$type][$key] = mb_strtolower($data['emailAddresses'][$type][$key]);
-                }
+                // only to lower, dont remove invalid emails! process should be stopped with error, otherwise search for this contact will be negative
+                $data['emailAddresses'][$type][$key] = mb_strtolower($data['emailAddresses'][$type][$key]);
             }
 
             if (count($data['emailAddresses'][$type]) === 0) {

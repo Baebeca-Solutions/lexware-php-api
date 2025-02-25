@@ -1,7 +1,7 @@
 <?php
 
 $random_contact_name = 'contact_'.rand(11111111, 999999999999);
-test_start('Create Contact with invalid E-Mail Address');
+test_start('Create Contact with strange E-Mail Address');
 try {
     $request = $lexoffice->create_contact(array(
         'version' => 0,
@@ -19,18 +19,25 @@ try {
         ),
         'emailAddresses' => array(
             'business' => array(
-                '..test@email.@company.com',
+                'häns@klose.de',
             ),
         )
     ));
-    test_finished(true);
+    if ($request->id) {
+        $contact = $lexoffice->get_contact($request->id);
+        if (!empty($contact->emailAddresses->business[0])) {
+            test_finished(true);
+        }
+        else {
+            test_finished(false);
+        }
+    } else {
+        test_finished(false);
+    }
 } catch(lexoffice_exception $e) {
-    if ($e->get_error()['Response']->IssueList[0]->source === 'emailAddresses[0].emailAddress') {
-        test_finished(true);
-    }
-    else {
-        test_finished(true);
-    }
+    test($e->getMessage());
+    test(print_r($e->get_error(), true));
+    test_finished(false);
 }
 
 $random_contact_name = 'contact_'.rand(11111111, 999999999999);
@@ -54,24 +61,23 @@ try {
                     'salutation' => 'Herr',
                     'firstName' => 'John',
                     'lastName' => 'Doe',
-                    'emailAddress' =>'..test@email.@company.com',
+                    'emailAddress' =>'häns@klose.de',
                     'phoneNumber' => '022619202930',
                 )
             ),
         ),
-        'emailAddresses' => array(
-            'business' => array(
-                ''
-            ),
-        )
     ));
-    test_finished(false);
-    test_finished(true);
+    if ($request->id) {
+        $contact = $lexoffice->get_contact($request->id);
+        if (!empty($contact->company->contactPersons[0]->emailAddress)) {
+            test_finished(true);
+        }
+        else test_finished(false);
+    } else {
+        test_finished(false);
+    }
 } catch(lexoffice_exception $e) {
-    if ($e->get_error()['Response']->IssueList[0]->source === 'emailAddresses[0].emailAddress') {
-        test_finished(true);
-    }
-    else {
-        test_finished(true);
-    }
+    test($e->getMessage());
+    test(print_r($e->get_error(), true));
+    test_finished(false);
 }
