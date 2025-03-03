@@ -771,33 +771,32 @@ class lexoffice_client {
     }
 
     public function get_pdf($type, $uuid, $filename): bool {
-        if ($type === 'downpaymentinvoice') {
-            $request = $this->get_down_payment_invoice($uuid);
-            if (empty($request->files->documentFileId)) return false;
+        if ($type === 'downpaymentinvoice') $type = 'down-payment-invoices';
+        $request = $this->api_call('GET', $type, $uuid);
+
+        // no PDFs for drafts
+        if ($request->voucherStatus === 'draft') return false;
+
+        // document already exists
+        if (!empty($request->files->documentFileId)) {
             $documentFileId = $request->files->documentFileId;
         }
+        // document rendering needed
         else {
             $request = $this->api_call('GET', $type, $uuid, '', '/document');
             if (empty($request->documentFileId)) return false;
             $documentFileId = $request->documentFileId;
         }
 
+        // download pdf
         $request_file = $this->api_call('GET', 'files', $documentFileId);
         if (!$request_file) return false;
         file_put_contents($filename, $request_file);
 
         // check additonal X-Rechnung XML
-        try {
+        if (!empty($request->electronicDocumentProfile) && strtoupper($request->electronicDocumentProfile) === 'XRECHNUNG') {
             $request_file = $this->api_call('GET', 'files', $documentFileId, 'application/xml');
             if ($request_file) file_put_contents($filename.'.xml', $request_file);
-        }
-        catch (lexoffice_exception $e) {
-            if ($e->get_error()['HTTP Status'] === 404) {
-                // ingore it, it is not an X-Rechnung
-            }
-            else {
-                throw $e;
-            }
         }
         return true;
     }
