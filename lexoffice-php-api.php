@@ -794,7 +794,7 @@ class lexoffice_client {
         file_put_contents($filename, $request_file);
 
         // check additonal X-Rechnung XML
-        if (!empty($request->electronicDocumentProfile) && strtoupper($request->electronicDocumentProfile) === 'XRECHNUNG') {
+        if (!empty($request->electronicDocumentProfile) && $request->electronicDocumentProfile === 'XRechnung') {
             $request_file = $this->api_call('GET', 'files', $documentFileId, 'application/xml');
             if ($request_file) file_put_contents($filename.'.xml', $request_file);
         }
