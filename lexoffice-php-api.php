@@ -647,6 +647,10 @@ class lexoffice_client {
         return $this->api_call('POST', 'delivery-notes', '', $data, ($finalized ? '?finalize=true' : ''));
     }
 
+    public function create_dunning($data, $precedingSalesVoucherId) {
+        return $this->api_call('POST', 'dunnings', '', $data, ($precedingSalesVoucherId ? '?precedingSalesVoucherId='.$precedingSalesVoucherId : ''));
+    }
+
     public function get_event($uuid) {
         return $this->api_call('GET', 'event-subscriptions', $uuid);
     }
@@ -759,6 +763,10 @@ class lexoffice_client {
         return $this->api_call('GET', 'delivery-notes', $uuid);
     }
 
+    public function get_dunning($uuid) {
+        return $this->api_call('GET', 'dunnings', $uuid);
+    }
+
     /**
     *  @deprecated use get_pdf($type, $uuid, $filename) instead / will be removed in futere releases
     */
@@ -772,6 +780,7 @@ class lexoffice_client {
 
     public function get_pdf($type, $uuid, $filename): bool {
         if ($type === 'downpaymentinvoice') $type = 'down-payment-invoices';
+        if ($type === 'dunning') $type = 'dunnings';
         $request = $this->api_call('GET', $type, $uuid);
 
         // no PDFs for drafts
