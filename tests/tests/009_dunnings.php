@@ -119,16 +119,13 @@ try {
 	test_finished(false);
 }
 
-// dunnings are in draft, so not downloadable
-/*
 test_start('get dunning pdf');
+@unlink(__DIR__.'/tmp/009_dunning.pdf');
 if ($request->id) {
     test('download pdf and xml instantly without rendering');
     $lexoffice->get_pdf('dunning', $request->id, __DIR__ . '/tmp/009_dunning.pdf');
-    if (
-        is_file(__DIR__.'/tmp/009_dunning.pdf') &&
-        is_file(__DIR__.'/tmp/009_dunning.pdf.xml')
-    ) {
+    if (is_file(__DIR__.'/tmp/009_dunning.pdf')) {
+        unlink(__DIR__.'/tmp/009_dunning.pdf');
         test_finished(true);
     }
     else {
@@ -137,4 +134,3 @@ if ($request->id) {
 } else {
     test_finished(false);
 }
-*/

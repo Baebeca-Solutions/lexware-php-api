@@ -1,10 +1,4 @@
 <?php
-
-@unlink(__DIR__.'/tmp/021_invoice_final.pdf');
-@unlink(__DIR__.'/tmp/021_invoice_final.pdf.xml');
-@unlink(__DIR__.'/tmp/021_invoice_draft.pdf');
-@unlink(__DIR__.'/tmp/021_invoice_draft.pdf.xml');
-
 $random_contact_name = 'contact'.rand(11111111, 999999999999);
 test_start('create contact');
 $contact = '';
@@ -120,6 +114,8 @@ try {
 	], true);
 
 	if ($request->id) {
+        @unlink(__DIR__.'/tmp/021_invoice_final.pdf');
+        @unlink(__DIR__.'/tmp/021_invoice_final.pdf.xml');
 		test('x-invoice created - id: '.$request->id);
         test('download pdf and xml instantly without rendering');
         $lexoffice->get_pdf('invoices', $request->id, __DIR__ . '/tmp/021_invoice_final.pdf');
@@ -128,6 +124,8 @@ try {
             is_file(__DIR__.'/tmp/021_invoice_final.pdf') &&
             is_file(__DIR__.'/tmp/021_invoice_final.pdf.xml')
         ) {
+            unlink(__DIR__.'/tmp/021_invoice_final.pdf');
+            unlink(__DIR__.'/tmp/021_invoice_final.pdf.xml');
             test_finished(true);
         }
         else {
@@ -188,6 +186,8 @@ try {
     ], false);
 
     if ($request->id) {
+        @unlink(__DIR__.'/tmp/021_invoice_draft.pdf');
+        @unlink(__DIR__.'/tmp/021_invoice_draft.pdf.xml');
         test('x-invoice created - id: '.$request->id);
         test('download pdf and xml instantly without rendering');
         $request = $lexoffice->get_pdf('invoices', $request->id, __DIR__ . '/tmp/021_invoice_draft.pdf');
@@ -196,6 +196,8 @@ try {
             #is_file(__DIR__.'/tmp/021_invoice_draft.pdf') &&
             #is_file(__DIR__.'/tmp/021_invoice_draft.pdf.xml')
         ) {
+            unlink(__DIR__.'/tmp/021_invoice_draft.pdf');
+            unlink(__DIR__.'/tmp/021_invoice_draft.pdf.xml');
             test_finished(true);
         }
         else {

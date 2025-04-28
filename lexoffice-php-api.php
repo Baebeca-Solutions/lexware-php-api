@@ -783,8 +783,8 @@ class lexoffice_client {
         if ($type === 'dunning') $type = 'dunnings';
         $request = $this->api_call('GET', $type, $uuid);
 
-        // no PDFs for drafts
-        if ($request->voucherStatus === 'draft') return false;
+        // no PDFs for drafts, except dunnings
+        if ($request->voucherStatus === 'draft' && $type !== 'dunnings') return false;
 
         // document already exists
         if (!empty($request->files->documentFileId)) {
