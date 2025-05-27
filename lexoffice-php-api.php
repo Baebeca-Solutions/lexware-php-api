@@ -13,11 +13,11 @@
  * @license		If you need a copy under license for your closed software please contact us to get a business license
  **/
 
-// Official Lexoffice Documentation: https://developers.lexoffice.io/docs/
+// Official Lexoffice Documentation: https://developers.lexware.io
 
 class lexoffice_client {
     protected $api_key = '';
-    protected $api_endpoint = 'https://api.lexoffice.io';
+    protected $api_endpoint = 'https://api.lexware.io';
     protected $callback = false;
     protected $ssl_verify = true;
     protected $api_version = 'v1';

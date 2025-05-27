@@ -24,7 +24,7 @@ Alle weiteren Informationen finden Sie hier:
 [![Lexware Office - Technologie Partner](https://www.baebeca.de/wp-content/uploads/2024/09/Lexware-Office_TP_Badge_rgb-1-300x199.png)](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)
 
 ## office.lexware.de API-Dokumentation
-Die offizielle Lexware Office API-Dokumentation findest du [hier](https://developers.lexoffice.io/docs/).
+Die offizielle Lexware Office API-Dokumentation findest du [hier](https://developers.lexware.io).
 
 ## lexware-php-api Dokumentation
 Die Dokumentation mit allen Informationen findest du in unserem [Wiki](https://wiki.baebeca.de/index.php?title=lexware-php-api) unter https://wiki.baebeca.de/index.php?title=lexware-php-api
