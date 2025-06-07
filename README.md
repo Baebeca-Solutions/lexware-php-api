@@ -1,5 +1,5 @@
 # lexware-php-api (ehemals lexoffice-php-api)
-PHP Client für API von [office.lexware.de](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de) (ehemals lexoffice.de)
+PHP Client für [office.lexware.de](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de) API (ehemals lexoffice.de)
  
 ## Baebeca Solutions GmbH & Lexware Office
 * [Integrationspartner](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)
