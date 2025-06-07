@@ -34,16 +34,20 @@ An wen kann ich mich wenden, wenn ich Probleme oder Fragen habe?<br>
 Für diese Frage ist entscheidend, ob du eine Nutzungslizenz für unsere lexware-php-api erworben hast oder die kostenlose Variante nutzt.
 
 * Sofern eine Nutzungslizenz vorhanden ist, kannst du dich sich jederzeit gerne wie folgt an uns wenden:
-  * per Mail an support@baebeca.de
-  * per Telefon an 02261-8161691
-  * einen Github [issue](https://github.com/Baebeca-Solutions/lexware-php-api/issues) öffnen
+  * Ticket per Mail an support@baebeca.de
+  * Ticket per Telefon an 02261-8161691
 * Wenn du die kostenlose Version benutzt, kannst du einen Github [issue](https://github.com/Baebeca-Solutions/lexware-php-api/issues) öffnen.
 
 ## Lizenz
-Unsere Software wurde unter der "GNU Affero General Public License v3.0" Lizenz veröffentlicht. 
-Dies bedeutet, dass Sie unsere Software gerne in Ihren Projekten und Produkten nutzen dürfen, 
-solange Sie Ihr Projekt dann ebenso Quelloffen unter den in der Lizenz genannten Rahmenbedingungen 
-zur Verfügung stellen.
+Dieses Projekt steht unter der [GNU AGPLv3 Lizenz](./LICENSE_DE.txt).
 
-Wenn Sie Ihre Lösung nicht veröffentlichen möchten, Support benötigen, individuelle 
-Erweiterungen benötigen oder dieses Projekt einfach Unterstützen möchten, können Sie für 99,- EUR/Netto eine lifetime Nutzungslizenz erhalten. Setzte dich diesbezüglich einfach kurz mit uns via support@baebeca.de, 02261-8161691 oder über unsere [Website](https://www.baebeca.de/softwareentwicklung/projekte/lexware-php-client/) in Verbindung.
+Du darfst den Code frei verwenden, verändern und weiterverbreiten, **sofern deine Software ebenfalls quelloffen ist** (AGPLv3-konform).
+
+---
+
+### Kommerzielle / Closed-Source Nutzung
+
+Die Verwendung in **kommerziellen** oder **Closed-Source**-Projekten ist **nicht ohne eine kommerzielle Lizenz gestattet**.
+
+Bitte kontaktiere uns unter **support@baebeca.de**, um eine Lizenz zu erwerben.  
+Siehe dazu alle Infos: [Kommerzielle Lizenzbedingungen](./LICENSE-commercial_DE.md)
