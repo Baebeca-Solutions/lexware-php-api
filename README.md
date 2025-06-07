@@ -1,23 +1,7 @@
 # lexware-php-api (ehemals lexoffice-php-api)
-PHP Client für [office.lexware.de](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de) Public API
-
-PHP Versionen:
-* PHP 8.4 (siehe Branch [master-php-8.4](https://github.com/Baebeca-Solutions/lexware-php-api/tree/master-php-8.4)
-* PHP 8.3 (legacy, siehe Branch [master-php-8.3](https://github.com/Baebeca-Solutions/lexware-php-api/tree/master-php-8.3)
-* PHP 8.0 (legacy, siehe Branch [master-php-8.0](https://github.com/Baebeca-Solutions/lexware-php-api/tree/master-php-8.0)
-* PHP 7.4 (legacy, siehe Branch [master-php-7.4](https://github.com/Baebeca-Solutions/lexware-php-api/tree/master-php-7.4)
-
-Wir lieben Automatisierung und die nahtlose Verzahnung von Systemen!
-
-[office.lexware.de](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de) stellt seinen Kunden eine öffentliche API-Schnittstelle zur Verfügung über die 
-bestehende Systeme integriert und Prozesse automatisiert werden können. Für diesen Ansatz haben 
-wir einen PHP-Client entwickelt und stellen diesen kostenfrei zur Verfügung. 
-
-Alle weiteren Informationen finden Sie hier:
-* Allgemeine Themen auf unserer [Projektseite](https://www.baebeca.de/softwareentwicklung/projekte/lexware-php-client/)
-* Eine technische Dokumentation in unserem [Wiki](https://wiki.baebeca.de/index.php?title=lexware-php-api)
+PHP Client für API von [office.lexware.de](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de) (ehemals lexoffice.de)
  
-## Baebeca Solutions bei office.lexware.de
+## Baebeca Solutions GmbH & Lexware Office
 * [Integrationspartner](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)
 * [Softwarepartner](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)
 
@@ -27,7 +11,8 @@ Alle weiteren Informationen finden Sie hier:
 Die offizielle Lexware Office API-Dokumentation findest du [hier](https://developers.lexware.io).
 
 ## lexware-php-api Dokumentation
-Die Dokumentation mit allen Informationen findest du in unserem [Wiki](https://wiki.baebeca.de/index.php?title=lexware-php-api) unter https://wiki.baebeca.de/index.php?title=lexware-php-api
+Die Dokumentation mit allen Informationen findest du in unserem [Wiki](https://wiki.baebeca.de/index.php?title=lexware-php-api).<br>
+Allgemeine Themen findest du auf unserer [Projektseite](https://www.baebeca.de/softwareentwicklung/lexware-php-client/).
 
 ## Support
 An wen kann ich mich wenden, wenn ich Probleme oder Fragen habe?<br>
