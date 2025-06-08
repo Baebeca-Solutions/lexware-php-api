@@ -1,4 +1,4 @@
-# Commercial License Terms
+# Commercial License Terms (English)
 
 This project is dual licensed:
 

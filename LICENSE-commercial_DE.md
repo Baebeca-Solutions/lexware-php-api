@@ -1,4 +1,4 @@
-# Kommerzielle Lizenzbedingungen
+# Kommerzielle Lizenzbedingungen (Deutsch)
 
 Dieses Projekt ist dual lizenziert:
 
