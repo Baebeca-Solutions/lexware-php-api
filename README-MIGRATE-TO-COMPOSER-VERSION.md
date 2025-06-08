@@ -24,11 +24,11 @@ Wenn du die Namespaces nicht global setzt sind die Änderunge:
 Wenn du die Message der Exception (```$e->getMessage()```) auswertest musst du wiefolgt ersetzen
 - ```lexoffice-php-api:``` => ```LexwareApi:``` 
 
-# 4) Neue Exception Detail Methode
+# 4) Geänderte Exception Detail Methode
 Nutze die neue Methode um die Details zu erhalten
 - ```->get_error()``` => ```->getError()``` 
 
-# 5) Geänderter String in Exception Message
+# 5) Geänderte Strings in Exception Message
 Hier wurde jeweils das Wort "lexoffice" durch "lexware" ersetzt.
 - ```action not possible due a lexoffice contract issue``` => ```action not possible due a lexware contract issue```
 - ```Authenticated but insufficient scope or insufficient access rights in lexoffice``` => ```Authenticated but insufficient scope or insufficient access rights in lexware```

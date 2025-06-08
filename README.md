@@ -1,6 +1,14 @@
 # lexware-php-api (ehemals lexoffice-php-api)
 PHP Client für [office.lexware.de](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de) API (ehemals lexoffice.de)
- 
+
+- [Github](https://github.com/Baebeca-Solutions/lexware-php-api)
+- [Wiki (Dokumenation)](https://wiki.baebeca.de/index.php?title=lexware-php-api)
+- [Projektseite](https://www.baebeca.de/softwareentwicklung/lexware-php-client/)
+- [Packagist](https://packagist.org/packages/baebeca/lexware-php-api)
+- [Lexware Office API-Dokumentation](https://developers.lexware.io)
+
+[![Lexware Office - Technologie Partner](https://www.baebeca.de/wp-content/uploads/2024/09/Lexware-Office_TP_Badge_rgb-1-300x199.png)](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)
+
 ## Composer
 Ersetze "php-x.x" mit deiner gewünschten PHP Version.
  
@@ -16,11 +24,10 @@ Ersetze "php-x.x" mit deiner gewünschten PHP Version.
 }
 ```
 
-### Nutzung
+## Nutzung
 
 ```PHP
 <?php
-
 require __DIR__.'/vendor/autoload.php';
 use \Baebeca\LexwareApi;
 use \Baebeca\LexwareException;
@@ -29,7 +36,9 @@ $lexware = new LexwareApi([
     'api_key' => 'my-api-key'
 ]);
 ```
-### Error Handling
+- [Wiki (Dokumenation)](https://wiki.baebeca.de/index.php?title=lexware-php-api)
+
+## Error Handling
 
 ```PHP
 <?php 
@@ -43,16 +52,7 @@ catch (LexwareException $e) {
 }
 ```
 
-## Baebeca Solutions GmbH & Lexware Office
-* [Integrationspartner](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)
-* [Softwarepartner](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)
-
-[![Lexware Office - Technologie Partner](https://www.baebeca.de/wp-content/uploads/2024/09/Lexware-Office_TP_Badge_rgb-1-300x199.png)](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)
-
-## Dokumentation
-- [lexware-php-api - Wiki](https://wiki.baebeca.de/index.php?title=lexware-php-api)
-- [lexware-php-api - Projektseite](https://www.baebeca.de/softwareentwicklung/lexware-php-client/)
-- [Offizielle Lexware Office API-Dokumentation](https://developers.lexware.io)
+- [Wiki (Dokumenation)](https://wiki.baebeca.de/index.php?title=lexware-php-api)
 
 ## Support
 An wen kann ich mich wenden, wenn ich Probleme oder Fragen habe?<br>
