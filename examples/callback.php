@@ -2,7 +2,6 @@
 
 // to prevent execute callbacks for other keys/companies, you can setup your "organizationId" as whitelist
 $company_id = '';
-// blub
 
 $data_webhook = file_get_contents('php://input');
 $data = json_decode($data_webhook);
@@ -10,7 +9,7 @@ $data = json_decode($data_webhook);
 $headers = getallheaders();
 if (!isset($headers['X-Lxo-Signature'])) exit('no X-Lxo-Signature is given');
 
-$lexoffice_key_public_api = '-----BEGIN PUBLIC KEY-----
+$lexware_key_public_api = '-----BEGIN PUBLIC KEY-----
 MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAtCkZXZqT2zFRmA83KsBC
 tQSv9t+AaWiZpRWvzE4wiQEh0aHzNYkT/DlP419pngqoLxnqW9SsgWfKOG3utoEV
 z+Lru9odZntW/n/yaRK3f0AcMtuWs/Z1PZ4BbN/RlFYyqlPg0VfuAvZMAa+J9WAl
@@ -25,7 +24,7 @@ ahwFA9iHtwBw7yK5VfM/hA+JeF2FXYhTdehfClAQt1YCYXkgUEFxm9idRdBoCY6U
 bmFUXQLdi7tZyDor8Rxoq2MCAwEAAQ==
 -----END PUBLIC KEY-----';
 
-if (1 === openssl_verify ($data_webhook, base64_decode($headers['X-Lxo-Signature']), $lexoffice_key_public_api, 'RSA-SHA512')) {
+if (1 === openssl_verify ($data_webhook, base64_decode($headers['X-Lxo-Signature']), $lexware_key_public_api, 'RSA-SHA512')) {
 
 	if ($company_id && $data->organizationId == $company_id) exit('invalid organizationId');
 

@@ -3,7 +3,7 @@ $random_contact_name = 'contact'.rand(11111111, 999999999999);
 test_start('create contact');
 $contact = '';
 try {
-    $request = $lexoffice->create_contact(array(
+    $request = $lexware->create_contact(array(
         'version' => 0,
         'roles' => array(
             'customer' => array(
@@ -62,15 +62,15 @@ try {
     }
 
 }
-catch(lexoffice_exception $e) {
+catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
-    test(print_r($e->get_error(), true));
+    test(print_r($e->getError(), true));
     test_finished(false);
 }
 
 test_start('create final invoice and download non rendered version');
 try {
-	$request = $lexoffice->create_invoice([
+	$request = $lexware->create_invoice([
 		'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
 		'introduction' => 'Einleitungstext',
 		'remark' => "Fußzeile\r\nMehrzeilig",
@@ -118,7 +118,7 @@ try {
         @unlink(__DIR__.'/tmp/021_invoice_final.pdf.xml');
 		test('x-invoice created - id: '.$request->id);
         test('download pdf and xml instantly without rendering');
-        $lexoffice->get_pdf('invoices', $request->id, __DIR__ . '/tmp/021_invoice_final.pdf');
+        $lexware->get_pdf('invoices', $request->id, __DIR__ . '/tmp/021_invoice_final.pdf');
 
         if (
             is_file(__DIR__.'/tmp/021_invoice_final.pdf') &&
@@ -134,15 +134,15 @@ try {
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
 	test($e->getMessage());
-	test(print_r($e->get_error(), true));
+	test(print_r($e->getError(), true));
 	test_finished(false);
 }
 
 test_start('create draft invoice and download non rendered version');
 try {
-    $request = $lexoffice->create_invoice([
+    $request = $lexware->create_invoice([
         'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
         'introduction' => 'Einleitungstext',
         'remark' => "Fußzeile\r\nMehrzeilig",
@@ -190,7 +190,7 @@ try {
         @unlink(__DIR__.'/tmp/021_invoice_draft.pdf.xml');
         test('x-invoice created - id: '.$request->id);
         test('download pdf and xml instantly without rendering');
-        $request = $lexoffice->get_pdf('invoices', $request->id, __DIR__ . '/tmp/021_invoice_draft.pdf');
+        $request = $lexware->get_pdf('invoices', $request->id, __DIR__ . '/tmp/021_invoice_draft.pdf');
         if (
             $request === false // at the moment no pdfs for drafts
             #is_file(__DIR__.'/tmp/021_invoice_draft.pdf') &&
@@ -206,9 +206,9 @@ try {
     } else {
         test_finished(false);
     }
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
-    test(print_r($e->get_error(), true));
+    test(print_r($e->getError(), true));
     test_finished(false);
 }
 

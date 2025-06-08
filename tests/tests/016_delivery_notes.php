@@ -2,7 +2,7 @@
 
 test_start('create delivery_note without contact');
 try {
-	$request = $lexoffice->create_delivery_note([
+	$request = $lexware->create_delivery_note([
 		'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
 		'introduction' => 'Einleitungstext',
 		'remark' => "Fußzeile\r\nMehrzeilig",
@@ -53,9 +53,9 @@ try {
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
 	test($e->getMessage());
-	test(print_r($e->get_error(), true));
+	test(print_r($e->getError(), true));
 	test_finished(false);
 }
 
@@ -63,7 +63,7 @@ test_start('create delivery_note with contact');
 try {
 	$random_contact_name = 'contact_'.rand(11111111, 999999999999);
 	try {
-		$request_contact = $lexoffice->create_contact(array(
+		$request_contact = $lexware->create_contact(array(
 			'version' => 0,
 			'roles' => array(
 				'customer' => array(
@@ -122,14 +122,14 @@ try {
 			test_finished(false);
 		}
 
-	} catch(lexoffice_exception $e) {
+	} catch(\Baebeca\LexwareException $e) {
 		test($e->getMessage());
-		test(print_r($e->get_error(), true));
+		test(print_r($e->getError(), true));
 		test_finished(false);
 	}
 
 
-	$request = $lexoffice->create_delivery_note([
+	$request = $lexware->create_delivery_note([
 		'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
 		'introduction' => 'Einleitungstext',
 		'remark' => "Fußzeile\r\nMehrzeilig",
@@ -175,8 +175,8 @@ try {
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
 	test($e->getMessage());
-	test(print_r($e->get_error(), true));
+	test(print_r($e->getError(), true));
 	test_finished(false);
 }

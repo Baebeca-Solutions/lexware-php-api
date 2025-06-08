@@ -16,7 +16,7 @@ if ($upload_vouchers_without_image) {
             if (strlen($month) == 1) $month = '0'.$month;
             $year = rand(19, 21);
 
-            $request = $lexoffice->create_voucher([
+            $request = $lexware->create_voucher([
                 'version' => 0,
                 'type' => 'salesinvoice',
                 'voucherNumber' => '6126',
@@ -42,9 +42,9 @@ if ($upload_vouchers_without_image) {
             } else {
                 test_finished(false);
             }
-        } catch(lexoffice_exception $e) {
+        } catch(\Baebeca\LexwareException $e) {
             test($e->getMessage());
-            test(print_r($e->get_error(), true));
+            test(print_r($e->getError(), true));
             test_finished(false);
         }
     }
@@ -61,7 +61,7 @@ if ($upload_vouchers_with_image) {
             if (strlen($month) == 1) $month = '0'.$month;
             $year = rand(19, 21);
 
-            $request = $lexoffice->create_voucher([
+            $request = $lexware->create_voucher([
                 'version' => 0,
                 'type' => 'salesinvoice',
                 'voucherNumber' => '6126',
@@ -85,19 +85,19 @@ if ($upload_vouchers_with_image) {
                 test('voucher created ('.$i.' / '.$amount_vouchers.') - id: '.$request->id);
 
                 try {
-                    $lexoffice->upload_voucher($request->id, __DIR__.'/files/dummy_2.pdf');
+                    $lexware->upload_voucher($request->id, __DIR__.'/files/dummy_2.pdf');
                     test('voucher uploaded');
-                } catch (lexoffice_exception $e2) {
+                } catch (\Baebeca\LexwareException $e2) {
                     test($e2->getMessage());
-                    test(print_r($e2->get_error(), true));
+                    test(print_r($e2->getError(), true));
                     test_finished(false);
                 }
             } else {
                 test_finished(false);
             }
-        } catch(lexoffice_exception $e) {
+        } catch(\Baebeca\LexwareException $e) {
             test($e->getMessage());
-            test(print_r($e->get_error(), true));
+            test(print_r($e->getError(), true));
             test_finished(false);
         }
     }

@@ -1,6 +1,35 @@
 # lexware-php-api (ehemals lexoffice-php-api)
 PHP Client für [office.lexware.de](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de) API (ehemals lexoffice.de)
  
+## Composer
+Ersetze "php-x.x" mit deiner gewünschten PHP Version.
+ 
+### CLI
+```composer require baebeca/lexware-php-api:dev-php-x.x```
+
+### composer.json
+```json
+{
+  "require": {
+    "baebeca/lexware-php-api": "dev-php-x.x",
+  }
+}
+```
+
+### Nutzung
+
+```PHP
+<?php
+
+require __DIR__.'/vendor/autoload.php';
+use \Baebeca\LexwareApi;
+use \Baebeca\LexwareException;
+
+$api = new LexwareApi([
+    'api_key' => 'my-api-key'
+]);
+```
+
 ## Baebeca Solutions GmbH & Lexware Office
 * [Integrationspartner](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)
 * [Softwarepartner](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)

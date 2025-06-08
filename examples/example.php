@@ -1,35 +1,43 @@
 <?php
-require_once(__DIR__.'/lexoffice-php-api.php');
+require __DIR__.'/../vendor/autoload.php';
+use \Baebeca\LexwareApi;
+use \Baebeca\LexwareException;
 
-// please add your API Key
-$api_key = '';
+$lexware = new LexwareApi([
+    'api_key' => 'my-api-key'
+]);
 
-$lexoffice = new lexoffice_client(array(
-	'api_key' => $api_key
-));
+// catch errors
+try {
+    $invoices = $lexware->get_last_invoices(-5);
+}
+catch (LexwareException $e) {
+    var_dump($e->getMessage());
+    print_r($e->getError());
+}
 
 // show active Webhooks
-#print_r($lexoffice->get_events_all());
+#print_r($lexware->get_events_all());
 
 // create webhook
-#print_r($lexoffice->add_event('contact.created', 'https://domain.tld/lexoffice-php-client/callback.php'));
+#print_r($lexware->add_event('contact.created', 'https://domain.tld/lexware-php-client/callback.php'));
 
 // delete webhook
-#print_r($lexoffice->delete_event('a8a0a5a6-0dc1-4c9b-bfaa-7de4d4a3d6a5'));
+#print_r($lexware->delete_event('a8a0a5a6-0dc1-4c9b-bfaa-7de4d4a3d6a5'));
 
 // get specific invoice
-#echo '<pre>'.print_r($lexoffice->get_invoice('7f0f0f7f-dd61-4bf7-a9f7-a67b0530c7e9'), true).'</pre>';
+#echo '<pre>'.print_r($lexware->get_invoice('7f0f0f7f-dd61-4bf7-a9f7-a67b0530c7e9'), true).'</pre>';
 
 // echo specific invoice number
-#$invoice = $lexoffice->get_invoice('350d7ea4-63f9-44fb-a404-b4de167b4a8e');
+#$invoice = $lexware->get_invoice('350d7ea4-63f9-44fb-a404-b4de167b4a8e');
 #echo $invoice->voucherNumber;
 
 // download invoice pdf
-#$lexoffice->get_invoice_pdf('7f0f0f7f-dd61-4bf7-a9f7-a67b0530c7e9', 'test.pdf'), true);
+#$lexware->get_invoice_pdf('7f0f0f7f-dd61-4bf7-a9f7-a67b0530c7e9', 'test.pdf'), true);
 
 // create draft invoice
 /*
-print_r($lexoffice->create_invoice(array(
+print_r($lexware->create_invoice(array(
 	'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
 	'introduction' => 'Einleitungstext',
 	'remark' => "Fußzeile\r\nMehrzeilig",

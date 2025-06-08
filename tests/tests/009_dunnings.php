@@ -1,7 +1,7 @@
 <?php
 test_start('invoice - 19% UST position');
 try {
-    $request = $lexoffice->create_invoice([
+    $request = $lexware->create_invoice([
         'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
         'introduction' => 'Einleitungstext',
         'remark' => "Fußzeile\r\nMehrzeilig",
@@ -53,16 +53,16 @@ try {
     } else {
         test_finished(false);
     }
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
-    test(print_r($e->get_error(), true));
+    test(print_r($e->getError(), true));
     test_finished(false);
 }
 
 
 test_start('create dunning from existing invoice');
 try {
-	$request = $lexoffice->create_dunning([
+	$request = $lexware->create_dunning([
         'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
         'introduction' => 'Einleitungstext',
         'remark' => "Fußzeile\r\nMehrzeilig",
@@ -113,9 +113,9 @@ try {
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
 	test($e->getMessage());
-	test(print_r($e->get_error(), true));
+	test(print_r($e->getError(), true));
 	test_finished(false);
 }
 
@@ -123,7 +123,7 @@ test_start('get dunning pdf');
 @unlink(__DIR__.'/tmp/009_dunning.pdf');
 if ($request->id) {
     test('download pdf and xml instantly without rendering');
-    $lexoffice->get_pdf('dunning', $request->id, __DIR__ . '/tmp/009_dunning.pdf');
+    $lexware->get_pdf('dunning', $request->id, __DIR__ . '/tmp/009_dunning.pdf');
     if (is_file(__DIR__.'/tmp/009_dunning.pdf')) {
         unlink(__DIR__.'/tmp/009_dunning.pdf');
         test_finished(true);

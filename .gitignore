@@ -1,3 +1,5 @@
 .idea/
-/tests/_local_settings.php
-/tests/tests/tmp/
+tests/_local_settings.php
+tests/tests/tmp/
+vendor/
+composer.lock

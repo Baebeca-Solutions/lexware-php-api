@@ -62,12 +62,12 @@
                 <ram:ID>123456</ram:ID>
                 <ram:Name>Baebeca Solutions GmbH</ram:Name>
                 <ram:DefinedTradeContact>
-                    <ram:PersonName>lexoffice_api_test@baebeca.de</ram:PersonName>
+                    <ram:PersonName>lexware_api_test@baebeca.de</ram:PersonName>
                     <ram:TelephoneUniversalCommunication>
                         <ram:CompleteNumber>02261-816160</ram:CompleteNumber>
                     </ram:TelephoneUniversalCommunication>
                     <ram:EmailURIUniversalCommunication>
-                        <ram:URIID>lexoffice_api_test@baebeca.de</ram:URIID>
+                        <ram:URIID>lexware_api_test@baebeca.de</ram:URIID>
                     </ram:EmailURIUniversalCommunication>
                 </ram:DefinedTradeContact>
                 <ram:PostalTradeAddress>
@@ -77,7 +77,7 @@
                     <ram:CountryID>DE</ram:CountryID>
                 </ram:PostalTradeAddress>
                 <ram:URIUniversalCommunication>
-                    <ram:URIID schemeID="EM">lexoffice_api_test@baebeca.de</ram:URIID>
+                    <ram:URIID schemeID="EM">lexware_api_test@baebeca.de</ram:URIID>
                 </ram:URIUniversalCommunication>
                 <ram:SpecifiedTaxRegistration>
                     <ram:ID schemeID="VA">DE323775624</ram:ID>

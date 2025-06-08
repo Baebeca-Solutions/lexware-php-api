@@ -9,7 +9,7 @@ if ($create_tons_of_customers) {
         $random_contact_name = 'contact_'.rand(11111111, 999999999999);
         test_start('create contact ('.$i.' / '.($amount_k*1000).') - company');
         try {
-            $request = $lexoffice->create_contact(array(
+            $request = $lexware->create_contact(array(
                 'version' => 0,
                 'roles' => array(
                     'customer' => array(
@@ -71,9 +71,9 @@ if ($create_tons_of_customers) {
                 test_finished(false);
             }
 
-        } catch(lexoffice_exception $e) {
+        } catch(\Baebeca\LexwareException $e) {
             test($e->getMessage());
-            test(print_r($e->get_error(), true));
+            test(print_r($e->getError(), true));
             test_finished(false);
         }
     }

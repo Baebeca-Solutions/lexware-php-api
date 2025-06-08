@@ -1,7 +1,7 @@
 <?php
 test_start('create draft invoice and download pdf (not possible)');
 try {
-	$request = $lexoffice->create_invoice([
+	$request = $lexware->create_invoice([
 		'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
 		'introduction' => 'Einleitungstext',
 		'remark' => "Fußzeile\r\nMehrzeilig",
@@ -50,10 +50,10 @@ try {
 		test('draft invoice created - id: '.$request->id);
 		test('try download pdf');
 		try {
-			$lexoffice->get_invoice_pdf($request->id, 'test.pdf');
-		} catch (lexoffice_exception $e) {
+			$lexware->get_invoice_pdf($request->id, 'test.pdf');
+		} catch (\Baebeca\LexwareException $e) {
 			test($e->getMessage());
-			if ($e->getMessage() == 'lexoffice-php-api: requested invoice is a draft. Cannot create/download pdf file. Check details via $e->get_error()') {
+			if ($e->getMessage() == 'LexwareApi: requested invoice is a draft. Cannot create/download pdf file. Check details via $e->getError()') {
 				test_finished(true);
 			} else {
 				test_finished(false);
@@ -62,7 +62,7 @@ try {
 	} else {
 		test_finished(false);
 	}
-} catch (lexoffice_exception $e) {
+} catch (\Baebeca\LexwareException $e) {
 	test($e->getMessage());
 	test_finished(false);
 }

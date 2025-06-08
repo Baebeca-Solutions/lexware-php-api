@@ -1,5 +1,7 @@
 <?php
-require(__DIR__.'/../lexoffice-php-api.php');
+require __DIR__.'/../vendor/autoload.php';
+use \Baebeca\LexwareApi;
+use \Baebeca\LexwareException;
 
 // if local developer test include secret api keys
 if (is_file(__DIR__.'/_local_settings.php')) {
@@ -21,7 +23,7 @@ $taxrate_7 = 7;
 /** local test configuration */
 
 if (!isset($sandbox)) $sandbox = false;
-$lexoffice = new lexoffice_client(array(
+$lexware = new \Baebeca\LexwareApi(array(
 	'api_key' => $api_key,
 	'ssl_verify' => false,
 	'sandbox' => $sandbox,

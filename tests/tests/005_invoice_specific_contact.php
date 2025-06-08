@@ -3,7 +3,7 @@
 $random_contact_name = 'contact_'.rand(11111111, 999999999999);
 test_start('create invoice for specific contact');
 try {
-	$request = $lexoffice->create_contact(array(
+	$request = $lexware->create_contact(array(
 		'version' => 0,
 		'roles' => array(
 			'customer' => array(
@@ -60,7 +60,7 @@ try {
 
 	if ($request->id) {
 		try {
-			$request = $lexoffice->create_invoice([
+			$request = $lexware->create_invoice([
 				'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
 				'introduction' => 'Einleitungstext',
 				'remark' => "Fußzeile\r\nMehrzeilig",
@@ -106,17 +106,17 @@ try {
 			} else {
 				test_finished(false);
 			}
-		} catch(lexoffice_exception $e) {
+		} catch(\Baebeca\LexwareException $e) {
 			test($e->getMessage());
-			test(print_r($e->get_error(), true));
+			test(print_r($e->getError(), true));
 			test_finished(false);
 		}
 	} else {
 		test_finished(false);
 	}
 
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
 	test($e->getMessage());
-	test(print_r($e->get_error(), true));
+	test(print_r($e->getError(), true));
 	test_finished(false);
 }

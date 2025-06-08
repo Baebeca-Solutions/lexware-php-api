@@ -2,7 +2,7 @@
 
 test_start('create a quoation');
 try {
-    $request = $lexoffice->create_quotation([
+    $request = $lexware->create_quotation([
         'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
         'expirationDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
         'introduction' => 'Einleitungstext',
@@ -72,16 +72,16 @@ try {
     } else {
         test_finished(false);
     }
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
-    test(print_r($e->get_error(), true));
+    test(print_r($e->getError(), true));
     test_finished(false);
 }
 
 test_start('get a quoation');
 try {
     // $request->id from previous call
-    $request = $lexoffice->get_quotation($request->id);
+    $request = $lexware->get_quotation($request->id);
 
     if ($request->id) {
         test_finished(true);
@@ -89,8 +89,8 @@ try {
         test_finished(false);
     }
 
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
-    test(print_r($e->get_error(), true));
+    test(print_r($e->getError(), true));
     test_finished(false);
 }

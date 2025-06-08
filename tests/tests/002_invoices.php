@@ -2,7 +2,7 @@
 
 test_start('create draft invoice');
 try {
-	$request = $lexoffice->create_invoice([
+	$request = $lexware->create_invoice([
 		'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
 		'introduction' => 'Einleitungstext',
 		'remark' => "Fußzeile\r\nMehrzeilig",
@@ -55,9 +55,10 @@ try {
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
+} 
+catch (\Baebeca\LexwareException $e) {
 	test($e->getMessage());
-	test(print_r($e->get_error(), true));
+	test(print_r($e->getError(), true));
 	test_finished(false);
 }
 
@@ -67,7 +68,7 @@ try {
 
 test_start('invoice - 0% UST position');
 try {
-	$request = $lexoffice->create_invoice([
+	$request = $lexware->create_invoice([
 		'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
 		'introduction' => 'Einleitungstext',
 		'remark' => "Fußzeile\r\nMehrzeilig",
@@ -119,16 +120,17 @@ try {
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
+} 
+catch (\Baebeca\LexwareException $e) {
 	test($e->getMessage());
-	test(print_r($e->get_error(), true));
+	test(print_r($e->getError(), true));
 	test_finished(false);
 }
 
 
 test_start('invoice - 7% UST position');
 try {
-	$request = $lexoffice->create_invoice([
+	$request = $lexware->create_invoice([
 		'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
 		'introduction' => 'Einleitungstext',
 		'remark' => "Fußzeile\r\nMehrzeilig",
@@ -180,15 +182,16 @@ try {
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
+} 
+catch (\Baebeca\LexwareException $e) {
 	test($e->getMessage());
-	test(print_r($e->get_error(), true));
+	test(print_r($e->getError(), true));
 	test_finished(false);
 }
 
 test_start('invoice - 19% UST position');
 try {
-	$request = $lexoffice->create_invoice([
+	$request = $lexware->create_invoice([
 		'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
 		'introduction' => 'Einleitungstext',
 		'remark' => "Fußzeile\r\nMehrzeilig",
@@ -240,15 +243,16 @@ try {
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
+} 
+catch (\Baebeca\LexwareException $e) {
 	test($e->getMessage());
-	test(print_r($e->get_error(), true));
+	test(print_r($e->getError(), true));
 	test_finished(false);
 }
 
 test_start('invoice - 0%, 19, 7% UST position');
 try {
-	$request = $lexoffice->create_invoice([
+	$request = $lexware->create_invoice([
 		'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
 		'introduction' => 'Einleitungstext',
 		'remark' => "Fußzeile\r\nMehrzeilig",
@@ -326,15 +330,16 @@ try {
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
+} 
+catch (\Baebeca\LexwareException $e) {
 	test($e->getMessage());
-	test(print_r($e->get_error(), true));
+	test(print_r($e->getError(), true));
 	test_finished(false);
 }
 
 test_start('invoice - negative amount position');
 try {
-	$request = $lexoffice->create_invoice([
+	$request = $lexware->create_invoice([
 		'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
 		'introduction' => 'Einleitungstext',
 		'remark' => "Fußzeile\r\nMehrzeilig",
@@ -412,15 +417,16 @@ try {
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
+} 
+catch (\Baebeca\LexwareException $e) {
 	test($e->getMessage());
-	test(print_r($e->get_error(), true));
+	test(print_r($e->getError(), true));
 	test_finished(false);
 }
 
 test_start('invoice - zero amount');
 try {
-    $request = $lexoffice->create_invoice([
+    $request = $lexware->create_invoice([
         'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
         'introduction' => 'Einleitungstext',
         'remark' => "Fußzeile\r\nMehrzeilig",
@@ -485,15 +491,16 @@ try {
     } else {
         test_finished(false);
     }
-} catch(lexoffice_exception $e) {
+} 
+catch (\Baebeca\LexwareException $e) {
     test($e->getMessage());
-    test(print_r($e->get_error(), true));
+    test(print_r($e->getError(), true));
     test_finished(false);
 }
 
 test_start('invoice - 100% discount');
 try {
-    $request = $lexoffice->create_invoice([
+    $request = $lexware->create_invoice([
         'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
         'introduction' => 'Einleitungstext',
         'remark' => "Fußzeile\r\nMehrzeilig",
@@ -545,16 +552,17 @@ try {
     } else {
         test_finished(false);
     }
-} catch(lexoffice_exception $e) {
+} 
+catch (\Baebeca\LexwareException $e) {
     test($e->getMessage());
-    test(print_r($e->get_error(), true));
+    test(print_r($e->getError(), true));
     test_finished(false);
 }
 
 
 test_start('invoice - text position');
 try {
-	$request = $lexoffice->create_invoice([
+	$request = $lexware->create_invoice([
 		'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
 		'introduction' => 'Einleitungstext',
 		'remark' => "Fußzeile\r\nMehrzeilig",
@@ -623,9 +631,10 @@ try {
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
+} 
+catch (\Baebeca\LexwareException $e) {
 	test($e->getMessage());
-	test(print_r($e->get_error(), true));
+	test(print_r($e->getError(), true));
 	test_finished(false);
 }
 
@@ -633,7 +642,7 @@ try {
 test_start('invoice - get all invoices');
 $max_invoices_in_test_account = 0;
 try {
-	$request = $lexoffice->get_invoices_all();
+	$request = $lexware->get_invoices_all();
 	if (count($request)) {
 		$max_invoices_in_test_account = count($request);
 		test($max_invoices_in_test_account.' invoices in account');
@@ -641,12 +650,12 @@ try {
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
-	if ($e->getMessage() == 'lexoffice-php-api: positive invoice count needed') {
+} catch(\Baebeca\LexwareException $e) {
+	if ($e->getMessage() == 'LexwareApi: positive invoice count needed') {
 		test_finished(true);
 	} else {
 		test($e->getMessage());
-		test(print_r($e->get_error(), true));
+		test(print_r($e->getError(), true));
 		test_finished(false);
 	}
 }
@@ -654,92 +663,92 @@ try {
 
 test_start('invoice - get last -5 invoices');
 try {
-	$request = $lexoffice->get_last_invoices(-5);
-} catch(lexoffice_exception $e) {
-	if ($e->getMessage() == 'lexoffice-php-api: positive invoice count needed') {
+	$request = $lexware->get_last_invoices(-5);
+} catch(\Baebeca\LexwareException $e) {
+	if ($e->getMessage() == 'LexwareApi: positive invoice count needed') {
 		test_finished(true);
 	} else {
 		test($e->getMessage());
-		test(print_r($e->get_error(), true));
+		test(print_r($e->getError(), true));
 		test_finished(false);
 	}
 }
 
 test_start('invoice - get last 20 invoices');
 try {
-	$request = $lexoffice->get_last_invoices(20);
+	$request = $lexware->get_last_invoices(20);
 	if (count($request) == 20) {
 		test_finished(true);
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
-	if ($e->getMessage() == 'lexoffice-php-api: positive invoice count needed') {
+} catch(\Baebeca\LexwareException $e) {
+	if ($e->getMessage() == 'LexwareApi: positive invoice count needed') {
 		test_finished(true);
 	} else {
 		test($e->getMessage());
-		test(print_r($e->get_error(), true));
+		test(print_r($e->getError(), true));
 		test_finished(false);
 	}
 }
 
 test_start('invoice - get last 100 invoices');
 try {
-	$request = $lexoffice->get_last_invoices(100);
+	$request = $lexware->get_last_invoices(100);
 	if (count($request) == 100) {
 		test_finished(true);
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
-	if ($e->getMessage() == 'lexoffice-php-api: positive invoice count needed') {
+} catch(\Baebeca\LexwareException $e) {
+	if ($e->getMessage() == 'LexwareApi: positive invoice count needed') {
 		test_finished(true);
 	} else {
 		test($e->getMessage());
-		test(print_r($e->get_error(), true));
+		test(print_r($e->getError(), true));
 		test_finished(false);
 	}
 }
 
 test_start('invoice - get last 120 invoices');
 try {
-	$request = $lexoffice->get_last_invoices(120);
+	$request = $lexware->get_last_invoices(120);
 	if (count($request) == 120) {
 		test_finished(true);
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
-	if ($e->getMessage() == 'lexoffice-php-api: positive invoice count needed') {
+} catch(\Baebeca\LexwareException $e) {
+	if ($e->getMessage() == 'LexwareApi: positive invoice count needed') {
 		test_finished(true);
 	} else {
 		test($e->getMessage());
-		test(print_r($e->get_error(), true));
+		test(print_r($e->getError(), true));
 		test_finished(false);
 	}
 }
 
 test_start('invoice - get last '.$max_invoices_in_test_account.' invoices');
 try {
-	$request = $lexoffice->get_last_invoices($max_invoices_in_test_account);
+	$request = $lexware->get_last_invoices($max_invoices_in_test_account);
 	if (count($request) == $max_invoices_in_test_account) {
 		test_finished(true);
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
-	if ($e->getMessage() == 'lexoffice-php-api: positive invoice count needed') {
+} catch(\Baebeca\LexwareException $e) {
+	if ($e->getMessage() == 'LexwareApi: positive invoice count needed') {
 		test_finished(true);
 	} else {
 		test($e->getMessage());
-		test(print_r($e->get_error(), true));
+		test(print_r($e->getError(), true));
 		test_finished(false);
 	}
 }
 
 test_start('invoice - 19% UST position with special chars in product');
 try {
-    $request = $lexoffice->create_invoice([
+    $request = $lexware->create_invoice([
         'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
         'introduction' => 'Einleitungstext',
         'remark' => "Fußzeile\r\nMehrzeilig",
@@ -791,9 +800,9 @@ try {
     } else {
         test_finished(false);
     }
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
-    test(print_r($e->get_error(), true));
+    test(print_r($e->getError(), true));
     test_finished(false);
 }
 
@@ -805,7 +814,7 @@ $amount = 50;
 test_start('big amount of '.$amount.' invoices - 19% UST position');
 try {
 	for ($i = 0; $i < $amount; $i++) {
-		$request = $lexoffice->create_invoice([
+		$request = $lexware->create_invoice([
 			'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
 			'introduction' => 'Einleitungstext',
 			'remark' => "Fußzeile\r\nMehrzeilig",
@@ -854,9 +863,9 @@ try {
 			test_finished(false);
 		}
 	}
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
 	test($e->getMessage());
-	test(print_r($e->get_error(), true));
+	test(print_r($e->getError(), true));
 	test_finished(false);
 }
 test_finished(true);

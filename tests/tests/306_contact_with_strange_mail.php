@@ -3,7 +3,7 @@
 $random_contact_name = 'contact_'.rand(11111111, 999999999999);
 test_start('Create Contact with strange E-Mail Address');
 try {
-    $request = $lexoffice->create_contact(array(
+    $request = $lexware->create_contact(array(
         'version' => 0,
         'roles' => array(
             'customer' => array(
@@ -24,7 +24,7 @@ try {
         )
     ));
     if ($request->id) {
-        $contact = $lexoffice->get_contact($request->id);
+        $contact = $lexware->get_contact($request->id);
         if (!empty($contact->emailAddresses->business[0])) {
             test_finished(true);
         }
@@ -34,16 +34,16 @@ try {
     } else {
         test_finished(false);
     }
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
-    test(print_r($e->get_error(), true));
+    test(print_r($e->getError(), true));
     test_finished(false);
 }
 
 $random_contact_name = 'contact_'.rand(11111111, 999999999999);
 test_start('Create Contact with invalid E-Mail Address(Contact Person)');
 try {
-    $request = $lexoffice->create_contact(array(
+    $request = $lexware->create_contact(array(
         'version' => 0,
         'roles' => array(
             'customer' => array(
@@ -68,7 +68,7 @@ try {
         ),
     ));
     if ($request->id) {
-        $contact = $lexoffice->get_contact($request->id);
+        $contact = $lexware->get_contact($request->id);
         if (!empty($contact->company->contactPersons[0]->emailAddress)) {
             test_finished(true);
         }
@@ -76,8 +76,8 @@ try {
     } else {
         test_finished(false);
     }
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
-    test(print_r($e->get_error(), true));
+    test(print_r($e->getError(), true));
     test_finished(false);
 }

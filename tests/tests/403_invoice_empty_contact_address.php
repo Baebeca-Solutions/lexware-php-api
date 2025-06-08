@@ -3,7 +3,7 @@
 $random_contact_name = 'contact_'.rand(11111111, 999999999999);
 test_start('Create contact - company');
 try {
-    $request = $lexoffice->create_contact(array(
+    $request = $lexware->create_contact(array(
         'version' => 0,
         'roles' => array(
             'customer' => array(
@@ -22,15 +22,15 @@ try {
         test_finished(false);
     }
 
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
-    test(print_r($e->get_error(), true));
+    test(print_r($e->getError(), true));
     test_finished(false);
 }
 
 test_start('Create invoice (Empty address - returns error)');
 try {
-    $request_2 = $lexoffice->create_invoice([
+    $request_2 = $lexware->create_invoice([
         'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
         'introduction' => 'Einleitungstext',
         'remark' => "Fußzeile\r\nMehrzeilig",
@@ -67,14 +67,14 @@ try {
         ],
     ], true);
 
-} catch(lexoffice_exception $e) {
-    if ($e->get_error()['Response']->message == 'Referenced contact needs to have exactly one billing address, but 0 addresses were found.') {
+} catch(\Baebeca\LexwareException $e) {
+    if ($e->getError()['Response']->message == 'Referenced contact needs to have exactly one billing address, but 0 addresses were found.') {
         test_finished(true);
     } else {
-        test('We expect that this invoice will fail, because the contact has no address. seems like a lexoffice bug.');
-        test('If this bug on lexoffice side is fixed, please revert all the changes from case #215872 in related projects');
+        test('We expect that this invoice will fail, because the contact has no address. seems like a lexware bug.');
+        test('If this bug on lexware side is fixed, please revert all the changes from case #215872 in related projects');
         test($e->getMessage());
-        test(print_r($e->get_error(), true));
+        test(print_r($e->getError(), true));
         test_finished(false);
     }
 }
@@ -82,7 +82,7 @@ try {
 // the invoice shows address from request, but invoice is linked to contactId
 test_start('Create invoice (Contact without address, but it is specified in create_invoice request)');
 try {
-    $request_2 = $lexoffice->create_invoice([
+    $request_2 = $lexware->create_invoice([
         'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
         'introduction' => 'Einleitungstext',
         'remark' => "Fußzeile\r\nMehrzeilig",
@@ -130,8 +130,8 @@ try {
     } else {
         test_finished(false);
     }
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
-    test(print_r($e->get_error(), true));
+    test(print_r($e->getError(), true));
     test_finished(false);
 }

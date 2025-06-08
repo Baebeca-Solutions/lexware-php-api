@@ -2,7 +2,7 @@
 
 test_start('create big voucher');
 try {
-	$request = $lexoffice->create_voucher([
+	$request = $lexware->create_voucher([
 		'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
 		'type' => 'salesinvoice',
 		'voucherNumber' => "Test-1234",
@@ -26,15 +26,15 @@ try {
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
 	test($e->getMessage());
-	test(print_r($e->get_error(), true));
+	test(print_r($e->getError(), true));
 	test_finished(false);
 }
 
 test_start('create Warenverkauf voucher');
 try {
-	$request = $lexoffice->create_voucher([
+	$request = $lexware->create_voucher([
 		'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
 		'type' => 'salesinvoice',
 		'voucherNumber' => "Test-1234-Ware",
@@ -58,15 +58,15 @@ try {
 	} else {
 		test_finished(false);
 	}
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
 	test($e->getMessage());
-	test(print_r($e->get_error(), true));
+	test(print_r($e->getError(), true));
 	test_finished(false);
 }
 
 test_start('create mixed tax voucher 16/19');
 try {
-    $request = $lexoffice->create_voucher([
+    $request = $lexware->create_voucher([
         'version' => 0,
         'voucherDate' => '2021-02-27',
         'dueDate' => '2021-03-06',
@@ -99,15 +99,15 @@ try {
     } else {
         test_finished(false);
     }
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
-    test(print_r($e->get_error(), true));
+    test(print_r($e->getError(), true));
     test_finished(false);
 }
 
 test_start('create voucher #74228');
 try {
-    $request = $lexoffice->create_voucher([
+    $request = $lexware->create_voucher([
         'version' => 0,
         'type' => 'salesinvoice',
         'voucherNumber' => '6126',
@@ -133,16 +133,16 @@ try {
     } else {
         test_finished(false);
     }
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
-    test(print_r($e->get_error(), true));
+    test(print_r($e->getError(), true));
     test_finished(false);
 }
 
 test_start('create voucher with pdf');
 $voucher_id = false;
 try {
-    $request = $lexoffice->create_voucher([
+    $request = $lexware->create_voucher([
         'version' => 0,
         'type' => 'salesinvoice',
         'voucherNumber' => 'dummy_pdf_upload',
@@ -166,30 +166,30 @@ try {
         test('voucher created - id: '.$request->id);
         try {
             $voucher_id = $request->id; // used in next test
-            $lexoffice->upload_voucher($request->id, __DIR__.'/files/dummy.pdf');
+            $lexware->upload_voucher($request->id, __DIR__.'/files/dummy.pdf');
             test_finished(true);
-        } catch(lexoffice_exception $e) {
+        } catch(\Baebeca\LexwareException $e) {
             test($e->getMessage());
-            test(print_r($e->get_error(), true));
+            test(print_r($e->getError(), true));
             test_finished(false);
         }
     } else {
         test_finished(false);
     }
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
-    test(print_r($e->get_error(), true));
+    test(print_r($e->getError(), true));
     test_finished(false);
 }
 
 test_start('add additonal pdf to previous created voucher');
 try {
     if (empty($voucher_id)) test_finished(false);
-    $lexoffice->upload_voucher($voucher_id, __DIR__.'/files/dummy_2.pdf');
+    $lexware->upload_voucher($voucher_id, __DIR__.'/files/dummy_2.pdf');
     test_finished(true);
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
-    test(print_r($e->get_error(), true));
+    test(print_r($e->getError(), true));
     test_finished(false);
 }
 
@@ -198,7 +198,7 @@ try {
 /*
 test_start('get all vouchers');
 try {
-    $request = $lexoffice->get_vouchers('salesinvoice', 'draft,open,paid,paidoff,voided,transferred,sepadebit,accepted,rejected', 'both');
+    $request = $lexware->get_vouchers('salesinvoice', 'draft,open,paid,paidoff,voided,transferred,sepadebit,accepted,rejected', 'both');
 
     if (count($request)) {
         test('get '.count($request).' vouchers');
@@ -206,9 +206,9 @@ try {
     } else {
         test_finished(false);
     }
-} catch(lexoffice_exception $e) {
+} catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
-    test(print_r($e->get_error(), true));
+    test(print_r($e->getError(), true));
     test_finished(false);
 }
 */
