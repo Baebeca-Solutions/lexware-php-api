@@ -1,16 +1,12 @@
 <?php
-
 /**
- * @copyright	2013-2020 | Baebeca Solutions GmbH
- * @author		Sebastian Lutz
- * @email		slutz@baebeca.de
- * @pgp			0x5AD0240C
- * @link		https://www.baebeca.de/softwareentwicklung/open-source-projekte/lexoffice-php-client/
- * @customer	-
- * @version		$Revision$
- * @date		$Date$
- * @license		GNU Affero General Public License v3.0
- * @license		If you need a copy under license for your closed software please contact us to get a business license
+ * @package     \baebeca\lexware-php-api
+ * @copyright	Baebeca Solutions GmbH
+ * @author		Sebastian Hayer-Lutz
+ * @email		slu@baebeca.de
+ * @link		https://github.com/Baebeca-Solutions/lexware-php-api
+ * @license		AGPL-3.0 and Commercial
+ * @license 	If you need a commercial license for your closed-source project check: https://github.com/Baebeca-Solutions/lexware-php-api/blob/php-8.4/LICENSE-commercial_EN.md
  **/
 
 namespace Baebeca;
