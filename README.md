@@ -49,26 +49,24 @@ catch (LexwareException $e) {
 
 [![Lexware Office - Technologie Partner](https://www.baebeca.de/wp-content/uploads/2024/09/Lexware-Office_TP_Badge_rgb-1-300x199.png)](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)
 
-## office.lexware.de API-Dokumentation
-Die offizielle Lexware Office API-Dokumentation findest du [hier](https://developers.lexware.io).
-
-## lexware-php-api Dokumentation
-Die Dokumentation mit allen Informationen findest du in unserem [Wiki](https://wiki.baebeca.de/index.php?title=lexware-php-api).<br>
-Allgemeine Themen findest du auf unserer [Projektseite](https://www.baebeca.de/softwareentwicklung/lexware-php-client/).
+## Dokumentation
+- [lexware-php-api - Wiki](https://wiki.baebeca.de/index.php?title=lexware-php-api)
+- [lexware-php-api - Projektseite](https://www.baebeca.de/softwareentwicklung/lexware-php-client/)
+- [Offizielle Lexware Office API-Dokumentation](https://developers.lexware.io)
 
 ## Support
 An wen kann ich mich wenden, wenn ich Probleme oder Fragen habe?<br>
-Für diese Frage ist entscheidend, ob du eine Nutzungslizenz für unsere lexware-php-api erworben hast oder die kostenlose Variante nutzt.
+Für diese Frage ist entscheidend, ob du eine Nutzungslizenz erworben hast oder die freie Variante benutzt.
 
-* Sofern eine Nutzungslizenz vorhanden ist, kannst du dich sich jederzeit gerne wie folgt an uns wenden:
-  * Ticket per Mail an support@baebeca.de
-  * Ticket per Telefon an 02261-8161691
-* Wenn du die kostenlose Version benutzt, kannst du einen Github [issue](https://github.com/Baebeca-Solutions/lexware-php-api/issues) öffnen.
+* Wenn eine Nutzungslizenz vorhanden ist, kannst du jederzeit ein Ticket bei uns öffnen:
+  * E-Mail: support@baebeca.de
+  * Telefon: 02261-8161691
+* Wenn du die freie Version benutzt, kannst du einen Github [issue](https://github.com/Baebeca-Solutions/lexware-php-api/issues) öffnen.
 
 ## Lizenz
 Dieses Projekt steht unter der [GNU AGPLv3 Lizenz](./LICENSE_DE.txt).
 
-Du darfst den Code frei verwenden, verändern und weiterverbreiten, **sofern deine Software ebenfalls quelloffen ist** (AGPLv3-konform).
+Du darfst den Code frei verwenden, verändern und weiterverbreiten, **sofern deine Software ebenfalls quelloffen und veröffentlicht wird** (AGPLv3-konform).
 
 ---
 
