@@ -25,9 +25,22 @@ require __DIR__.'/vendor/autoload.php';
 use \Baebeca\LexwareApi;
 use \Baebeca\LexwareException;
 
-$api = new LexwareApi([
+$lexware = new LexwareApi([
     'api_key' => 'my-api-key'
 ]);
+```
+### Error Handling
+
+```PHP
+<?php 
+// catch errors
+try {
+    $invoices = $lexware->get_last_invoices(-5);
+}
+catch (LexwareException $e) {
+    var_dump($e->getMessage());
+    print_r($e->getError());
+}
 ```
 
 ## Baebeca Solutions GmbH & Lexware Office
