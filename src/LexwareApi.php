@@ -1053,7 +1053,7 @@ class LexwareApi  {
             in_array(substr(strtolower($file), -4), ['.pdf', '.jpg', '.png', '.xml']) ||
             in_array(substr(strtolower($file), -5), ['.jpeg'])
         ) {
-            return $this->api_call('POST', 'files', '', ['file' => new CURLFile($file), 'type' => 'voucher']);
+            return $this->api_call('POST', 'files', '', ['file' => new \CURLFile($file), 'type' => 'voucher']);
         }
 
         // use file mimetype (lexware requires a fileextension in the filename :/)
@@ -1075,7 +1075,7 @@ class LexwareApi  {
             default:
                 throw new LexwareException('invalid mime type', ['file' => $file]);
         }
-        return $this->api_call('POST', 'files', '', ['file' => new CURLFile($file, $mime_type, $dummy_title), 'type' => 'voucher']);
+        return $this->api_call('POST', 'files', '', ['file' => new \CURLFile($file, $mime_type, $dummy_title), 'type' => 'voucher']);
     }
 
     public function upload_voucher($uuid, $file) {
@@ -1086,7 +1086,7 @@ class LexwareApi  {
             in_array(substr(strtolower($file), -4), ['.pdf', '.jpg', '.png', '.xml']) ||
             in_array(substr(strtolower($file), -5), ['.jpeg'])
         ) {
-            return $this->api_call('POST', 'vouchers', $uuid, ['file' => new CURLFile($file)], '/files');
+            return $this->api_call('POST', 'vouchers', $uuid, ['file' => new \CURLFile($file)], '/files');
         }
 
         // use file mimetype (lexware requires a fileextension in the filename :/)
@@ -1108,7 +1108,7 @@ class LexwareApi  {
             default:
                 throw new LexwareException('invalid mime type', ['file' => $file]);
         }
-        return $this->api_call('POST', 'vouchers', $uuid, ['file' => new CURLFile($file, $mime_type, $dummy_title), 'type' => 'voucher'], '/files');
+        return $this->api_call('POST', 'vouchers', $uuid, ['file' => new \CURLFile($file, $mime_type, $dummy_title), 'type' => 'voucher'], '/files');
     }
 
     /* Tax methods */
