@@ -1434,8 +1434,8 @@ class LexwareApi  {
         }
     }
 
-    public function valid_vat_id($vat_id) {
-        $vat_id = trim($vat_id);
+    public function valid_vat_id(& $vat_id) {
+        $vat_id = strtoupper(trim($vat_id));
         $country_chars = substr($vat_id, 0, 2);
         $vat_id_length = strlen($vat_id);
 
@@ -1579,6 +1579,8 @@ class LexwareApi  {
             foreach ($data['emailAddresses'][$type] as $key => $email) {
                 // only to lower, dont remove invalid emails! process should be stopped with error, otherwise search for this contact will be negative
                 $data['emailAddresses'][$type][$key] = mb_strtolower($data['emailAddresses'][$type][$key]);
+                // remove empty mails, because lexware will decline the request
+                if ($email === '') unset($data['emailAddresses'][$type][$key]);
             }
 
             if (count($data['emailAddresses'][$type]) === 0) {
