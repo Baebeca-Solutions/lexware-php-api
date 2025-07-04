@@ -40,7 +40,7 @@ try {
 
         $contactOut = $lexware->get_contact($request->id);
 
-        if ($contactOut->company->vatRegistrationId === 'BE0896811321') {
+        if (!empty($contactOut->company->vatRegistrationId) && $contactOut->company->vatRegistrationId === 'BE0896811321') {
             test_finished(true);
         }
         else {
@@ -98,7 +98,7 @@ try {
 
         $contactOut = $lexware->get_contact($request->id);
 
-        if ($contactOut->company->vatRegistrationId === 'BE0896811321') {
+        if (!empty($contactOut->company->vatRegistrationId) && $contactOut->company->vatRegistrationId === 'BE0896811321') {
             test_finished(true);
         }
         else {
