@@ -1434,7 +1434,7 @@ class LexwareApi  {
         }
     }
 
-    public function valid_vat_id(& $vat_id) {
+    public function valid_vat_id($vat_id) {
         $vat_id = strtoupper(trim($vat_id));
         $country_chars = substr($vat_id, 0, 2);
         $vat_id_length = strlen($vat_id);
