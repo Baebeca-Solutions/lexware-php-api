@@ -1143,19 +1143,25 @@ class LexwareApi  {
      * @throws \LexwareException
      */
     public function get_needed_voucher_booking_id(float $taxrate, string $country_code, int $date, bool $euopean_vatid, bool $b2b_business, bool $physical_good = true): string {
+        $country_code = strtoupper($country_code);
+
         // Weltweit, Kleinunternehmer
+        if ($this->is_tax_free_company() && $taxrate) throw new LexwareException('invalid taxrate for taxfree company');
         if ($this->is_tax_free_company()) return '7a1efa0e-6283-4cbf-9583-8e88d3ba5960'; // §19 Kleinunternehmer
 
         // Deutschland
-        if (strtoupper($country_code) == 'DE' && $physical_good) return '8f8664a8-fd86-11e1-a21f-0800200c9a66'; // Einnahmen -> Warenlieferung
-        if (strtoupper($country_code) == 'DE') return '8f8664a0-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
+        if ($country_code === 'DE') {
+            if (!$this->check_taxrate($taxrate, $country_code, $date)) throw new LexwareException('invalid taxrate for given country', ['taxrate' => $taxrate, 'country_code' => $country_code, 'date' => $date]);
+            if ($physical_good) return '8f8664a8-fd86-11e1-a21f-0800200c9a66'; // Einnahmen -> Warenlieferung
+            return '8f8664a0-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
+        }
 
         // Europa
         if ($this->is_european_member($country_code, $date)) {
             // B2B - Warenlieferung
-            if ($taxrate == 0 && $euopean_vatid && $b2b_business && $physical_good) return '9075a4e3-66de-4795-a016-3889feca0d20'; // Innergemeinschaftliche Lieferung
+            if (!$taxrate && $euopean_vatid && $b2b_business && $physical_good) return '9075a4e3-66de-4795-a016-3889feca0d20'; // Innergemeinschaftliche Lieferung
             // B2B - Dienstleistung
-            if ($taxrate == 0 && $euopean_vatid && $b2b_business && !$physical_good) return '380a20cb-d04c-426e-b49c-84c22adfa362'; // Fremdleistungen §13b
+            if (!$taxrate && $euopean_vatid && $b2b_business && !$physical_good) return '380a20cb-d04c-426e-b49c-84c22adfa362'; // Fremdleistungen §13b
 
             // Check OSS Stuff
             $oss = $this->is_oss_needed($country_code, $date);
@@ -1369,6 +1375,8 @@ class LexwareApi  {
      * @return bool
      */
     public function check_taxrate(float $taxrate, string $country_code, int $date): bool {
+        if ($taxrate && $this->is_tax_free_company()) return false;
+
         $taxrates = $this->get_taxrates($country_code, $date);
         if (!empty($taxrates['default']) && $taxrate == $taxrates['default']) return true;
 
