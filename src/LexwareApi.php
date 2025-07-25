@@ -502,7 +502,7 @@ class LexwareApi  {
             $count <= $this->rate_limit_max_tries
         ) {
             sleep($this->rate_limit_seconds*$count);
-            if (is_callable($this->rate_limit_callable))call_user_func($this->rate_limit_callable, true);
+            if (is_callable($this->rate_limit_callable)) call_user_func($this->rate_limit_callable, true);
             return $this->api_call($type, $resource, $uuid, $data, $params, $return_http_header, $count++);
         }
         // rate limit exceeded
