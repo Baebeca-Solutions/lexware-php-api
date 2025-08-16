@@ -12,13 +12,13 @@ PHP 8 Client für [office.lexware.de](https://www.awin1.com/cread.php?awinmid=13
 ## Composer
  
 ### CLI
-```composer require baebeca/lexware-php-api:^2.0```
+```composer require baebeca/lexware-php-api:~2.0```
 
 ### composer.json
 ```json
 {
   "require": {
-    "baebeca/lexware-php-api": "^2.0",
+    "baebeca/lexware-php-api": "~2.0",
   }
 }
 ```
