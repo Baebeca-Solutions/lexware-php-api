@@ -640,31 +640,29 @@ catch (\Baebeca\LexwareException $e) {
 
 
 test_start('invoice - get all invoices');
-$max_invoices_in_test_account = 0;
+$count_invoices_in_test_account = 0;
 try {
 	$request = $lexware->get_invoices_all();
 	if (count($request)) {
-		$max_invoices_in_test_account = count($request);
-		test($max_invoices_in_test_account.' invoices in account');
+        $count_invoices_in_test_account = count($request);
+		test($count_invoices_in_test_account.' invoices in account');
 		test_finished(true);
 	} else {
 		test_finished(false);
 	}
-} catch(\Baebeca\LexwareException $e) {
-	if ($e->getMessage() == 'LexwareApi: positive invoice count needed') {
-		test_finished(true);
-	} else {
-		test($e->getMessage());
-		test(print_r($e->getError(), true));
-		test_finished(false);
-	}
+}
+catch(\Baebeca\LexwareException $e) {
+    test($e->getMessage());
+    test(print_r($e->getError(), true));
+    test_finished(false);
 }
 
 
 test_start('invoice - get last -5 invoices');
 try {
 	$request = $lexware->get_last_invoices(-5);
-} catch(\Baebeca\LexwareException $e) {
+}
+catch(\Baebeca\LexwareException $e) {
 	if ($e->getMessage() == 'LexwareApi: positive invoice count needed') {
 		test_finished(true);
 	} else {
@@ -674,76 +672,55 @@ try {
 	}
 }
 
-test_start('invoice - get last 20 invoices');
+if ($count_invoices_in_test_account >= 20) {
+    test_start('invoice - get last 20 invoices');
+    try {
+        $request = $lexware->get_last_invoices(20);
+        if (count($request) == 20) {
+            test_finished(true);
+        } else {
+            test_finished(false);
+        }
+    }
+    catch(\Baebeca\LexwareException $e) {
+        test($e->getMessage());
+        test(print_r($e->getError(), true));
+        test_finished(false);
+    }
+}
+
+if ($count_invoices_in_test_account >= 255) {
+    test_start('invoice - get last 255 invoices');
+    try {
+        $request = $lexware->get_last_invoices(255);
+        if (count($request) == 255) {
+            test_finished(true);
+        } else {
+            test_finished(false);
+        }
+    }
+    catch(\Baebeca\LexwareException $e) {
+        test($e->getMessage());
+        test(print_r($e->getError(), true));
+        test_finished(false);
+    }
+}
+
+test_start('invoice - get all (last '.$count_invoices_in_test_account.') invoices');
 try {
-	$request = $lexware->get_last_invoices(20);
-	if (count($request) == 20) {
+	$request = $lexware->get_last_invoices($count_invoices_in_test_account);
+	if (count($request) == $count_invoices_in_test_account) {
 		test_finished(true);
 	} else {
-		test_finished(false);
-	}
-} catch(\Baebeca\LexwareException $e) {
-	if ($e->getMessage() == 'LexwareApi: positive invoice count needed') {
-		test_finished(true);
-	} else {
-		test($e->getMessage());
-		test(print_r($e->getError(), true));
+        test(count($request).' invoices returned');
+        #test(print_r($request, true));
 		test_finished(false);
 	}
 }
-
-test_start('invoice - get last 100 invoices');
-try {
-	$request = $lexware->get_last_invoices(100);
-	if (count($request) == 100) {
-		test_finished(true);
-	} else {
-		test_finished(false);
-	}
-} catch(\Baebeca\LexwareException $e) {
-	if ($e->getMessage() == 'LexwareApi: positive invoice count needed') {
-		test_finished(true);
-	} else {
-		test($e->getMessage());
-		test(print_r($e->getError(), true));
-		test_finished(false);
-	}
-}
-
-test_start('invoice - get last 120 invoices');
-try {
-	$request = $lexware->get_last_invoices(120);
-	if (count($request) == 120) {
-		test_finished(true);
-	} else {
-		test_finished(false);
-	}
-} catch(\Baebeca\LexwareException $e) {
-	if ($e->getMessage() == 'LexwareApi: positive invoice count needed') {
-		test_finished(true);
-	} else {
-		test($e->getMessage());
-		test(print_r($e->getError(), true));
-		test_finished(false);
-	}
-}
-
-test_start('invoice - get last '.$max_invoices_in_test_account.' invoices');
-try {
-	$request = $lexware->get_last_invoices($max_invoices_in_test_account);
-	if (count($request) == $max_invoices_in_test_account) {
-		test_finished(true);
-	} else {
-		test_finished(false);
-	}
-} catch(\Baebeca\LexwareException $e) {
-	if ($e->getMessage() == 'LexwareApi: positive invoice count needed') {
-		test_finished(true);
-	} else {
-		test($e->getMessage());
-		test(print_r($e->getError(), true));
-		test_finished(false);
-	}
+catch(\Baebeca\LexwareException $e) {
+    test($e->getMessage());
+    test(print_r($e->getError(), true));
+    test_finished(false);
 }
 
 test_start('invoice - 19% UST position with special chars in product');
