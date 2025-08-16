@@ -698,12 +698,12 @@ class LexwareApi  {
     }
 
     public function get_invoices_all() {
-        $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=250&sort=voucherNumber,DESC&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
+        $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=250&sort=voucherNumber,DESC&voucherType=invoice,salesinvoice,downpaymentinvoice&voucherStatus=open,paid,paidoff,voided,transferred');
         $vouchers = $result->content;
         unset($result->content);
 
         for ($i = 1; $i < $result->totalPages; $i++) {
-            $result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=250&sort=voucherNumber,DESC&voucherType=invoice,creditnote&voucherStatus=open,paid,paidoff,voided,transferred');
+            $result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size=250&sort=voucherNumber,DESC&voucherType=invoice,salesinvoice,downpaymentinvoice&voucherStatus=open,paid,paidoff,voided,transferred');
             foreach ($result_page->content as $voucher) {
                 $vouchers[] = $voucher;
             }
@@ -716,10 +716,11 @@ class LexwareApi  {
         if ($count <= 0) throw new LexwareException('positive invoice count needed');
 
         if ($count <= 250) {
-            $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size='.$count.'&sort=voucherNumber,DESC&voucherType=invoice&voucherStatus=open,paid,paidoff,voided,transferred');
+            $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size='.$count.'&sort=voucherNumber,DESC&voucherType=invoice,salesinvoice,downpaymentinvoice&voucherStatus=open,paid,paidoff,voided,transferred');
             return $result->content;
-        } else {
-            $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=250&sort=voucherNumber,DESC&voucherType=invoice&voucherStatus=open,paid,paidoff,voided,transferred');
+        }
+        else {
+            $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=250&sort=voucherNumber,DESC&voucherType=invoice,salesinvoice,downpaymentinvoice&voucherStatus=open,paid,paidoff,voided,transferred');
             $vouchers = $result->content;
             $count = $count-250;
             unset($result->content);
@@ -728,11 +729,12 @@ class LexwareApi  {
                 if (!$count) break;
                 if ($count <= 250) {
                     $count_tmp = $count;
-                } else {
+                }
+                else {
                     $count_tmp = 250;
                 }
 
-                $result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size='.$count_tmp.'&sort=voucherNumber,DESC&voucherType=invoice&voucherStatus=open,paid,paidoff,voided,transferred');
+                $result_page = $this->api_call('GET', 'voucherlist', '', '', '?page='.$i.'&size='.$count_tmp.'&sort=voucherNumber,DESC&voucherType=invoice,salesinvoice,downpaymentinvoice&voucherStatus=open,paid,paidoff,voided,transferred');
                 foreach ($result_page->content as $voucher) {
                     $vouchers[] = $voucher;
                 }
