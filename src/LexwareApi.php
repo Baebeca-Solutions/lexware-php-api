@@ -1057,7 +1057,7 @@ class LexwareApi  {
         }
 
         // use file mimetype (lexware requires a fileextension in the filename :/)
-        $mime_type = mime_content_type($file);
+        $mime_type = \mime_content_type($file);
         switch ($mime_type) {
             case 'application/pdf':
                 $dummy_title = 'dummy.pdf';
@@ -1090,7 +1090,7 @@ class LexwareApi  {
         }
 
         // use file mimetype (lexware requires a fileextension in the filename :/)
-        $mime_type = mime_content_type($file);
+        $mime_type = \mime_content_type($file);
         switch ($mime_type) {
             case 'application/pdf':
                 $dummy_title = 'dummy.pdf';
