@@ -1,11 +1,7 @@
 <?php
-
 // disabled in default test, only used for special tests
-$amount_k = 10;
-$create_tons_of_customers = false;
-
 if ($create_tons_of_customers) {
-    for ($i = 1; $i <= $amount_k*1000; $i++) {
+    for ($i = 1; $i <= $create_tons_of_customers*1000; $i++) {
         $random_contact_name = 'contact_'.rand(11111111, 999999999999);
         test_start('create contact ('.$i.' / '.($amount_k*1000).') - company');
         try {

@@ -1,13 +1,14 @@
 <?php
 
 test_start('creditnote - 19% UST position with special chars in product');
+$creditnoteId = '';
 try {
     $request = $lexware->create_creditnote([
         'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
         'introduction' => 'Einleitungstext',
         'remark' => "Fußzeile\r\nMehrzeilig",
         'address' => [
-            #'contactId' => '<id>',
+            'contactId' => CONTACT_ID_COMPANY,
             'name' => 'Frau Jane Doe',
             'street' => 'Str. 1',
             'zip' => '12345',
@@ -49,13 +50,30 @@ try {
 
     if ($request->id) {
         test('invoice created - id: '.$request->id);
-
+        $creditnoteId = $request->id;
         test_finished(true);
     } else {
         test_finished(false);
     }
-} catch(\Baebeca\LexwareException $e) {
+}
+catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
     test(print_r($e->getError(), true));
+    test_finished(false);
+}
+
+test_start('get credit note pdf');
+@unlink(__DIR__.'/tmp/017_creditnote.pdf');
+if ($creditnoteId) {
+    test('download pdf');
+    $lexware->get_pdf('credit-notes', $creditnoteId, __DIR__ . '/tmp/017_creditnote.pdf');
+    if (is_file(__DIR__.'/tmp/017_creditnote.pdf')) {
+        unlink(__DIR__.'/tmp/017_creditnote.pdf');
+        test_finished(true);
+    }
+    else {
+        test_finished(false);
+    }
+} else {
     test_finished(false);
 }

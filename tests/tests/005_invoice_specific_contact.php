@@ -3,120 +3,54 @@
 $random_contact_name = 'contact_'.rand(11111111, 999999999999);
 test_start('create invoice for specific contact');
 try {
-	$request = $lexware->create_contact(array(
-		'version' => 0,
-		'roles' => array(
-			'customer' => array(
-				'number' => '',
-			),
-		),
-		'company' => array(
-			// use random name, use it in later search check
-			'name' => $random_contact_name,
-			'street' => 'Brink 1',
-			'zip' => '51647',
-			'city' => 'Gummersbach',
-			'countryCode' => 'DE',
-			'contactPersons' => array(
-				array(
-					'salutation' => 'Herr',
-					'firstName' => 'John',
-					'lastName' => 'Doe',
-					'emailAddress' =>'support@baebeca.de',
-					'phoneNumber' => '022619202930',
-				)
-			),
-		),
-		'addresses' => array(
-			'billing' => array(
-				array(
-					'street' => 'Brink 1',
-					'zip' => '51647',
-					'city' => 'Gummersbach',
-					'countryCode' => 'DE',
-				),
-			),
-			'shipping' => array(
-				array(
-					'street' => 'Brink 1',
-					'zip' => '51647',
-					'city' => 'Gummersbach',
-					'countryCode' => 'DE',
-				),
-			),
-		),
-		'emailAddresses' => array(
-			'business' => array(
-				'support@baebeca.de'
-			),
-		),
-		'phoneNumbers' => array(
-			'business' => array(
-				'022619202930'
-			),
-		),
-		'note' => '',
-	));
+    $request = $lexware->create_invoice([
+        'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
+        'introduction' => 'Einleitungstext',
+        'remark' => "Fußzeile\r\nMehrzeilig",
+        'address' => [
+            'contactId' => CONTACT_ID_COMPANY,
+        ],
+        'lineItems' => [
+            [
+                'type' => 'custom',
+                'name' => 'Produktname',
+                'description' => 'Beschreibung',
+                'quantity' => 1,
+                'unitName' => 'Stück',
+                'unitPrice' => [
+                    'currency' => 'EUR',
+                    'netAmount' => 11.99,
+                    'taxRatePercentage' => $taxrate_19,
+                ],
+                #'discountPercentage' => 0,
+            ],
+        ],
+        'totalPrice' => [
+            'currency' => 'EUR',
+            #'totalDiscountAbsolute' => 0,
+            #'totalDiscountPercentage' => 0,
+        ],
+        'taxConditions' => [
+            'taxType' => 'net',
+        ],
+        'shippingConditions' => [
+            'shippingDate' => date(DATE_RFC3339_EXTENDED),
+            'shippingType' => 'delivery',
+        ],
+        'paymentConditions' => [
+            'paymentTermLabel' => 'Vorkasse',
+            'paymentTermDuration' => 1,
+        ],
+    ], true);
 
-	if ($request->id) {
-		try {
-			$request = $lexware->create_invoice([
-				'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
-				'introduction' => 'Einleitungstext',
-				'remark' => "Fußzeile\r\nMehrzeilig",
-				'address' => [
-					'contactId' => $request->id,
-				],
-				'lineItems' => [
-					[
-						'type' => 'custom',
-						'name' => 'Produktname',
-						'description' => 'Beschreibung',
-						'quantity' => 1,
-						'unitName' => 'Stück',
-						'unitPrice' => [
-							'currency' => 'EUR',
-							'netAmount' => 11.99,
-							'taxRatePercentage' => $taxrate_19,
-						],
-						#'discountPercentage' => 0,
-					],
-				],
-				'totalPrice' => [
-					'currency' => 'EUR',
-					#'totalDiscountAbsolute' => 0,
-					#'totalDiscountPercentage' => 0,
-				],
-				'taxConditions' => [
-					'taxType' => 'net',
-				],
-				'shippingConditions' => [
-					'shippingDate' => date(DATE_RFC3339_EXTENDED),
-					'shippingType' => 'delivery',
-				],
-				'paymentConditions' => [
-					'paymentTermLabel' => 'Vorkasse',
-					'paymentTermDuration' => 1,
-				],
-			], true);
-
-			if ($request->id) {
-				test('invoice created - id: '.$request->id);
-				test_finished(true);
-			} else {
-				test_finished(false);
-			}
-		} catch(\Baebeca\LexwareException $e) {
-			test($e->getMessage());
-			test(print_r($e->getError(), true));
-			test_finished(false);
-		}
-	} else {
-		test_finished(false);
-	}
-
+    if ($request->id) {
+        test('invoice created - id: '.$request->id);
+        test_finished(true);
+    } else {
+        test_finished(false);
+    }
 } catch(\Baebeca\LexwareException $e) {
-	test($e->getMessage());
-	test(print_r($e->getError(), true));
-	test_finished(false);
+    test($e->getMessage());
+    test(print_r($e->getError(), true));
+    test_finished(false);
 }

@@ -2,7 +2,7 @@
 test_start('test profile endpoint');
 try {
 	$request = $lexware->get_profile();
-	if (isset($request->organizationId) && !empty($request->organizationId)) {
+	if (!empty($request->organizationId)) {
 		test_finished(true);
 	} else {
 		test_finished(false);

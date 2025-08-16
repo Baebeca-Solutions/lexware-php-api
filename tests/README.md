@@ -20,6 +20,13 @@ if ($something_is_true) {
 }
 ```
 
+Usabale constants from 000_init.php:
+* CONTACT_ID_PRIVATE
+* CONTACT_ID_COMPANY
+* CONTACT_ID_XRECHNUNG
+* INVOICE_ID
+* INVOICE_ID_XRECHNUNG
+
 Sample output
 ```
 C:\php-8.4.3-nts-Win32-vs17-x64\php.exe C:\Users\slu\Documents\GitHub\lexware-php-api\tests\test.php

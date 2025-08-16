@@ -122,7 +122,7 @@ try {
 test_start('get dunning pdf');
 @unlink(__DIR__.'/tmp/009_dunning.pdf');
 if ($request->id) {
-    test('download pdf and xml instantly without rendering');
+    test('download pdf');
     $lexware->get_pdf('dunning', $request->id, __DIR__ . '/tmp/009_dunning.pdf');
     if (is_file(__DIR__.'/tmp/009_dunning.pdf')) {
         unlink(__DIR__.'/tmp/009_dunning.pdf');

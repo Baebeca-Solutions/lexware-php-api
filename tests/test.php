@@ -17,7 +17,10 @@ use \Baebeca\LexwareException;
 if (is_file(__DIR__.'/_local_settings.php')) {
 	require(__DIR__.'/_local_settings.php');
 } else {
-	exit('no "/tests/_local_settings.php" found');
+    echo PHP_EOL;
+	echo 'no /tests/_local_settings.php found'.PHP_EOL;
+	echo 'check the file /tests/_local_settings_default.php'.PHP_EOL;
+    exit();
 }
 
 if (!isset($run_specific_test)) exit('$run_specific_test not defined');
@@ -37,7 +40,6 @@ $lexware = new \Baebeca\LexwareApi(array(
 	'api_key' => $api_key,
 	'ssl_verify' => false,
 	'sandbox' => $sandbox,
-	'sandbox_sso' => $sandbox_sso,
 ));
 
 
@@ -74,7 +76,11 @@ function test_finished($result) {
 }
 
 $tests = array_slice(scandir('./tests'), 2);
+test('include test: '.'./tests/000_init.php', true);
+require_once ('./tests/000_init.php');
+
 foreach ($tests as $test) {
+    if ($test === '000_init.php') continue;
 	$test_tmp = explode('_', $test);
 	if (empty($run_specific_test) || $run_specific_test == (int)$test_tmp[0]) {
 		if (substr($test, -4) != '.php') continue;
