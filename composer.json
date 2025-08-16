@@ -1,6 +1,6 @@
 {
     "name": "baebeca/lexware-php-api",
-    "description": "Lexware PHP API Client für PHP 8.4 mit Dual-Lizenzierung (AGPLv3 + kommerziell)",
+    "description": "Lexware PHP API Client mit Dual-Lizenzierung (AGPLv3 + kommerziell)",
     "type": "library",
     "homepage": "https://www.baebeca.de/softwareentwicklung/lexware-php-client/",
     "readme": "README.md",
@@ -21,7 +21,7 @@
         "docs": "https://wiki.baebeca.de/index.php?title=Lexware-php-api"
     },
     "require": {
-        "php": "~8.4.0"
+        "php": ">=8.0"
     },
     "autoload": {
         "psr-4": {
