@@ -391,7 +391,10 @@ class LexwareApi  {
         if ($type == 'GET') {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 
-            if ($resource == 'files') {
+            if (
+                $resource === 'files' || // bookkeeping files
+                $params === '/file' // voucher document own endpoints
+            ) {
                 $header = ['Authorization: Bearer '.$this->api_key];
                 if (!empty($data)) $header[] = 'Accept: '.$data;
                 curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
@@ -476,7 +479,7 @@ class LexwareApi  {
 
         // 200 ok, 201 created, 202 accepted
         if (in_array($http_status, [200, 201, 202])) {
-            if (!empty($result) && !($type == 'GET' && $resource == 'files') && !$return_http_header) {
+            if (!empty($result) && !($type === 'GET' && $params === '/file') && !$return_http_header) {
                 return json_decode($result);
             }
             // full http_header
@@ -786,32 +789,31 @@ class LexwareApi  {
     public function get_pdf($type, $uuid, $filename): bool {
         if ($type === 'downpaymentinvoice') $type = 'down-payment-invoices';
         if ($type === 'dunning') $type = 'dunnings';
-        $request = $this->api_call('GET', $type, $uuid);
-
-        // no PDFs for drafts, except dunnings
-        if ($request->voucherStatus === 'draft' && $type !== 'dunnings') return false;
-
-        // document already exists
-        if (!empty($request->files->documentFileId)) {
-            $documentFileId = $request->files->documentFileId;
-        }
-        // document rendering needed
-        else {
-            $request = $this->api_call('GET', $type, $uuid, '', '/document');
-            if (empty($request->documentFileId)) return false;
-            $documentFileId = $request->documentFileId;
-        }
 
         // download pdf
-        $request_file = $this->api_call('GET', 'files', $documentFileId);
-        if (!$request_file) return false;
-        file_put_contents($filename, $request_file);
+        try {
+            $file = $this->api_call('GET', $type, $uuid, 'application/pdf', '/file');
+            if (!$file) return false;
+            file_put_contents($filename, $file);
+        }
+        catch (LexwareException $e) {
+            // no PDFs for some types in draft mode
+            if ($e->getError()['HTTP Status'] === 409) return false;
+            throw $e;
+        }
 
         // check additonal X-Rechnung XML
-        if (!empty($request->electronicDocumentProfile) && $request->electronicDocumentProfile === 'XRechnung') {
-            $request_file = $this->api_call('GET', 'files', $documentFileId, 'application/xml');
-            if ($request_file) file_put_contents($filename.'.xml', $request_file);
+        if (!in_array($type, ['credit-notes', 'down-payment-invoices', 'invoices'])) return true;
+        try {
+            $file = $this->api_call('GET', $type, $uuid, 'application/xml', '/file');
+            if ($file) file_put_contents($filename.'.xml', $file);
         }
+        catch (LexwareException $e) {
+            // no e-voucher or not configured
+            if ($e->getError()['HTTP Status'] === 404) return true;
+            throw $e;
+        }
+
         return true;
     }
 
