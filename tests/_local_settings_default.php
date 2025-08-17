@@ -11,6 +11,12 @@ $sandbox = true;
 // - E-Rechnung aktiviert
 $api_key = ''; //
 
+// separate test account - required configurations
+// - Netto Preise
+// - Ist-Versteuerung
+// - OSS - Ziellandsteuer
+$api_key_OSS_DESTINATION = ''; //
+
 // 0 if all tests, otherwhise number of test
 $run_specific_test = 0;
 

@@ -35,7 +35,7 @@ try {
         ),
         'emailAddresses' => array(
             'business' => array(
-                'support@baebeca.de'
+                'no-reply@baebeca.de'
             ),
         ),
         'phoneNumbers' => array(
@@ -199,14 +199,14 @@ catch(\Baebeca\LexwareException $e) {
     test_finished(false);
 }
 
-test_start('create invoice final');
+test_start('create non e-invoice final');
 try {
     $request = $lexware->create_invoice([
         'voucherDate' => substr(date('c'), 0, 19).'.000'.substr(date('c'), 19),
         'introduction' => 'Einleitungstext',
         'remark' => "Fußzeile\r\nMehrzeilig",
         'address' => [
-            'contactId' => CONTACT_ID_PRIVATE,
+            #'contactId' => '',
             'name' => 'Frau Jane Doe',
             'street' => 'Str. 1',
             'zip' => '12345',
@@ -247,8 +247,8 @@ try {
     ], true);
 
     if ($request->id) {
-        test('INVOICE_ID: '.$request->id);
-        define('INVOICE_ID', $request->id);
+        test('INVOICE_ID_NON_E_INVOICE: '.$request->id);
+        define('INVOICE_ID_NON_E_INVOICE', $request->id);
         test_finished(true);
     } else {
         test_finished(false);

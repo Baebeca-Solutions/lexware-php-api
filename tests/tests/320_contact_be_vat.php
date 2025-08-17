@@ -27,7 +27,7 @@ try {
         ),
         'emailAddresses' => array(
             'business' => array(
-                'support@baebeca.de'
+                'no-reply@baebeca.de'
             ),
         ),
     );
@@ -85,7 +85,7 @@ try {
         ),
         'emailAddresses' => array(
             'business' => array(
-                'support@baebeca.de'
+                'no-reply@baebeca.de'
             ),
         ),
     );

@@ -1,5 +1,7 @@
 <?php
-test_start('download pdf with additional xml from an X-Rechnung');
+test_start('download pdf with additional xml from an X-Rechnung: '.INVOICE_ID_XRECHNUNG);
+@unlink(__DIR__.'\tmp\120_XRechnung.pdf');
+@unlink(__DIR__.'\tmp\120_XRechnung.pdf.xml');
 try {
     $lexware->get_pdf('invoices', INVOICE_ID_XRECHNUNG, __DIR__.'/tmp/120_XRechnung.pdf');
     if (file_exists(__DIR__.'/tmp/120_XRechnung.pdf') && file_exists(__DIR__.'/tmp/120_XRechnung.pdf.xml')) {
@@ -17,9 +19,10 @@ catch(\Baebeca\LexwareException $e) {
     test_finished(false);
 }
 
-test_start('download pdf without additional xml from an default invoice');
+test_start('download pdf without additional xml from an default invoice: '.INVOICE_ID_NON_E_INVOICE);
+@unlink(__DIR__.'\tmp\120_Rechnung.pdf');
 try {
-    $lexware->get_pdf('invoices', INVOICE_ID, __DIR__.'/tmp/120_Rechnung.pdf');
+    $lexware->get_pdf('invoices', INVOICE_ID_NON_E_INVOICE, __DIR__.'/tmp/120_Rechnung.pdf');
     if (file_exists(__DIR__.'/tmp/120_Rechnung.pdf') && !file_exists(__DIR__.'/tmp/120_Rechnung.pdf.xml')) {
         unlink(__DIR__.'\tmp\120_Rechnung.pdf');
         test_finished(true);

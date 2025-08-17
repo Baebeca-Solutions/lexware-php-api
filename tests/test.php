@@ -23,12 +23,13 @@ if (is_file(__DIR__.'/_local_settings.php')) {
     exit();
 }
 
+if (!isset($sandbox)) exit('$sandbox not defined');
+if (!isset($api_key)) exit('$api_key not defined');
+if (!isset($api_key_OSS_DESTINATION)) exit('$api_key_OSS_DESTINATION not defined');
 if (!isset($run_specific_test)) exit('$run_specific_test not defined');
 if (!isset($debug)) exit('$debug not defined');
-
-// enable your current oss config
-#$oss_config = 'origin';
-$oss_config = 'destination';
+if (!isset($xRechnungSampleId)) exit('$xRechnungSampleId not defined');
+if (!isset($create_tons_of_customers)) exit('$create_tons_of_customers not defined');
 
 // current german taxrates
 $taxrate_19 = 19;
@@ -41,6 +42,13 @@ $lexware = new \Baebeca\LexwareApi(array(
 	'ssl_verify' => false,
 	'sandbox' => $sandbox,
 ));
+$lexware_OSS_ORIGIN =& $lexware;
+
+$lexware_OSS_DESTINATION = new \Baebeca\LexwareApi(array(
+    'api_key' => $api_key_OSS_DESTINATION,
+    'ssl_verify' => false,
+    'sandbox' => $sandbox,
+));;
 
 
 $logfile_current_test = false;

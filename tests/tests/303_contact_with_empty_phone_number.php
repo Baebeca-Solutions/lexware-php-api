@@ -22,7 +22,7 @@ try {
 					'salutation' => 'Herr',
 					'firstName' => 'John',
 					'lastName' => 'Doe',
-					'emailAddress' =>'support@baebeca.de',
+					'emailAddress' =>'no-reply@baebeca.de',
         			'phoneNumber' => '022619202930',
 				)
 			),
@@ -39,7 +39,7 @@ try {
 		),
 		'emailAddresses' => array(
 			'business' => array(
-				'support@baebeca.de'
+				'no-reply@baebeca.de'
 			),
 		),
 		'phoneNumbers' => array(

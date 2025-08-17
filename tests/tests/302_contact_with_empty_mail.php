@@ -22,7 +22,7 @@ try {
 					'salutation' => 'Herr',
 					'firstName' => 'John',
 					'lastName' => 'Doe',
-					'emailAddress' =>'support@baebeca.de',
+					'emailAddress' =>'no-reply@baebeca.de',
         			'phoneNumber' => '022619202930',
 				)
 			),
