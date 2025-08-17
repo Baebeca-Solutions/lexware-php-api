@@ -479,7 +479,7 @@ class LexwareApi  {
 
         // 200 ok, 201 created, 202 accepted
         if (in_array($http_status, [200, 201, 202])) {
-            if (!empty($result) && !($type === 'GET' && $params === '/file') && !$return_http_header) {
+            if (!empty($result) && !($type === 'GET' && $resource === 'files') && !($type === 'GET' && $params === '/file') && !$return_http_header) {
                 return json_decode($result);
             }
             // full http_header
