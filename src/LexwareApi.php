@@ -12,11 +12,11 @@
 namespace Baebeca;
 
 class LexwareApi  {
-    protected $api_key = '';
-    protected $api_endpoint = 'https://api.lexware.io';
-    protected $callback = false;
-    protected $ssl_verify = true;
-    protected $api_version = 'v1';
+    protected string $api_key = '';
+    protected string $api_endpoint = 'https://api.lexware.io';
+    protected false|string $callback = false;
+    protected bool $ssl_verify = true;
+    protected string $api_version = 'v1';
     protected $countries;
     private $rate_limit_repeat, $rate_limit_seconds, $rate_limit_max_tries, $rate_limit_callable;
 
@@ -38,7 +38,7 @@ class LexwareApi  {
         return true;
     }
 
-    private function load_country_definition() {
+    private function load_country_definition(): void {
         // country definition | this is the curren definition which is legal today
         // tax adjustments in past or future will be checked later in
         $this->countries = (object)[
@@ -467,6 +467,10 @@ class LexwareApi  {
         $http_status = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
         $error = '';
 
+        #var_dump($data);
+        #var_dump($http_status);
+        #var_dump($result);
+
         // prepare data for error message
         if ($data !== '' && is_string($data)) $data = json_decode($data);
 
@@ -474,13 +478,16 @@ class LexwareApi  {
         if (in_array($http_status, [200, 201, 202])) {
             if (!empty($result) && !($type == 'GET' && $resource == 'files') && !$return_http_header) {
                 return json_decode($result);
-                // full http_header
-            } else if (!empty($result) && $return_http_header) {
+            }
+            // full http_header
+            else if (!empty($result) && $return_http_header) {
                 return ['header' => curl_getinfo($ch), 'body' => $result];
-                // binary or full http_header
-            } else if (!empty($result)) {
+            }
+            // binary or full http_header
+            else if (!empty($result)) {
                 return $result;
-            } else {
+            }
+            else {
                 $error = 'empty response';
             }
         }
@@ -866,7 +873,7 @@ class LexwareApi  {
 
                 // extract results
                 foreach ($result_tmp as $tmp) {
-                    array_push($result, $tmp);
+                    $result[] = $tmp;
                 }
                 unset($result_tmp, $tmp); // cleanup
 
@@ -1014,7 +1021,7 @@ class LexwareApi  {
             }
 
             // check if is not already encoded
-            if (strpos($filter, '%') === false || $filter == rawurldecode($filter)) {
+            if (!str_contains($filter, '%') || $filter == rawurldecode($filter)) {
                 if ($filter === htmlspecialchars_decode($filter, ENT_NOQUOTES)) {
                     $filter = htmlspecialchars($filter, ENT_NOQUOTES);
                 }
@@ -1053,7 +1060,7 @@ class LexwareApi  {
         // use mimetype type from filename
         if (
             in_array(substr(strtolower($file), -4), ['.pdf', '.jpg', '.png', '.xml']) ||
-            in_array(substr(strtolower($file), -5), ['.jpeg'])
+            str_ends_with(strtolower($file), '.jpeg')
         ) {
             return $this->api_call('POST', 'files', '', ['file' => new \CURLFile($file), 'type' => 'voucher']);
         }
@@ -1086,7 +1093,7 @@ class LexwareApi  {
         // use mimetype type from filename
         if (
             in_array(substr(strtolower($file), -4), ['.pdf', '.jpg', '.png', '.xml']) ||
-            in_array(substr(strtolower($file), -5), ['.jpeg'])
+            str_ends_with(strtolower($file), '.jpeg')
         ) {
             return $this->api_call('POST', 'vouchers', $uuid, ['file' => new \CURLFile($file)], '/files');
         }
@@ -1142,7 +1149,7 @@ class LexwareApi  {
      * @param bool $b2b_business customer is a b2b customer
      * @param bool $physical_good a physical good will be selled
      * @return string
-     * @throws \LexwareException
+     * @throws LexwareException
      */
     public function get_needed_voucher_booking_id(float $taxrate, string $country_code, int $date, bool $euopean_vatid, bool $b2b_business, bool $physical_good = true): string {
         $country_code = strtoupper($country_code);
@@ -1265,15 +1272,6 @@ class LexwareApi  {
                 'physical_good' => $physical_good,
             ]);
         }
-
-        throw new LexwareException('unknown booking scenario, cannot decide correct booking category', [
-            'taxrate' => $taxrate,
-            'country_code' => $country_code,
-            'date' => $date,
-            'european_vatid' => $euopean_vatid,
-            'b2b_business' => $b2b_business,
-            'physical_good' => $physical_good,
-        ]);
     }
 
     public function get_needed_tax_type(string $customer_country_code, string $vat_id, bool $physical_good, int $timestamp): string {
@@ -1400,7 +1398,7 @@ class LexwareApi  {
      *  bool    false           => no OSS needed, you can proceed without OSS stuff
      *  string  "origin"        => you have to use german taxrates
      *  string  "destination"   => you have to use OSS taxrates
-     * @throws \LexwareException
+     * @throws LexwareException
      */
     public function is_oss_needed(string $country_code, int $date) {
         if ($date <= 1625090400) return false; // 01.07.2021
@@ -1423,7 +1421,7 @@ class LexwareApi  {
      *  2 => Elektronische Dienstleistung
      * @param float|int $taxrate
      * @return string lexware voucher booking category id
-     * @throws \LexwareException
+     * @throws LexwareException
      */
     public function get_oss_voucher_category(string $country_code, int $date, int $booking_category = 1, $taxrate = 0): string {
         $oss_type = $this->is_oss_needed($country_code, $date);
