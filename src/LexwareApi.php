@@ -790,11 +790,26 @@ class LexwareApi  {
         if ($type === 'downpaymentinvoice') $type = 'down-payment-invoices';
         if ($type === 'dunning') $type = 'dunnings';
 
-        // download pdf
+        // https://developers.lexware.io/partner/docs/#invoices-endpoint-download-an-invoice-file
+
+        // download default file
+        $xRechnung = false;
         try {
-            $file = $this->api_call('GET', $type, $uuid, 'application/pdf', '/file');
-            if (!$file) return false;
-            file_put_contents($filename, $file);
+            $request = $this->api_call('GET', $type, $uuid, '*/*', '/file', true);
+            $body = substr($request['body'], $request['header']['header_size']);
+            if (!$body) return false;
+
+            // default is xRechnung
+            if (
+                $request['header']['content_type'] === 'application/xml' ||
+                $request['header']['content_type'] === 'application/xml;charset=UTF-8'
+            ) {
+                $xRechnung = true;
+                file_put_contents($filename.'.xml', $body);
+            }
+            else {
+                file_put_contents($filename, $body);
+            }
         }
         catch (LexwareException $e) {
             // no PDFs for some types in draft mode
@@ -802,16 +817,10 @@ class LexwareApi  {
             throw $e;
         }
 
-        // check additonal X-Rechnung XML
-        if (!in_array($type, ['credit-notes', 'down-payment-invoices', 'invoices'])) return true;
-        try {
-            $file = $this->api_call('GET', $type, $uuid, 'application/xml', '/file');
-            if ($file) file_put_contents($filename.'.xml', $file);
-        }
-        catch (LexwareException $e) {
-            // no e-voucher or not configured
-            if ($e->getError()['HTTP Status'] === 404) return true;
-            throw $e;
+        // get additional visual files if needed
+        if ($xRechnung) {
+            $file = $this->api_call('GET', $type, $uuid, 'application/pdf', '/file');
+            if ($file) file_put_contents($filename, $file);
         }
 
         return true;
@@ -935,6 +944,7 @@ class LexwareApi  {
                     $extension = 'pdf';
                     break;
                 case 'application/xml':
+                case 'application/xml;charset=UTF-8':
                 case 'text/xml':
                     $extension = 'xml';
                     $xRechnung = true;
@@ -949,10 +959,9 @@ class LexwareApi  {
 
             // get additional visual files
             if ($xRechnung) {
-                $request = $this->api_call('GET', 'files', $uuid_file, 'application/pdf', '', true);
-                $body = substr($request['body'], $request['header']['header_size']);
+                $file = $this->api_call('GET', 'files', $uuid_file, 'application/pdf');
                 $filename = $filename_prefix.'_'.$i.'.pdf';
-                file_put_contents($filename, $body);
+                file_put_contents($filename, $file);
                 $saved_files[] = $filename;
             }
 
