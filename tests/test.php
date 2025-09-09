@@ -9,7 +9,8 @@
  * @license 	If you need a commercial license for your closed-source project check: https://github.com/Baebeca-Solutions/lexware-php-api/blob/php-8.4/LICENSE-commercial_EN.md
  **/
 
-require __DIR__.'/../vendor/autoload.php';
+require __DIR__.'/../src/LexwareApi.php';
+require __DIR__.'/../src/LexwareException.php';
 use \Baebeca\LexwareApi;
 use \Baebeca\LexwareException;
 
