@@ -20,6 +20,10 @@ class LexwareApi  {
     protected $countries;
     private $rate_limit_repeat, $rate_limit_seconds, $rate_limit_max_tries, $rate_limit_callable;
 
+    /**
+     * @param array $settings
+     * @throws \Baebeca\LexwareException
+     */
     public function __construct($settings) {
         if (!is_array($settings)) throw new LexwareException('settings should be an array');
         if (empty($settings['api_key'])) throw new LexwareException('no api_key is given');
@@ -38,12 +42,16 @@ class LexwareApi  {
         return true;
     }
 
+    /**
+     * @return void
+     */
     private function load_country_definition(): void {
         // country definition | this is the curren definition which is legal today
         // tax adjustments in past or future will be checked later in
         $this->countries = (object)[
             /** nullrate | Nullsatz
              * https://europa.eu/youreurope/business/taxation/vat/vat-rules-rates/index_de.htm
+             *
              * Einige EU-Länder wenden auf bestimmte Umsätze einen Nullsatz an.
              * Bei Anwendung eines Nullsatzes muss der Verbraucher keine Mehrwertsteuer abführen,
              * Sie können jedoch Mehrwertsteuer, die Sie bei unmittelbar mit dem betreffenden Umsatz verbundenen
@@ -377,10 +385,24 @@ class LexwareApi  {
         ];
     }
 
+    /**
+     *
+     */
     public function __destruct() {
         unset($this->api_key);
     }
 
+    /**
+     * @param $type
+     * @param $resource
+     * @param $uuid
+     * @param $data
+     * @param $params
+     * @param $return_http_header
+     * @param int $count
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     protected function api_call($type, $resource, $uuid = '', $data = '', $params = '', $return_http_header = false, int $count = 1) {
         // check api_key
         if ($this->api_key === true || $this->api_key === false || $this->api_key === '') throw new LexwareException('invalid API Key', ['api_key' => $this->api_key]);
@@ -460,7 +482,7 @@ class LexwareApi  {
         curl_setopt($ch, CURLOPT_HEADER, $return_http_header);
         curl_setopt($ch, CURLOPT_USERAGENT, 'Baebeca Solutions GmbH - lexware-php-api | https://github.com/Baebeca-Solutions/lexware-php-api');
 
-        // skip ssl verify only if manual deactivated (eg. in local tests)
+        // skip ssl verify only if manual deactivated (e.g. in local tests)
         if (!$this->ssl_verify) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -537,6 +559,12 @@ class LexwareApi  {
         ]);
     }
 
+    /**
+     * @param $event
+     * @param $callback
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function create_event($event, $callback = false) {
         if (!$callback) $callback = $this->callback;
         if ($callback) {
@@ -546,16 +574,30 @@ class LexwareApi  {
         }
     }
 
+    /**
+     * @param array|object $data
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function create_article(array|object $data) {
         if (is_object($data)) $data = json_decode(json_encode($data, true), true);
         //todo some validation checks
         return $this->api_call('POST', 'articles', '', $data);
     }
 
+    /**
+     * @param $uuid
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function get_article($uuid) {
         return $this->api_call('GET', 'articles', $uuid);
     }
 
+    /**
+     * @return mixed
+     * @throws \Baebeca\LexwareException
+     */
     public function get_articles_all() {
         $result = $this->api_call('GET', 'articles', '', '', '?page=0&size=250&direction=ASC&property=name');
         $articles = $result->content;
@@ -571,16 +613,32 @@ class LexwareApi  {
         return($articles);
     }
 
+    /**
+     * @param $uuid
+     * @param array|object $data
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function update_article($uuid, array|object $data) {
         if (is_object($data)) $data = json_decode(json_encode($data, true), true);
         //todo some validation checks
         return $this->api_call('PUT', 'articles', $uuid, $data);
     }
 
+    /**
+     * @param $uuid
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function delete_article($uuid) {
         return $this->api_call('DELETE', 'articles', $uuid);
     }
 
+    /**
+     * @param array $data
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function create_contact(array $data) {
         $data = $this->validate_contact_data($data);
 
@@ -620,10 +678,23 @@ class LexwareApi  {
         return $new_contact;
     }
 
+    /**
+     * @param $data
+     * @param $finalized
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function create_quotation($data, $finalized = false) {
         return $this->api_call('POST', 'quotations', '', $data, ($finalized ? '?finalize=true' : ''));
     }
 
+    /**
+     * @param $data
+     * @param $finalized
+     * @param $linked_invoice_id
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function create_creditnote($data, $finalized = false, $linked_invoice_id = '') {
         $params_url = '';
         $params = [];
@@ -635,40 +706,87 @@ class LexwareApi  {
         return $this->api_call('POST', 'credit-notes', '', $data, $params_url);
     }
 
+    /**
+     * @param $data
+     * @param $finalized
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function create_invoice($data, $finalized = false) {
         //todo some validation checks
         return $this->api_call('POST', 'invoices', '', $data, ($finalized ? '?finalize=true' : ''));
     }
 
+    /**
+     * @param $data
+     * @param $finalized
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function create_orderconfirmation($data, $finalized = false) {
         //todo some validation checks
         return $this->api_call('POST', 'order-confirmations', '', $data, ($finalized ? '?finalize=true' : ''));
     }
 
+    /**
+     * @param $data
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function create_voucher($data) {
         return $this->api_call('POST', 'vouchers', '', $data);
     }
 
+    /**
+     * @param $data
+     * @param $finalized
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function create_delivery_note($data, $finalized = false) {
         return $this->api_call('POST', 'delivery-notes', '', $data, ($finalized ? '?finalize=true' : ''));
     }
 
+    /**
+     * @param $data
+     * @param $precedingSalesVoucherId
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function create_dunning($data, $precedingSalesVoucherId) {
         return $this->api_call('POST', 'dunnings', '', $data, ($precedingSalesVoucherId ? '?precedingSalesVoucherId='.$precedingSalesVoucherId : ''));
     }
 
+    /**
+     * @param $uuid
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function get_event($uuid) {
         return $this->api_call('GET', 'event-subscriptions', $uuid);
     }
 
+    /**
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function get_events_all() {
         return $this->api_call('GET', 'event-subscriptions');
     }
 
+    /**
+     * @param $uuid
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function get_recurring_template($uuid) {
         return $this->api_call('GET', 'recurring-templates', $uuid);
     }
 
+    /**
+     * @return mixed
+     * @throws \Baebeca\LexwareException
+     */
     public function get_recurring_templates_all() {
         $result = $this->api_call('GET', 'recurring-templates', '', '', '?page=0&size=250&sort=createdDate,ASC');
         $recurring_templates = $result->content;
@@ -683,11 +801,20 @@ class LexwareApi  {
         }
         return($recurring_templates);
     }
-    
+
+    /**
+     * @param $uuid
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function get_contact($uuid) {
         return $this->api_call('GET', 'contacts', $uuid);
     }
 
+    /**
+     * @return mixed
+     * @throws \Baebeca\LexwareException
+     */
     public function get_contacts_all() {
         $result = $this->api_call('GET', 'contacts', '', '', '?page=0&size=250&direction=ASC&property=name');
         $contacts = $result->content;
@@ -703,10 +830,19 @@ class LexwareApi  {
         return($contacts);
     }
 
+    /**
+     * @param $uuid
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function get_invoice($uuid) {
         return $this->api_call('GET', 'invoices', $uuid);
     }
 
+    /**
+     * @return mixed
+     * @throws \Baebeca\LexwareException
+     */
     public function get_invoices_all() {
         $result = $this->api_call('GET', 'voucherlist', '', '', '?page=0&size=250&sort=voucherNumber,DESC&voucherType=invoice,salesinvoice,downpaymentinvoice&voucherStatus=open,paid,paidoff,voided,transferred');
         $vouchers = $result->content;
@@ -722,6 +858,11 @@ class LexwareApi  {
         return($vouchers);
     }
 
+    /**
+     * @param $count
+     * @return mixed
+     * @throws \Baebeca\LexwareException
+     */
     public function get_last_invoices($count) {
         if ($count <= 0) throw new LexwareException('positive invoice count needed');
 
@@ -755,22 +896,47 @@ class LexwareApi  {
         }
     }
 
+    /**
+     * @param $uuid
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function get_down_payment_invoice($uuid) {
         return $this->api_call('GET', 'down-payment-invoices', $uuid);
     }
 
+    /**
+     * @param $uuid
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function get_quotation($uuid) {
         return $this->api_call('GET', 'quotations', $uuid);
     }
 
+    /**
+     * @param $uuid
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function get_orderconfirmation($uuid) {
         return $this->api_call('GET', 'order-confirmations', $uuid);
     }
 
+    /**
+     * @param $uuid
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function get_deliverynote($uuid) {
         return $this->api_call('GET', 'delivery-notes', $uuid);
     }
 
+    /**
+     * @param $uuid
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function get_dunning($uuid) {
         return $this->api_call('GET', 'dunnings', $uuid);
     }
@@ -786,6 +952,13 @@ class LexwareApi  {
         return $this->get_pdf('invoices', $uuid, $filename);
     }
 
+    /**
+     * @param $type
+     * @param $uuid
+     * @param $filename
+     * @return bool
+     * @throws \Baebeca\LexwareException
+     */
     public function get_pdf($type, $uuid, $filename): bool {
         if ($type === 'downpaymentinvoice') $type = 'down-payment-invoices';
         if ($type === 'dunning') $type = 'dunnings';
@@ -826,10 +999,24 @@ class LexwareApi  {
         return true;
     }
 
+    /**
+     * @param $uuid
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function get_voucher($uuid) {
         return $this->api_call('GET', 'vouchers', $uuid);
     }
 
+    /**
+     * @param $type
+     * @param $state
+     * @param $archived
+     * @param $date_from
+     * @param $date_to
+     * @return array
+     * @throws \Baebeca\LexwareException
+     */
     public function get_vouchers(
         $type = 'invoice,creditnote,orderconfirmation',
         $state = 'draft,open,paid,paidoff,voided,accepted,rejected',
@@ -889,7 +1076,7 @@ class LexwareApi  {
                 unset($result_tmp, $tmp); // cleanup
 
                 // get next timespan, update +1 month
-                $date_from = date('Y-m-d', strtotime($date_to.'T00:00:00.000+01:00')+(60*60*25)); // +1 day (dont need same day twice)
+                $date_from = date('Y-m-d', strtotime($date_to.'T00:00:00.000+01:00')+(60*60*25)); // +1 day (don't need same day twice)
                 $date_to_timestamp = strtotime($date_from.'T00:00:00.000+01:00')+(60*60*24*30); // +1 month
                 // reduce if lower timeframe was set by user
                 if ($date_to_timestamp > $date_to_timestamp_end) $date_to_timestamp = $date_to_timestamp_end;
@@ -915,6 +1102,12 @@ class LexwareApi  {
         return [];
     }
 
+    /**
+     * @param $uuid
+     * @param $filename_prefix
+     * @return array
+     * @throws \Baebeca\LexwareException
+     */
     public function get_voucher_files($uuid, $filename_prefix): array {
         // must get voucher files before
         $voucher = $this->get_voucher($uuid);
@@ -971,21 +1164,45 @@ class LexwareApi  {
         return $saved_files;
     }
 
+    /**
+     * @param $uuid
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function get_voucher_payments($uuid) {
         return $this->api_call('GET', 'payments', $uuid);
     }
 
+    /**
+     * @var null
+     */
     private $cache_profile = null;
+
+    /**
+     * @return array|bool|mixed|string|null
+     * @throws \Baebeca\LexwareException
+     */
     public function get_profile() {
         if (!is_null($this->cache_profile)) return $this->cache_profile;
         $this->cache_profile = $this->api_call('GET', 'profile');
         return $this->cache_profile;
     }
 
+    /**
+     * @param $uuid
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function get_creditnote($uuid) {
         return $this->api_call('GET', 'credit-notes', $uuid);
     }
 
+    /**
+     * @param $uuid
+     * @param array|object $data
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function update_contact($uuid, array|object $data) {
         if (is_object($data)) $data = json_decode(json_encode($data, true), true);
         $data = $this->validate_contact_data($data);
@@ -997,10 +1214,21 @@ class LexwareApi  {
     #
     #}
 
+    /**
+     * @param $uuid
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function delete_event($uuid) {
         return $this->api_call('DELETE', 'event-subscriptions', $uuid);
     }
 
+    /**
+     * @param array $filters
+     * @param bool $wildcards
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function search_contact(array $filters, bool $wildcards = false) {
         // todo integrate pagination
 
@@ -1065,6 +1293,11 @@ class LexwareApi  {
 
     // todo check lifetime api key
 
+    /**
+     * @param $file
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function upload_file($file) {
         if (!file_exists($file)) throw new LexwareException('file does not exist', ['file' => $file]);
         if (filesize($file) > 5*1024*1024) throw new LexwareException('filesize to big', ['file' => $file, 'filesize' => filesize($file).' byte']);
@@ -1098,6 +1331,12 @@ class LexwareApi  {
         return $this->api_call('POST', 'files', '', ['file' => new \CURLFile($file, $mime_type, $dummy_title), 'type' => 'voucher']);
     }
 
+    /**
+     * @param $uuid
+     * @param $file
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function upload_voucher($uuid, $file) {
         if (!file_exists($file)) throw new LexwareException('file does not exist', ['file' => $file]);
         if (filesize($file) > 5*1024*1024) throw new LexwareException('filesize to big', ['file' => $file, 'filesize' => filesize($file).' byte']);
@@ -1133,6 +1372,10 @@ class LexwareApi  {
 
     /* Tax methods */
 
+    /**
+     * @return bool
+     * @throws \Baebeca\LexwareException
+     */
     public function is_tax_free_company(): bool {
         $profile = $this->get_profile();
         return !empty($profile->smallBusiness) && $profile->smallBusiness;
@@ -1140,8 +1383,8 @@ class LexwareApi  {
 
     /**
      * Check if the given country is member in the european union
-     * @param $country_code string 2-letter country code
-     * @param $date int timestamp booking date
+     * @param string $country_code 2-letter country code
+     * @param int $date timestamp booking date
      * @return bool
      */
     public function is_european_member(string $country_code, int $date): bool {
@@ -1285,6 +1528,13 @@ class LexwareApi  {
         }
     }
 
+    /**
+     * @param string $customer_country_code
+     * @param string $vat_id
+     * @param bool $physical_good
+     * @param int $timestamp
+     * @return string
+     */
     public function get_needed_tax_type(string $customer_country_code, string $vat_id, bool $physical_good, int $timestamp): string {
         if (strtoupper($customer_country_code) === 'DE') return 'net';
         if (!empty($vat_id) && $this->is_european_member($customer_country_code, $timestamp)) return 'intraCommunitySupply';
@@ -1384,6 +1634,7 @@ class LexwareApi  {
      * @param string $country_code 2-letter country code
      * @param int $date booking date timestamp
      * @return bool
+     * @throws \Baebeca\LexwareException
      */
     public function check_taxrate(float $taxrate, string $country_code, int $date): bool {
         if ($taxrate && $this->is_tax_free_company()) return false;
@@ -1453,6 +1704,10 @@ class LexwareApi  {
         }
     }
 
+    /**
+     * @param $vat_id
+     * @return bool
+     */
     public function valid_vat_id($vat_id) {
         $vat_id = strtoupper(trim($vat_id));
         $country_chars = substr($vat_id, 0, 2);
@@ -1468,6 +1723,10 @@ class LexwareApi  {
         );
     }
 
+    /**
+     * @param array $data
+     * @return array
+     */
     private function validate_contact_data(array $data): array {
         if (isset($data['company']['name']) && empty($data['company']['name'])) $data['company']['name'] = '-- ohne Firmenname --';
         if (isset($data['person']['firstName']) && empty($data['person']['firstName'])) $data['person']['firstName'] = '-- ohne Vorname --';
@@ -1627,26 +1886,54 @@ class LexwareApi  {
         return $data;
     }
 
+    /**
+     * @param bool $repeat
+     * @param int $seconds_to_sleep
+     * @param int $max_tries
+     * @return void
+     */
     public function configure_rate_limit(bool $repeat = true, int $seconds_to_sleep = 1, int $max_tries = 10) : void {
         $this->rate_limit_repeat = $repeat;
         $this->rate_limit_seconds = $seconds_to_sleep;
         $this->rate_limit_max_tries = $max_tries;
     }
 
+    /**
+     * @param callable|null $callback
+     * @return void
+     */
     public function configure_rate_limit_callable(?callable $callback = null) : void {
         $this->rate_limit_callable = $callback;
     }
 
     /* legacy wrapper */
 
+    /**
+     * @param $uuid
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function get_credit_note($uuid) {
         return $this->get_creditnote($uuid);
     }
 
+    /**
+     * @param $data
+     * @param $finalized
+     * @return array|bool|mixed|string
+     * @throws \Baebeca\LexwareException
+     */
     public function create_credit_note($data, $finalized = false) {
         return $this->create_creditnote($data, $finalized);
     }
 
+    /**
+     * Only for internal usage in automated tests
+     * @param $taxType
+     * @param $smallBusiness
+     * @param $distanceSalesPrinciple
+     * @return void
+     */
     public function test_set_profile($taxType = 'net', $smallBusiness = false, $distanceSalesPrinciple = 'ORIGIN') {
         $profile = [
             'organizationId' => null,
@@ -1668,6 +1955,10 @@ class LexwareApi  {
         $this->cache_profile = (object) $profile;
     }
 
+    /**
+     * Only for internal usage in automated tests
+     * @return void
+     */
     public function test_clear_profile() {
         $this->cache_profile = null;
     }
