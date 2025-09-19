@@ -740,11 +740,15 @@ class LexwareApi  {
     /**
      * @param $data
      * @param $finalized
+     * @param $precedingSalesVoucherId
      * @return array|bool|mixed|string
      * @throws \Baebeca\LexwareException
      */
-    public function create_delivery_note($data, $finalized = false) {
-        return $this->api_call('POST', 'delivery-notes', '', $data, ($finalized ? '?finalize=true' : ''));
+    public function create_delivery_note($data, $finalized = false, $precedingSalesVoucherId = '') {
+        $params = '';
+        if ($finalized) $params.= '?finalize=true';
+        if ($precedingSalesVoucherId !== '') $params.= ($finalized ? '&' : '?').'precedingSalesVoucherId='.$precedingSalesVoucherId;
+        return $this->api_call('POST', 'delivery-notes', '', $data, $params);
     }
 
     /**
