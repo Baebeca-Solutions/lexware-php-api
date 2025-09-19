@@ -691,41 +691,45 @@ class LexwareApi  {
     /**
      * @param $data
      * @param $finalized
-     * @param $linked_invoice_id
+     * @param $precedingSalesVoucherId
      * @return array|bool|mixed|string
      * @throws \Baebeca\LexwareException
      */
-    public function create_creditnote($data, $finalized = false, $linked_invoice_id = '') {
-        $params_url = '';
-        $params = [];
-        if ($finalized) $params[] = 'finalize=true';
-        if (!empty($linked_invoice_id)) $params[] = 'precedingSalesVoucherId='.$linked_invoice_id;
-
-        if (!empty($params)) $params_url = '?'.implode('&', $params);
-
-        return $this->api_call('POST', 'credit-notes', '', $data, $params_url);
+    public function create_creditnote($data, $finalized = false, $precedingSalesVoucherId = '') {
+        $params = '';
+        if ($finalized) $params.= '?finalize=true';
+        if ($precedingSalesVoucherId !== '') $params.= ($finalized ? '&' : '?').'precedingSalesVoucherId='.$precedingSalesVoucherId;
+        return $this->api_call('POST', 'credit-notes', '', $data, $params);
     }
 
     /**
      * @param $data
      * @param $finalized
+     * @param $precedingSalesVoucherId
      * @return array|bool|mixed|string
      * @throws \Baebeca\LexwareException
      */
-    public function create_invoice($data, $finalized = false) {
+    public function create_invoice($data, $finalized = false, $precedingSalesVoucherId = '') {
         //todo some validation checks
-        return $this->api_call('POST', 'invoices', '', $data, ($finalized ? '?finalize=true' : ''));
+        $params = '';
+        if ($finalized) $params.= '?finalize=true';
+        if ($precedingSalesVoucherId !== '') $params.= ($finalized ? '&' : '?').'precedingSalesVoucherId='.$precedingSalesVoucherId;
+        return $this->api_call('POST', 'invoices', '', $data, $params);
     }
 
     /**
      * @param $data
      * @param $finalized
+     * @param $precedingSalesVoucherId
      * @return array|bool|mixed|string
      * @throws \Baebeca\LexwareException
      */
-    public function create_orderconfirmation($data, $finalized = false) {
+    public function create_orderconfirmation($data, $finalized = false, $precedingSalesVoucherId = '') {
         //todo some validation checks
-        return $this->api_call('POST', 'order-confirmations', '', $data, ($finalized ? '?finalize=true' : ''));
+        $params = '';
+        if ($finalized) $params.= '?finalize=true';
+        if ($precedingSalesVoucherId !== '') $params.= ($finalized ? '&' : '?').'precedingSalesVoucherId='.$precedingSalesVoucherId;
+        return $this->api_call('POST', 'order-confirmations', '', $data, $params);
     }
 
     /**
