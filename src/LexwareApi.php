@@ -696,10 +696,12 @@ class LexwareApi  {
      * @throws \Baebeca\LexwareException
      */
     public function create_creditnote($data, $finalized = false, $precedingSalesVoucherId = '') {
-        $params = '';
-        if ($finalized) $params.= '?finalize=true';
-        if ($precedingSalesVoucherId !== '') $params.= ($finalized ? '&' : '?').'precedingSalesVoucherId='.$precedingSalesVoucherId;
-        return $this->api_call('POST', 'credit-notes', '', $data, $params);
+        $params_url = '';
+        $params = [];
+        if ($finalized) $params[] = 'finalize=true';
+        if (!empty($precedingSalesVoucherId)) $params[] = 'precedingSalesVoucherId='.$precedingSalesVoucherId;
+        if (!empty($params)) $params_url = '?'.implode('&', $params);
+        return $this->api_call('POST', 'credit-notes', '', $data, $params_url);
     }
 
     /**
@@ -711,10 +713,12 @@ class LexwareApi  {
      */
     public function create_invoice($data, $finalized = false, $precedingSalesVoucherId = '') {
         //todo some validation checks
-        $params = '';
-        if ($finalized) $params.= '?finalize=true';
-        if ($precedingSalesVoucherId !== '') $params.= ($finalized ? '&' : '?').'precedingSalesVoucherId='.$precedingSalesVoucherId;
-        return $this->api_call('POST', 'invoices', '', $data, $params);
+        $params_url = '';
+        $params = [];
+        if ($finalized) $params[] = 'finalize=true';
+        if (!empty($precedingSalesVoucherId)) $params[] = 'precedingSalesVoucherId='.$precedingSalesVoucherId;
+        if (!empty($params)) $params_url = '?'.implode('&', $params);
+        return $this->api_call('POST', 'invoices', '', $data, $params_url);
     }
 
     /**
@@ -726,10 +730,12 @@ class LexwareApi  {
      */
     public function create_orderconfirmation($data, $finalized = false, $precedingSalesVoucherId = '') {
         //todo some validation checks
-        $params = '';
-        if ($finalized) $params.= '?finalize=true';
-        if ($precedingSalesVoucherId !== '') $params.= ($finalized ? '&' : '?').'precedingSalesVoucherId='.$precedingSalesVoucherId;
-        return $this->api_call('POST', 'order-confirmations', '', $data, $params);
+        $params_url = '';
+        $params = [];
+        if ($finalized) $params[] = 'finalize=true';
+        if (!empty($precedingSalesVoucherId)) $params[] = 'precedingSalesVoucherId='.$precedingSalesVoucherId;
+        if (!empty($params)) $params_url = '?'.implode('&', $params);
+        return $this->api_call('POST', 'order-confirmations', '', $data, $params_url);
     }
 
     /**
@@ -749,10 +755,12 @@ class LexwareApi  {
      * @throws \Baebeca\LexwareException
      */
     public function create_delivery_note($data, $finalized = false, $precedingSalesVoucherId = '') {
-        $params = '';
-        if ($finalized) $params.= '?finalize=true';
-        if ($precedingSalesVoucherId !== '') $params.= ($finalized ? '&' : '?').'precedingSalesVoucherId='.$precedingSalesVoucherId;
-        return $this->api_call('POST', 'delivery-notes', '', $data, $params);
+        $params_url = '';
+        $params = [];
+        if ($finalized) $params[] = 'finalize=true';
+        if (!empty($precedingSalesVoucherId)) $params[] = 'precedingSalesVoucherId='.$precedingSalesVoucherId;
+        if (!empty($params)) $params_url = '?'.implode('&', $params);
+        return $this->api_call('POST', 'delivery-notes', '', $data, $params_url);
     }
 
     /**
