@@ -48,11 +48,11 @@ try {
     ], true);
     test('quotation created - id: '.$quotation->id);
     test_finished(true);
-} catch(\Baebeca\LexwareException $e) {
+}
+catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
     test(print_r($e->getError(), true));
     test_finished(false);
-    exit;
 }
 
 test_start('create orderconfirmation from existing voucher '.$quotation->id);
@@ -114,7 +114,8 @@ try {
         test_finished(false);
     }
 
-} catch(\Baebeca\LexwareException $e) {
+}
+catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
     test(print_r($e->getError(), true));
     test_finished(false);
@@ -179,7 +180,8 @@ try {
         test_finished(false);
     }
 
-} catch(\Baebeca\LexwareException $e) {
+}
+catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
     test(print_r($e->getError(), true));
     test_finished(false);
@@ -244,7 +246,8 @@ try {
         test_finished(false);
     }
 
-} catch(\Baebeca\LexwareException $e) {
+}
+catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
     test(print_r($e->getError(), true));
     test_finished(false);
@@ -309,7 +312,8 @@ try {
         test_finished(false);
     }
 
-} catch(\Baebeca\LexwareException $e) {
+}
+catch(\Baebeca\LexwareException $e) {
     test($e->getMessage());
     test(print_r($e->getError(), true));
     test_finished(false);
