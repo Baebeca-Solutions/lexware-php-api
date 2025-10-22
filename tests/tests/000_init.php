@@ -1,6 +1,8 @@
 <?php
 @mkdir(realpath(__DIR__.'\tmp'));
 
+if (!empty($skip_000_init_test)) goto skip_000_init_test;
+
 test_start('create contact - private person');
 try {
     $request = $lexware->create_contact(array(
@@ -318,3 +320,5 @@ catch(\Baebeca\LexwareException $e) {
     test(print_r($e->getError(), true));
     test_finished(false);
 }
+
+skip_000_init_test:

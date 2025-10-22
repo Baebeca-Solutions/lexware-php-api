@@ -18,6 +18,7 @@ $api_key = ''; //
 $api_key_OSS_DESTINATION = ''; //
 
 // 0 if all tests, otherwhise number of test
+$skip_000_init_test = 0;
 $run_specific_test = 0;
 
 // show debug output
