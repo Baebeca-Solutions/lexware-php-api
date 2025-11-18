@@ -146,7 +146,7 @@ class LexwareApi  {
                 'title' => 'Estland',
                 'taxtitle' => 'KMKR',
                 'taxrates' => (object)[
-                    'default' => 22,
+                    'default' => 24,
                     'reduced' => [9, 13],
                     'nullrate' => false,
                 ],
@@ -1640,6 +1640,11 @@ class LexwareApi  {
         if (strtoupper($country_code) === 'SK' && $date <= 1735685999) {
             $taxrates['default'] = 20;
             $taxrates['reduced'] = [0, 5, 10];
+        }
+
+        // Estland 22% before 01.07.2025
+        if (strtoupper($country_code) === 'EE' && $date <= 1751324400) {
+            $taxrates['default'] = 22;
         }
 
         return $taxrates;
