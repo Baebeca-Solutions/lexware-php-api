@@ -303,7 +303,7 @@ class lexoffice_client {
                 'taxtitle' => 'TVA',
                 'taxrates' => (object)[
                     'default' => 21,
-                    'reduced' => [9, 11],
+                    'reduced' => [11],
                     'nullrate' => false,
                 ],
                 'europe_member' => true,
@@ -1325,6 +1325,12 @@ class lexoffice_client {
         // Estland 22% before 01.07.2025
         if (strtoupper($country_code) === 'EE' && $date <= 1751324400) {
             $taxrates['default'] = 22;
+        }
+
+        // Rumania before 01.08.2025
+        if (strtoupper($country_code) === 'RO' && $date <= 1753999200) {
+            $taxrates['default'] = 22;
+            $taxrates['reduced'] = [0, 5, 9];
         }
 
         return $taxrates;
