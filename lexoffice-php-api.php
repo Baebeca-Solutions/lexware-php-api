@@ -302,8 +302,8 @@ class lexoffice_client {
                 'title' => 'Rumänien',
                 'taxtitle' => 'TVA',
                 'taxrates' => (object)[
-                    'default' => 19,
-                    'reduced' => [5, 9],
+                    'default' => 21,
+                    'reduced' => [9, 11],
                     'nullrate' => false,
                 ],
                 'europe_member' => true,
