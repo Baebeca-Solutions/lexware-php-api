@@ -167,7 +167,7 @@ class LexwareApi  {
                 'taxtitle' => 'AVL',
                 'taxrates' => (object)[
                     'default' => 25.5,
-                    'reduced' => [10, 14],
+                    'reduced' => [10, 13.5],
                     'nullrate' => true,
                 ],
                 'europe_member' => true,
@@ -247,7 +247,7 @@ class LexwareApi  {
                 'taxtitle' => 'PVM',
                 'taxrates' => (object)[
                     'default' => 21,
-                    'reduced' => [5, 9],
+                    'reduced' => [5, 12],
                     'nullrate' => false,
                 ],
                 'europe_member' => true,
@@ -1651,6 +1651,16 @@ class LexwareApi  {
         if (strtoupper($country_code) === 'RO' && $date <= 1753999200) {
             $taxrates['default'] = 22;
             $taxrates['reduced'] = [0, 5, 9];
+        }
+
+        // Finnland before 01.01.2026
+        if (strtoupper($country_code) === 'FI' && $date <= 1767222000) {
+            $taxrates['reduced'] = [10, 14];
+        }
+
+        // Litauen before 01.01.2026
+        if (strtoupper($country_code) === 'LT' && $date <= 1767222000) {
+            $taxrates['reduced'] = [5, 9];
         }
 
         return $taxrates;
