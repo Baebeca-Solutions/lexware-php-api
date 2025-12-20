@@ -64,7 +64,7 @@ class lexoffice_client {
                 'taxrates' => (object)[
                     'default' => 20,
                     'reduced' => [10, 13],
-                    'nullrate' => false,
+                    'nullrate' => true,
                 ],
                 'europe_member' => true,
             ],
@@ -274,7 +274,7 @@ class lexoffice_client {
                 'taxrates' => (object)[
                     'default' => 21,
                     'reduced' => [9],
-                    'nullrate' => false,
+                    'nullrate' => true,
                 ],
                 'europe_member' => true,
             ],
