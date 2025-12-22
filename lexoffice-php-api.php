@@ -1642,7 +1642,11 @@ class lexoffice_exception extends Exception {
         parent::__construct($message);
     }
 
-    public function get_error() {
+    public function getError() {
         return $this->custom_error;
+    }
+
+    public function get_error() {
+        return $this->getError();
     }
 }
