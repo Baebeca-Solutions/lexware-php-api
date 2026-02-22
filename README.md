@@ -1,5 +1,5 @@
 # lexware-php-api (ehemals lexoffice-php-api)
-PHP 8 Client für [office.lexware.de](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de) API (ehemals lexoffice.de)
+PHP 8 Client für [office.lexware.de](https://www.baebeca.de/lexware) API (ehemals lexoffice.de)
 
 - [Github](https://github.com/Baebeca-Solutions/lexware-php-api)
 - [Wiki (Dokumenation)](https://wiki.baebeca.de/index.php?title=lexware-php-api)
@@ -7,7 +7,7 @@ PHP 8 Client für [office.lexware.de](https://www.awin1.com/cread.php?awinmid=13
 - [Packagist](https://packagist.org/packages/baebeca/lexware-php-api)
 - [Lexware Office API-Dokumentation](https://developers.lexware.io)
 
-[![Lexware Office - Technologie Partner](https://www.baebeca.de/wp-content/uploads/2024/09/Lexware-Office_TP_Badge_rgb-1-300x199.png)](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)
+[![Lexware Office - Technologie Partner](https://www.baebeca.de/wp-content/uploads/2024/09/Lexware-Office_TP_Badge_rgb-1-300x199.png)](https://www.baebeca.de/lexware)
 
 ## Composer
  
