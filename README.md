@@ -1,11 +1,11 @@
 # lexware-php-api (ehemals lexoffice-php-api)
-PHP Client für [office.lexware.de](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de) API (ehemals lexoffice.de)
+PHP Client für [office.lexware.de](https://www.baebeca.de/lexware) API (ehemals lexoffice.de)
  
 ## Baebeca Solutions GmbH & Lexware Office
-* [Integrationspartner](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)
-* [Softwarepartner](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)
+* [Integrationspartner](https://www.baebeca.de/lexware)
+* [Softwarepartner](https://www.baebeca.de/lexware)
 
-[![Lexware Office - Technologie Partner](https://www.baebeca.de/wp-content/uploads/2024/09/Lexware-Office_TP_Badge_rgb-1-300x199.png)](https://www.awin1.com/cread.php?awinmid=13787&awinaffid=635216&ued=https%3A%2F%2Foffice.lexware.de)
+[![Lexware Office - Technologie Partner](https://www.baebeca.de/wp-content/uploads/2024/09/Lexware-Office_TP_Badge_rgb-1-300x199.png)](https://www.baebeca.de/lexware)
 
 ## office.lexware.de API-Dokumentation
 Die offizielle Lexware Office API-Dokumentation findest du [hier](https://developers.lexware.io).
