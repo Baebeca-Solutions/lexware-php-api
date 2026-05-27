@@ -1107,7 +1107,7 @@ class lexoffice_client {
      */
     public function get_needed_voucher_booking_id(float $taxrate, string $country_code, int $date, bool $euopean_vatid, bool $b2b_business, bool $physical_good = true): string {
         // Weltweit, Kleinunternehmer
-        if ($this->is_tax_free_company()) return '7a1efa0e-6283-4cbf-9583-8e88d3ba5960'; // §19 Kleinunternehmer
+        if ($this->is_tax_free_company()) return 'f5c7fee8-f184-4e7a-ab04-8f7e7ad6c207'; // §19 Kleinunternehmer
 
         // Deutschland
         if (strtoupper($country_code) == 'DE' && $physical_good) return '8f8664a8-fd86-11e1-a21f-0800200c9a66'; // Einnahmen -> Warenlieferung
