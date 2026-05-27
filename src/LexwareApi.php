@@ -1426,7 +1426,7 @@ class LexwareApi  {
 
         // Weltweit, Kleinunternehmer
         if ($this->is_tax_free_company() && $taxrate) throw new LexwareException('invalid taxrate for taxfree company');
-        if ($this->is_tax_free_company()) return '7a1efa0e-6283-4cbf-9583-8e88d3ba5960'; // §19 Kleinunternehmer
+        if ($this->is_tax_free_company()) return 'f5c7fee8-f184-4e7a-ab04-8f7e7ad6c207'; // §19 Kleinunternehmer
 
         // Deutschland
         if ($country_code === 'DE') {
