@@ -382,6 +382,145 @@ class LexwareApi  {
                 ],
                 'europe_member' => false,
             ],
+
+            /** Drittland-Sondergebiete / Territories outside EU VAT area
+             * These are either independent states or territories of EU member states
+             * that are excluded from the EU VAT area (§ 1 Abs. 3 UStG / Art. 6 MwStSystRL).
+             * All have europe_member = false → treated as Drittland for invoicing.
+             */
+
+            // Andorra – eigenes Steuersystem (IGI), kein EU-Mitglied
+            'AD' => (object)[
+                'title' => 'Andorra',
+                'taxtitle' => 'IGI',
+                'taxrates' => (object)[
+                    'default' => 4.5,
+                    'reduced' => [0, 1],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Åland-Inseln (FI) – Drittgebiet, außerhalb EU-MwSt-Gebiet, lokale Sätze wie Finnland
+            'AX' => (object)[
+                'title' => 'Åland-Inseln',
+                'taxtitle' => 'ALV',
+                'taxrates' => (object)[
+                    'default' => 25.5,
+                    'reduced' => [10, 13.5],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Färöer-Inseln (DK) – kein EU-Mitglied, eigene MOMS
+            'FO' => (object)[
+                'title' => 'Färöer-Inseln',
+                'taxtitle' => 'MOMS',
+                'taxrates' => (object)[
+                    'default' => 25,
+                    'reduced' => [0],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Französisch-Guayana (FR) – außerhalb EU-MwSt-Gebiet, keine TVA
+            'GF' => (object)[
+                'title' => 'Französisch-Guayana',
+                'taxtitle' => 'TVA',
+                'taxrates' => (object)[
+                    'default' => null,
+                    'reduced' => [0],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Grönland (DK) – kein EU-Mitglied, keine MwSt
+            'GL' => (object)[
+                'title' => 'Grönland',
+                'taxtitle' => 'VAT',
+                'taxrates' => (object)[
+                    'default' => null,
+                    'reduced' => [0],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Guadeloupe (FR) – außerhalb EU-MwSt-Gebiet, lokale TVA
+            'GP' => (object)[
+                'title' => 'Guadeloupe',
+                'taxtitle' => 'TVA',
+                'taxrates' => (object)[
+                    'default' => 8.5,
+                    'reduced' => [0, 2.1],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Martinique (FR) – außerhalb EU-MwSt-Gebiet, lokale TVA
+            'MQ' => (object)[
+                'title' => 'Martinique',
+                'taxtitle' => 'TVA',
+                'taxrates' => (object)[
+                    'default' => 8.5,
+                    'reduced' => [0, 2.1],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Monaco – umsatzsteuerrechtlich Teil des französischen Steuergebiets (Art. 7 MwStSystRL)
+            'MC' => (object)[
+                'title' => 'Monaco',
+                'taxtitle' => 'TVA',
+                'taxrates' => (object)[
+                    'default' => 20,
+                    'reduced' => [5.5, 10],
+                    'nullrate' => true,
+                ],
+                'europe_member' => true,
+            ],
+            // Mayotte (FR) – außerhalb EU-MwSt-Gebiet, lokale TVA
+            'YT' => (object)[
+                'title' => 'Mayotte',
+                'taxtitle' => 'TVA',
+                'taxrates' => (object)[
+                    'default' => 16,
+                    'reduced' => [0, 2.1],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Réunion (FR) – außerhalb EU-MwSt-Gebiet, lokale TVA
+            'RE' => (object)[
+                'title' => 'Réunion',
+                'taxtitle' => 'TVA',
+                'taxrates' => (object)[
+                    'default' => 8.5,
+                    'reduced' => [0, 2.1],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // San Marino – Drittland, kein EU-Mitglied, kein MwSt-System
+            'SM' => (object)[
+                'title' => 'San Marino',
+                'taxtitle' => 'VAT',
+                'taxrates' => (object)[
+                    'default' => null,
+                    'reduced' => [0],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Vatikanstadt – Drittland, kein EU-Mitglied, kein MwSt-System
+            'VA' => (object)[
+                'title' => 'Vatikanstadt',
+                'taxtitle' => 'VAT',
+                'taxrates' => (object)[
+                    'default' => null,
+                    'reduced' => [0],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
         ];
     }
 
