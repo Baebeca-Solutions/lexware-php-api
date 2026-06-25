@@ -16,5 +16,22 @@ Public PHP middleware for the Lexware Office REST API. Provides a PHP class to c
 ## Local Tests
 
 Tests require `tests/_local_settings.php` (not in git) with real Lexware API keys.
-Run via: `php tests/test.php` (from project root).
-Test files are included in numeric order; set `$run_specific_test = 12` to run only test 012.
+Copy `tests/_local_settings_default.php` as starting point.
+
+Set `$php_binary_8` / `$php_binary_74` in local settings to your local PHP installation paths.
+Use the binary matching the current branch (PHP 8.x → master, PHP 7.4 → php-7.4-legacy-no-composer branch).
+
+Run all tests:        `[php_binary] tests/test.php`
+Run specific test:    `[php_binary] tests/test.php 12`   (runs only test group 012)
+
+## Sensitive Files
+
+Do not read:
+
+- (none)
+
+## Access Control
+
+Readable (explicitly allowed):
+
+- `tests/_local_settings.php` — contains sandbox API keys only, no production credentials

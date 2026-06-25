@@ -32,6 +32,9 @@ if (!isset($debug)) exit('$debug not defined');
 if (!isset($xRechnungSampleId)) exit('$xRechnungSampleId not defined');
 if (!isset($create_tons_of_customers)) exit('$create_tons_of_customers not defined');
 
+// CLI parameter overrides $run_specific_test from local settings: php test.php 12
+if (!empty($argv[1]) && is_numeric($argv[1])) $run_specific_test = (int)$argv[1];
+
 // current german taxrates
 $taxrate_19 = 19;
 $taxrate_7 = 7;
