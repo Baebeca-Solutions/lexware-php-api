@@ -107,3 +107,21 @@ try {
     test_finished($request === 'net');
 } catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
 
+test_start('check GI (Gibraltar) as service - thirdPartyCountryService');
+try {
+    $request = $lexware->get_needed_tax_type('GI', '', false, strtotime('2024-03-26'));
+    test_finished($request === 'thirdPartyCountryService');
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+test_start('check NC (Neukaledonien) as physical - thirdPartyCountryDelivery');
+try {
+    $request = $lexware->get_needed_tax_type('NC', '', true, strtotime('2024-03-26'));
+    test_finished($request === 'thirdPartyCountryDelivery');
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+test_start('check BQ (Karibisches Niederland) as service - thirdPartyCountryService');
+try {
+    $request = $lexware->get_needed_tax_type('BQ', '', false, strtotime('2024-03-26'));
+    test_finished($request === 'thirdPartyCountryService');
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+

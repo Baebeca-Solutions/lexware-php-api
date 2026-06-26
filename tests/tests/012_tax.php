@@ -240,6 +240,81 @@ try {
     test_finished(!$request);
 } catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
 
+// Französische Überseegebiete
+test_start('check european member BL (Saint-Barthélemy) - false');
+try {
+    $request = $lexware->is_european_member('BL', strtotime('2024-01-01'));
+    test_finished(!$request);
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+test_start('check european member MF (Saint-Martin) - false');
+try {
+    $request = $lexware->is_european_member('MF', strtotime('2024-01-01'));
+    test_finished(!$request);
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+test_start('check european member PM (Saint-Pierre-et-Miquelon) - false');
+try {
+    $request = $lexware->is_european_member('PM', strtotime('2024-01-01'));
+    test_finished(!$request);
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+test_start('check european member NC (Neukaledonien) - false');
+try {
+    $request = $lexware->is_european_member('NC', strtotime('2024-01-01'));
+    test_finished(!$request);
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+test_start('check european member PF (Französisch-Polynesien) - false');
+try {
+    $request = $lexware->is_european_member('PF', strtotime('2024-01-01'));
+    test_finished(!$request);
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+test_start('check european member WF (Wallis und Futuna) - false');
+try {
+    $request = $lexware->is_european_member('WF', strtotime('2024-01-01'));
+    test_finished(!$request);
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+test_start('check european member TF (Frz. Südgebiete) - false');
+try {
+    $request = $lexware->is_european_member('TF', strtotime('2024-01-01'));
+    test_finished(!$request);
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+// Niederländische Überseegebiete
+test_start('check european member AW (Aruba) - false');
+try {
+    $request = $lexware->is_european_member('AW', strtotime('2024-01-01'));
+    test_finished(!$request);
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+test_start('check european member CW (Curaçao) - false');
+try {
+    $request = $lexware->is_european_member('CW', strtotime('2024-01-01'));
+    test_finished(!$request);
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+test_start('check european member SX (Sint Maarten) - false');
+try {
+    $request = $lexware->is_european_member('SX', strtotime('2024-01-01'));
+    test_finished(!$request);
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+test_start('check european member BQ (Karibisches Niederland) - false');
+try {
+    $request = $lexware->is_european_member('BQ', strtotime('2024-01-01'));
+    test_finished(!$request);
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+// Gibraltar
+test_start('check european member GI (Gibraltar) - false');
+try {
+    $request = $lexware->is_european_member('GI', strtotime('2024-01-01'));
+    test_finished(!$request);
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
 // Drittland-Sondergebiete: check_taxrate() - 0% muss immer gültig sein
 test_start('check taxrate GL 0% - ok');
 try {

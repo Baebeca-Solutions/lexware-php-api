@@ -521,6 +521,143 @@ class LexwareApi  {
                 ],
                 'europe_member' => false,
             ],
+
+            // Französische Überseegebiete außerhalb EU-Zoll- und MwSt-Gebiet
+            // Saint-Barthélemy – seit 2012 außerhalb EU-Zoll + MwSt-Gebiet, kein MwSt-System
+            'BL' => (object)[
+                'title' => 'Saint-Barthélemy',
+                'taxtitle' => 'TVA',
+                'taxrates' => (object)[
+                    'default' => null,
+                    'reduced' => [0],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Saint-Martin (frz. Teil) – seit 2012 außerhalb EU-Zoll + MwSt-Gebiet
+            'MF' => (object)[
+                'title' => 'Saint-Martin',
+                'taxtitle' => 'TVA',
+                'taxrates' => (object)[
+                    'default' => null,
+                    'reduced' => [0],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Saint-Pierre-et-Miquelon – außerhalb EU-Zoll + MwSt-Gebiet, kein MwSt-System
+            'PM' => (object)[
+                'title' => 'Saint-Pierre-et-Miquelon',
+                'taxtitle' => 'TVA',
+                'taxrates' => (object)[
+                    'default' => null,
+                    'reduced' => [0],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Neukaledonien – außerhalb EU-Zoll + MwSt-Gebiet, lokale TGC
+            'NC' => (object)[
+                'title' => 'Neukaledonien',
+                'taxtitle' => 'TGC',
+                'taxrates' => (object)[
+                    'default' => 11,
+                    'reduced' => [0, 3, 6],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Französisch-Polynesien – außerhalb EU-Zoll + MwSt-Gebiet
+            'PF' => (object)[
+                'title' => 'Französisch-Polynesien',
+                'taxtitle' => 'TVA',
+                'taxrates' => (object)[
+                    'default' => null,
+                    'reduced' => [0],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Wallis und Futuna – außerhalb EU-Zoll + MwSt-Gebiet, kein MwSt-System
+            'WF' => (object)[
+                'title' => 'Wallis und Futuna',
+                'taxtitle' => 'TVA',
+                'taxrates' => (object)[
+                    'default' => null,
+                    'reduced' => [0],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Frz. Südgebiete (TAAF) – außerhalb EU-Zoll + MwSt-Gebiet, kein MwSt-System
+            'TF' => (object)[
+                'title' => 'Frz. Südgebiete',
+                'taxtitle' => 'TVA',
+                'taxrates' => (object)[
+                    'default' => null,
+                    'reduced' => [0],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+
+            // Niederländische Überseegebiete außerhalb EU-Zoll- und MwSt-Gebiet
+            // Aruba – außerhalb EU-Zoll + MwSt-Gebiet, lokale ABB-Steuer
+            'AW' => (object)[
+                'title' => 'Aruba',
+                'taxtitle' => 'ABB',
+                'taxrates' => (object)[
+                    'default' => null,
+                    'reduced' => [0],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Curaçao – außerhalb EU-Zoll + MwSt-Gebiet
+            'CW' => (object)[
+                'title' => 'Curaçao',
+                'taxtitle' => 'OB',
+                'taxrates' => (object)[
+                    'default' => null,
+                    'reduced' => [0],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Sint Maarten (niederl. Teil) – außerhalb EU-Zoll + MwSt-Gebiet
+            'SX' => (object)[
+                'title' => 'Sint Maarten',
+                'taxtitle' => 'VAT',
+                'taxrates' => (object)[
+                    'default' => null,
+                    'reduced' => [0],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+            // Karibisches Niederland (Bonaire, Sint Eustatius, Saba) – außerhalb EU-Zoll + MwSt-Gebiet
+            'BQ' => (object)[
+                'title' => 'Karibisches Niederland',
+                'taxtitle' => 'ABB',
+                'taxrates' => (object)[
+                    'default' => null,
+                    'reduced' => [0],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
+
+            // Gibraltar – brit. Überseegebiet, außerhalb EU-Zoll + MwSt-Gebiet, kein MwSt-System
+            'GI' => (object)[
+                'title' => 'Gibraltar',
+                'taxtitle' => 'GST',
+                'taxrates' => (object)[
+                    'default' => null,
+                    'reduced' => [0],
+                    'nullrate' => true,
+                ],
+                'europe_member' => false,
+            ],
         ];
     }
 
