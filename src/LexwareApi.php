@@ -21,6 +21,26 @@ class LexwareApi  {
     private $rate_limit_repeat, $rate_limit_seconds, $rate_limit_max_tries, $rate_limit_callable;
 
     /**
+     * Postal-code-based VAT special zones within EU countries.
+     * These areas are excluded from the EU VAT area (§ 1 Abs. 3 UStG / Art. 6 MwStSystRL)
+     * despite having an EU country code and must be treated as Drittland for invoicing.
+     * Subclasses may extend this list by overriding the property.
+     * @var array
+     */
+    protected array $postal_vat_zones = [
+        ['country_code' => 'DE', 'postal_from' => '27498', 'postal_to' => '27498', 'name' => 'Helgoland'],
+        ['country_code' => 'DE', 'postal_from' => '78266', 'postal_to' => '78266', 'name' => 'Büsingen am Hochrhein'],
+        ['country_code' => 'ES', 'postal_from' => '35000', 'postal_to' => '35999', 'name' => 'Kanarische Inseln'],
+        ['country_code' => 'ES', 'postal_from' => '38000', 'postal_to' => '38999', 'name' => 'Kanarische Inseln'],
+        ['country_code' => 'ES', 'postal_from' => '51000', 'postal_to' => '51999', 'name' => 'Ceuta'],
+        ['country_code' => 'ES', 'postal_from' => '52000', 'postal_to' => '52999', 'name' => 'Melilla'],
+        ['country_code' => 'IT', 'postal_from' => '23030', 'postal_to' => '23030', 'name' => 'Livigno'],
+        ['country_code' => 'IT', 'postal_from' => '22060', 'postal_to' => '22060', 'name' => "Campione d'Italia"],
+        ['country_code' => 'GR', 'postal_from' => '63086', 'postal_to' => '63086', 'name' => 'Berg Athos'],
+        ['country_code' => 'FI', 'postal_from' => '22000', 'postal_to' => '22999', 'name' => 'Åland-Inseln'],
+    ];
+
+    /**
      * @param array $settings
      * @throws \Baebeca\LexwareException
      */
@@ -1665,6 +1685,28 @@ class LexwareApi  {
     /* Tax methods */
 
     /**
+     * Check if the given country + postal code is a VAT-exempt zone (Drittland/Drittgebiet)
+     * despite having an EU country code. These areas must be treated as third countries for VAT.
+     * Returns false if $postal_code is empty — backward-compatible with callers without postal data.
+     * @param string $country_code 2-letter country code
+     * @param string $postal_code  postal code of the delivery/service address
+     * @return bool
+     */
+    public function is_excluded_postal_zone(string $country_code, string $postal_code = ''): bool {
+        if (empty($postal_code)) return false;
+
+        $country_code = strtoupper($country_code);
+        $postal_code = preg_replace('/[^0-9]/', '', $postal_code);
+        if (empty($postal_code)) return false;
+
+        foreach ($this->postal_vat_zones as $zone) {
+            if ($zone['country_code'] !== $country_code) continue;
+            if ($postal_code >= $zone['postal_from'] && $postal_code <= $zone['postal_to']) return true;
+        }
+        return false;
+    }
+
+    /**
      * @return bool
      * @throws \Baebeca\LexwareException
      */
@@ -1677,9 +1719,12 @@ class LexwareApi  {
      * Check if the given country is member in the european union
      * @param string $country_code 2-letter country code
      * @param int $date timestamp booking date
+     * @param string $postal_code optional postal code to detect VAT-exempt zones within EU countries
      * @return bool
      */
-    public function is_european_member(string $country_code, int $date): bool {
+    public function is_european_member(string $country_code, int $date, string $postal_code = ''): bool {
+        if ($this->is_excluded_postal_zone($country_code, $postal_code)) return false;
+
         // load country definition, needed in extending classes with own constructor
         if (is_null($this->countries)) $this->load_country_definition();
 
@@ -1694,15 +1739,34 @@ class LexwareApi  {
      * @param bool $euopean_vatid customer use a vatid
      * @param bool $b2b_business customer is a b2b customer
      * @param bool $physical_good a physical good will be selled
+     * @param string $postal_code optional postal code to detect VAT-exempt zones within EU countries
      * @return string
      * @throws LexwareException
      */
-    public function get_needed_voucher_booking_id(float $taxrate, string $country_code, int $date, bool $euopean_vatid, bool $b2b_business, bool $physical_good = true): string {
+    public function get_needed_voucher_booking_id(float $taxrate, string $country_code, int $date, bool $euopean_vatid, bool $b2b_business, bool $physical_good = true, string $postal_code = ''): string {
         $country_code = strtoupper($country_code);
 
         // Weltweit, Kleinunternehmer
         if ($this->is_tax_free_company() && $taxrate) throw new LexwareException('invalid taxrate for taxfree company');
         if ($this->is_tax_free_company()) return 'f5c7fee8-f184-4e7a-ab04-8f7e7ad6c207'; // §19 Kleinunternehmer
+
+        // Sondergebiet innerhalb EU → wie Drittland behandeln
+        if ($this->is_excluded_postal_zone($country_code, $postal_code)) {
+            if ($physical_good) {
+                if ($taxrate == 0 && $b2b_business) return '93d24c20-ea84-424e-a731-5e1b78d1e6a9'; // Ausfuhrlieferungen an Drittländer
+                if ($taxrate == 0 && !$b2b_business) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
+                throw new LexwareException('unknown booking scenario, zone shipping with taxes. cannot decide correct booking category', [
+                    'taxrate' => $taxrate, 'country_code' => $country_code, 'postal_code' => $postal_code,
+                    'date' => $date, 'european_vatid' => $euopean_vatid, 'b2b_business' => $b2b_business, 'physical_good' => $physical_good,
+                ]);
+            }
+            if ($taxrate == 0 && $b2b_business) return 'ef5b1a6e-f690-4004-9a19-91276348894f'; // Dienstleistung an Drittländer
+            if ($taxrate == 0 && !$b2b_business) return '8f8664a1-fd86-11e1-a21f-0800200c9a66'; // Einnahmen
+            throw new LexwareException('unknown booking scenario, zone service with taxes. cannot decide correct booking category', [
+                'taxrate' => $taxrate, 'country_code' => $country_code, 'postal_code' => $postal_code,
+                'date' => $date, 'european_vatid' => $euopean_vatid, 'b2b_business' => $b2b_business, 'physical_good' => $physical_good,
+            ]);
+        }
 
         // Deutschland
         if ($country_code === 'DE') {
@@ -1825,9 +1889,14 @@ class LexwareApi  {
      * @param string $vat_id
      * @param bool $physical_good
      * @param int $timestamp
+     * @param string $postal_code optional postal code to detect VAT-exempt zones within EU countries
      * @return string
      */
-    public function get_needed_tax_type(string $customer_country_code, string $vat_id, bool $physical_good, int $timestamp): string {
+    public function get_needed_tax_type(string $customer_country_code, string $vat_id, bool $physical_good, int $timestamp, string $postal_code = ''): string {
+        if ($this->is_excluded_postal_zone($customer_country_code, $postal_code)) {
+            if ($physical_good) return 'thirdPartyCountryDelivery';
+            return 'thirdPartyCountryService';
+        }
         if (strtoupper($customer_country_code) === 'DE') return 'net';
         if (!empty($vat_id) && $this->is_european_member($customer_country_code, $timestamp)) return 'intraCommunitySupply';
         if (!$this->is_european_member($customer_country_code, $timestamp)) {

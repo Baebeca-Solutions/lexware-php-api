@@ -24,6 +24,14 @@ Use the binary matching the current branch (PHP 8.x → master, PHP 7.4 → php-
 Run all tests:        `[php_binary] tests/test.php`
 Run specific test:    `[php_binary] tests/test.php 12`   (runs only test group 012)
 
+## Documentation
+
+Public wiki (MediaWiki): https://wiki.baebeca.de/index.php?title=Lexware-php-api
+
+On any user-facing API change (new methods, changed signatures, new behaviour), update the wiki page accordingly.
+Fetch the current raw wikitext via: https://wiki.baebeca.de/index.php?title=Lexware-php-api&action=raw
+Write the updated wikitext to a .txt file in the scratchpad directory so the user can copy and paste it into the wiki editor without leading-whitespace issues.
+
 ## Sensitive Files
 
 Do not read:

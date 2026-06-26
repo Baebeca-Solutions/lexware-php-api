@@ -8,7 +8,8 @@
       "Bash(git status*)",
       "Bash(git diff *)",
       "Bash(git branch *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "WebFetch(domain:wiki.baebeca.de)"
     ]
   }
 }
