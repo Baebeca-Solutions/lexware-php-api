@@ -17,7 +17,7 @@ class LexwareApi  {
     protected false|string $callback = false;
     protected bool $ssl_verify = true;
     protected string $api_version = 'v1';
-    protected $countries;
+    protected ?object $countries = null;
     private $rate_limit_repeat, $rate_limit_seconds, $rate_limit_max_tries, $rate_limit_callable;
 
     /**
