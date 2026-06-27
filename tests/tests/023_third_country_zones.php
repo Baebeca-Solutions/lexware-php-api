@@ -137,3 +137,43 @@ try {
     $result = $lexware->get_needed_tax_type('IT', '', true, strtotime('2024-01-01'), '23030');
     test_finished($result === 'thirdPartyCountryDelivery');
 } catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+// get_needed_voucher_booking_id() mit PLZ-Sonderzonen
+// Sonderzone: kein OSS nötig, direkt als Drittland behandeln
+
+test_start('get_needed_voucher_booking_id DE 27498 (Helgoland) Warenlieferung privat, 0% → Einnahmen');
+try {
+    $result = $lexware->get_needed_voucher_booking_id(0, 'DE', strtotime('2024-01-01'), false, false, true, '27498');
+    test_finished($result === '8f8664a1-fd86-11e1-a21f-0800200c9a66');
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+test_start('get_needed_voucher_booking_id DE 27498 (Helgoland) Warenlieferung B2B, 0% → Ausfuhrlieferung Drittland');
+try {
+    $result = $lexware->get_needed_voucher_booking_id(0, 'DE', strtotime('2024-01-01'), true, true, true, '27498');
+    test_finished($result === '93d24c20-ea84-424e-a731-5e1b78d1e6a9');
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+test_start('get_needed_voucher_booking_id DE 27498 (Helgoland) Dienstleistung B2B, 0% → Dienstleistung Drittland');
+try {
+    $result = $lexware->get_needed_voucher_booking_id(0, 'DE', strtotime('2024-01-01'), true, true, false, '27498');
+    test_finished($result === 'ef5b1a6e-f690-4004-9a19-91276348894f');
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+test_start('get_needed_voucher_booking_id ES 35001 (Kanarische Inseln) Warenlieferung privat, 0% → Einnahmen (kein OSS)');
+try {
+    $result = $lexware->get_needed_voucher_booking_id(0, 'ES', strtotime('2024-01-01'), false, false, true, '35001');
+    test_finished($result === '8f8664a1-fd86-11e1-a21f-0800200c9a66');
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+test_start('get_needed_voucher_booking_id ES 35001 (Kanarische Inseln) Warenlieferung B2B, 0% → Ausfuhrlieferung Drittland');
+try {
+    $result = $lexware->get_needed_voucher_booking_id(0, 'ES', strtotime('2024-01-01'), true, true, true, '35001');
+    test_finished($result === '93d24c20-ea84-424e-a731-5e1b78d1e6a9');
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }
+
+test_start('get_needed_voucher_booking_id ES 28001 (Madrid) ohne PLZ → kein Sondergebiet, normal EU');
+try {
+    // must not throw, must return an EU-based booking category (not throw missing OSS if OSS configured)
+    $result = $lexware->get_needed_voucher_booking_id(0, 'ES', strtotime('2024-01-01'), true, true, true, '28001');
+    test_finished($result === '9075a4e3-66de-4795-a016-3889feca0d20'); // Innergemeinschaftliche Lieferung
+} catch (\Baebeca\LexwareException $e) { test($e->getMessage()); test_finished(false); }

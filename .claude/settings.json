@@ -9,7 +9,8 @@
       "Bash(git diff *)",
       "Bash(git branch *)",
       "Bash(git push *)",
-      "WebFetch(domain:wiki.baebeca.de)"
+      "WebFetch(domain:wiki.baebeca.de)",
+      "PowerShell(Set-Location *; & \"C:\\php-8.5.0-nts-Win32-vs17-x64\\php.exe\" test.php *)"
     ]
   }
 }
