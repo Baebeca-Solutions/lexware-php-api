@@ -1,5 +1,9 @@
-.idea/
+/.claude/settings.local.json
+/.claude/worktrees/
+/.idea/
+!/.idea/codeStyles
 tests/_local_settings.php
 tests/tests/tmp/
 vendor/
 composer.lock
+/TODO.md
