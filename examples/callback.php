@@ -6,7 +6,7 @@
  * @email		slu@baebeca.de
  * @link		https://github.com/Baebeca-Solutions/lexware-php-api
  * @license		AGPL-3.0 and Commercial
- * @license 	If you need a commercial license for your closed-source project check: https://github.com/Baebeca-Solutions/lexware-php-api/blob/php-8.4/LICENSE-commercial_EN.md
+ * @license 	If you need a commercial license for your closed-source project check: https://github.com/Baebeca-Solutions/lexware-php-api/blob/master/LICENSE-commercial_EN.md
  **/
 
 // to prevent execute callbacks for other keys/companies, you can setup your "organizationId" as whitelist
@@ -35,7 +35,7 @@ bmFUXQLdi7tZyDor8Rxoq2MCAwEAAQ==
 
 if (1 === openssl_verify ($data_webhook, base64_decode($headers['X-Lxo-Signature']), $lexware_key_public_api, 'RSA-SHA512')) {
 
-	if ($company_id && $data->organizationId == $company_id) exit('invalid organizationId');
+	if ($company_id && $data->organizationId != $company_id) exit('invalid organizationId');
 
 	switch ($data->eventType) {
 		case 'invoice.status.changed':
