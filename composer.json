@@ -16,9 +16,9 @@
     ],
     "support": {
         "email": "support@baebeca.de",
-        "wiki": "https://wiki.baebeca.de/index.php?title=Lexware-php-api",
+        "issues": "https://github.com/Baebeca-Solutions/lexware-php-api/issues",
         "source": "https://github.com/Baebeca-Solutions/lexware-php-api",
-        "docs": "https://wiki.baebeca.de/index.php?title=Lexware-php-api"
+        "docs": "https://github.com/Baebeca-Solutions/lexware-php-api/blob/master/docs/README.md"
     },
     "require": {
         "php": ">=8.0",

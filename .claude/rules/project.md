@@ -26,11 +26,11 @@ Run specific test:    `[php_binary] tests/test.php 12`   (runs only test group 0
 
 ## Documentation
 
-Public wiki (MediaWiki): https://wiki.baebeca.de/index.php?title=Lexware-php-api
+User documentation lives in `docs/` (German, Du-Form), upgrade notes in `UPGRADE.md`.
 
-On any user-facing API change (new methods, changed signatures, new behaviour), update the wiki page accordingly.
-Fetch the current raw wikitext via: https://wiki.baebeca.de/index.php?title=Lexware-php-api&action=raw
-Write the updated wikitext to a .txt file in the scratchpad directory so the user can copy and paste it into the wiki editor without leading-whitespace issues.
+- On any user-facing API change (new methods, changed signatures, new behaviour), update `docs/` in the same commit.
+- A breaking change or a new optional parameter gets an entry in `UPGRADE.md`.
+- Both branches carry their own `docs/`: `master` documents the Composer version, `php-7.4-legacy-no-composer` the legacy version. A change ported to the other branch ports its docs too, adapted to that branch's API.
 
 ## Sensitive Files
 
