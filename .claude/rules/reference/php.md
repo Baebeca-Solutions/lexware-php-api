@@ -1,8 +1,8 @@
-<!-- baebeca-project-template v1.0.0 -->
+<!-- baebeca-project-template v1.0.1 -->
 # PHP Review Baseline
 
 General PHP criteria that apply across all projects. Project-specific
-criteria still take precedence and live in `.claude/rules/review.md`.
+criteria still take precedence and live in `.claude/rules/review-project.md`.
 
 ## Security
 

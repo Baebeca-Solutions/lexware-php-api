@@ -1,3 +1,4 @@
+<!-- baebeca-project-template seed -->
 ## Project: lexware-php-api
 
 Public PHP middleware for the Lexware Office REST API. Provides a PHP class to create/manage invoices, contacts, vouchers, articles, and more. Also contains helpers for EU VAT logic (tax rates, OSS, Drittland detection).

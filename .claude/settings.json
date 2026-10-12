@@ -1,16 +1,21 @@
 {
-  "permissions": {
-    "allow": [
-      "Bash(git checkout *)",
-      "Bash(git commit *)",
-      "Bash(git merge *)",
-      "Bash(git log *)",
-      "Bash(git status*)",
-      "Bash(git diff *)",
-      "Bash(git branch *)",
-      "Bash(git push *)",
-      "WebFetch(domain:wiki.baebeca.de)",
-      "PowerShell(Set-Location *; & \"C:\\php-8.5.0-nts-Win32-vs17-x64\\php.exe\" test.php *)"
-    ]
-  }
+    "attribution": {
+        "commit": "",
+        "pr": "",
+        "sessionUrl": false
+    },
+    "permissions": {
+        "allow": [
+            "Bash(git checkout *)",
+            "Bash(git commit *)",
+            "Bash(git merge *)",
+            "Bash(git log *)",
+            "Bash(git status*)",
+            "Bash(git diff *)",
+            "Bash(git branch *)",
+            "Bash(git push *)",
+            "WebFetch(domain:developers.lexware.io)",
+            "PowerShell(Set-Location *; & \"C:\\Program Files\\PHP\\*\\php.exe\" test.php *)"
+        ]
+    }
 }
