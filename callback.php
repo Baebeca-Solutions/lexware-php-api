@@ -27,7 +27,7 @@ bmFUXQLdi7tZyDor8Rxoq2MCAwEAAQ==
 
 if (1 === openssl_verify ($data_webhook, base64_decode($headers['X-Lxo-Signature']), $lexoffice_key_public_api, 'RSA-SHA512')) {
 
-	if ($company_id && $data->organizationId == $company_id) exit('invalid organizationId');
+	if ($company_id && $data->organizationId != $company_id) exit('invalid organizationId');
 
 	switch ($data->eventType) {
 		case 'invoice.status.changed':
