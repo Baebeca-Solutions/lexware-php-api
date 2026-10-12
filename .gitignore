@@ -1,3 +1,12 @@
-.idea/
-/tests/_local_settings.php
-/tests/tests/tmp/
+# baebeca-project-template seed
+# From project-template - defaults for every project. Add project-specific entries below this block.
+/.claude/settings.local.json
+/.claude/worktrees/
+/.idea/
+/TODO.md
+
+# Project related
+tests/_local_settings.php
+tests/tests/tmp/
+vendor/
+composer.lock
