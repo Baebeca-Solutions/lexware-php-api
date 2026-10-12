@@ -19,8 +19,6 @@ Only PHP 7.4 syntax is allowed. This excludes in particular:
 
 A type PHP 7.4 cannot declare (union, `mixed`, `false`) goes into the `@param`/`@return` tag alone; this satisfies the typing rule in CLAUDE.md.
 
-`.editorconfig` sets `ij_php_comma_after_last_parameter_style = always`: the IDE formatter adds a trailing comma to parameter lists, which is a parse error on PHP 7.4 and has to be removed.
-
 ### Functions
 
 Only functions of PHP 7.4 core and the extensions above. Replacements for common newer functions:
