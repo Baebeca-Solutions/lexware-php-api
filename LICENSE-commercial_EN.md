@@ -24,7 +24,7 @@ If you:
 - need customized extensions
 - simply want to support this project
 
-you can purchase a lifetime license for 199,- EUR/net.
+you can purchase a lifetime license for 200,- EUR/net.
 
 Please contact us at:
 

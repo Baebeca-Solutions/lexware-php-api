@@ -2,7 +2,7 @@
 PHP Client für [office.lexware.de](https://www.baebeca.de/lexware) API (ehemals lexoffice.de)
 
 > **Lizenz:** Für Open-Source-Projekte kostenlos unter der AGPLv3.
-> Für kommerzielle oder Closed-Source-Software erwirbst du einfach eine [kommerzielle Lizenz](./LICENSE-commercial_DE.md): Lifetime-Lizenz für einmalig 199,- EUR netto, inklusive Support. Details unter [Lizenz](#lizenz).
+> Für kommerzielle oder Closed-Source-Software erwirbst du einfach eine [kommerzielle Lizenz](./LICENSE-commercial_DE.md): Lifetime-Lizenz für einmalig 200,- EUR netto, inklusive Support. Details unter [Lizenz](#lizenz).
 
 ## Baebeca Solutions GmbH & Lexware Office
 * [Integrationspartner](https://www.baebeca.de/lexware)
@@ -44,7 +44,7 @@ Mit der kommerziellen Lizenz:
 - setzt du die lexware-php-api in Closed-Source-Software und SaaS ein, ohne deinen Quellcode offenzulegen
 - erhältst du [Support](#support) per E-Mail und Telefon
 - bekommst du auf Anfrage individuelle Erweiterungen
-- erhältst du eine Lifetime-Lizenz für einmalig 199,- EUR netto
+- erhältst du eine Lifetime-Lizenz für einmalig 200,- EUR netto
 - unterstützt du die Weiterentwicklung des Projekts
 
 Bitte kontaktiere uns unter **support@baebeca.de**, um eine Lizenz zu erwerben.  
