@@ -24,7 +24,7 @@ Wenn du:
 - individuelle Erweiterungen benötigst
 - dieses Projekt einfach Unterstützen möchtest 
 
-kannst du für einmalig 199,- EUR/netto eine lifetime Nutzungslizenz erwerben.
+kannst du für einmalig 200,- EUR/netto eine lifetime Nutzungslizenz erwerben.
 
 Bitte kontaktiere uns unter:
 
