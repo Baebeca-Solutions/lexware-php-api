@@ -21,6 +21,6 @@ Für eine bestimmte Version wähle auf GitHub oben links den passenden Tag aus.
 
 - [Upgrade-Hinweise](../UPGRADE.md)
 - [Lexware Office API-Dokumentation](https://developers.lexware.io)
-- [Projektseite](https://www.baebeca.de/softwareentwicklung/lexware-php-client/)
+- [Projektseite](https://www.baebeca.de/leistungen-und-produkte/softwareentwicklung/lexware-php-client/)
 - [Packagist](https://packagist.org/packages/baebeca/lexware-php-api)
 - [Support & Lizenz](../README.md#support)

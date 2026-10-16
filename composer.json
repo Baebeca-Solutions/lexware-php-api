@@ -2,7 +2,7 @@
     "name": "baebeca/lexware-php-api",
     "description": "Lexware PHP API Client mit Dual-Lizenzierung (AGPLv3 + kommerziell)",
     "type": "library",
-    "homepage": "https://www.baebeca.de/softwareentwicklung/lexware-php-client/",
+    "homepage": "https://www.baebeca.de/leistungen-und-produkte/softwareentwicklung/lexware-php-client/",
     "readme": "README.md",
     "license": ["AGPL-3.0-only", "proprietary"],
     "minimum-stability": "stable",

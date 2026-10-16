@@ -6,7 +6,7 @@ PHP 8 Client für [office.lexware.de](https://www.baebeca.de/lexware) API (ehema
 
 - [Dokumentation](docs/README.md)
 - [Upgrade-Hinweise](UPGRADE.md)
-- [Projektseite](https://www.baebeca.de/softwareentwicklung/lexware-php-client/)
+- [Projektseite](https://www.baebeca.de/leistungen-und-produkte/softwareentwicklung/lexware-php-client/)
 - [Packagist](https://packagist.org/packages/baebeca/lexware-php-api)
 - [Lexware Office API-Dokumentation](https://developers.lexware.io)
 
@@ -89,5 +89,5 @@ Mit der kommerziellen Lizenz:
 - erhältst du eine Lifetime-Lizenz für einmalig 200,- EUR netto
 - unterstützt du die Weiterentwicklung des Projekts
 
-Bitte kontaktiere uns unter **support@baebeca.de**, um eine Lizenz zu erwerben.
+Die Lizenz bestellst du direkt online: [Lizenz bestellen](https://www.baebeca.de/bestellen/?product=lexware-php-client). Fragen beantworten wir unter **support@baebeca.de**.
 Siehe dazu alle Infos: [Kommerzielle Lizenzbedingungen](./LICENSE-commercial_DE.md)
