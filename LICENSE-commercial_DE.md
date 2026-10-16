@@ -26,11 +26,13 @@ Wenn du:
 
 kannst du für einmalig 200,- EUR/netto eine lifetime Nutzungslizenz erwerben.
 
-Bitte kontaktiere uns unter:
+Die Lizenz bestellst du online unter **https://www.baebeca.de/bestellen/?product=lexware-php-client**.
+
+Fragen beantworten wir unter:
 
 - **support@baebeca.de**
 - **02261-81616-91**
-- **https://www.baebeca.de/softwareentwicklung/lexware-php-client/**
+- **https://www.baebeca.de/leistungen-und-produkte/softwareentwicklung/lexware-php-client/**
 
 ---
 © Baebeca Solutions GmbH. Alle Rechte vorbehalten.

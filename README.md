@@ -16,7 +16,7 @@ Die offizielle Lexware Office API-Dokumentation findest du [hier](https://develo
 ## lexware-php-api Dokumentation
 Dieser Branch ist die Legacy-Version für PHP 7.4 ohne Composer. Die Dokumentation findest du in [docs/](docs/README.md).<br>
 Die aktuelle Version mit Composer liegt im Branch [`master`](https://github.com/Baebeca-Solutions/lexware-php-api), den Umstieg beschreiben die [Upgrade-Hinweise](https://github.com/Baebeca-Solutions/lexware-php-api/blob/master/UPGRADE.md#legacy-branch-ohne-composer--aktuelle-version).<br>
-Allgemeine Themen findest du auf unserer [Projektseite](https://www.baebeca.de/softwareentwicklung/lexware-php-client/).
+Allgemeine Themen findest du auf unserer [Projektseite](https://www.baebeca.de/leistungen-und-produkte/softwareentwicklung/lexware-php-client/).
 
 ## Support
 An wen kann ich mich wenden, wenn ich Probleme oder Fragen habe?<br>
@@ -47,5 +47,5 @@ Mit der kommerziellen Lizenz:
 - erhältst du eine Lifetime-Lizenz für einmalig 200,- EUR netto
 - unterstützt du die Weiterentwicklung des Projekts
 
-Bitte kontaktiere uns unter **support@baebeca.de**, um eine Lizenz zu erwerben.  
+Die Lizenz bestellst du direkt online: [Lizenz bestellen](https://www.baebeca.de/bestellen/?product=lexware-php-client). Fragen beantworten wir unter **support@baebeca.de**.  
 Siehe dazu alle Infos: [Kommerzielle Lizenzbedingungen](./LICENSE-commercial_DE.md)

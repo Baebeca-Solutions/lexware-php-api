@@ -18,5 +18,5 @@ Diese Dokumentation beschreibt den Branch `php-7.4-legacy-no-composer`.
 ## Weitere Links
 
 - [Lexware Office API-Dokumentation](https://developers.lexware.io)
-- [Projektseite](https://www.baebeca.de/softwareentwicklung/lexware-php-client/)
+- [Projektseite](https://www.baebeca.de/leistungen-und-produkte/softwareentwicklung/lexware-php-client/)
 - [Support & Lizenz](../README.md#support)
